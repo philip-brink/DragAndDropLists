@@ -10,6 +10,9 @@ class DraggableItem extends StatefulWidget {
   final int id;
   final CrossAxisAlignment verticalAlignment;
   final Function(DraggableItem reordered, DraggableItem receiver, bool placedBeforeReceiver) onReorder;
+  final Function(PointerMoveEvent event) onPointerMove;
+  final Function(PointerDownEvent event) onPointerDown;
+  final Function(PointerUpEvent event) onPointerUp;
 
   DraggableItem(
       {this.child,
@@ -18,6 +21,9 @@ class DraggableItem extends StatefulWidget {
       this.sizeAnimationDuration = 300,
       this.dragOnLongPress,
       this.onReorder,
+      this.onPointerMove,
+      this.onPointerDown,
+      this.onPointerUp,
       this.verticalAlignment,
       this.id,
       Key key})
@@ -33,6 +39,36 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
+    Widget draggable;
+    if (widget.dragOnLongPress) {
+      draggable = LongPressDraggable<DraggableItem>(
+        data: widget,
+        axis: Axis.vertical,
+        child: widget.child,
+        feedback: Container(
+          width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
+          child: Material(
+            child: widget.child,
+            color: Colors.transparent,
+          ),
+        ),
+        childWhenDragging: Container(),
+      );
+    } else {
+      draggable = Draggable<DraggableItem>(
+        data: widget,
+        axis: Axis.vertical,
+        child: widget.child,
+        feedback: Container(
+          width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
+          child: Material(
+            child: widget.child,
+            color: Colors.transparent,
+          ),
+        ),
+        childWhenDragging: Container(),
+      );
+    }
     return Stack(
       children: <Widget>[
         Column(
@@ -52,33 +88,12 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
                     )
                   : Container(),
             ),
-            widget.dragOnLongPress
-                ? LongPressDraggable<DraggableItem>(
-                    data: widget,
-                    axis: Axis.vertical,
-                    child: widget.child,
-                    feedback: Container(
-                      width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
-                      child: Material(
-                        child: widget.child,
-                        color: Colors.transparent,
-                      ),
-                    ),
-                    childWhenDragging: Container(),
-                  )
-                : Draggable<DraggableItem>(
-                    data: widget,
-                    axis: Axis.vertical,
-                    child: widget.child,
-                    feedback: Container(
-                      width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
-                      child: Material(
-                        child: widget.child,
-                        color: Colors.transparent,
-                      ),
-                    ),
-                    childWhenDragging: Container(),
-                  ),
+            Listener(
+              child: draggable,
+              onPointerMove: widget.onPointerMove,
+              onPointerDown: widget.onPointerDown,
+              onPointerUp: widget.onPointerUp,
+            ),
             AnimatedSize(
               duration: (_hoveredDraggableAbove == null && _hoveredDraggableBelow == null)
                   ? Duration(milliseconds: 1)

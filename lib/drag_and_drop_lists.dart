@@ -1,5 +1,7 @@
 library drag_and_drop_lists;
 
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:drag_and_drop_lists/draggable_item.dart';
@@ -56,6 +58,11 @@ class DragAndDropLists extends StatefulWidget {
 
 class _DragAndDropLists extends State<DragAndDropLists> {
   List<DraggableList> _draggableLists;
+  ScrollController _scrollController = ScrollController();
+  bool _pointerDown = false;
+  double _pointerYPosition;
+  double _pointerXPosition;
+  bool _scrolling = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +74,13 @@ class _DragAndDropLists extends State<DragAndDropLists> {
         itemCount: _draggableLists.length,
         itemBuilder: (_, index) => _draggableLists[index],
         separatorBuilder: (_, index) => widget.listDivider,
+        controller: _scrollController,
       );
     }
     else {
       listView = ListView(
         children: _draggableLists,
+        controller: _scrollController,
       );
     }
 
@@ -94,6 +103,9 @@ class _DragAndDropLists extends State<DragAndDropLists> {
             sizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
             dragOnLongPress: widget.itemDragOnLongPress,
             onReorder: _onItemReorder,
+            onPointerMove: _onPointerMove,
+            onPointerDown: _onPointerDown,
+            onPointerUp: _onPointerUp,
             verticalAlignment: widget.verticalAlignment,
             id: itemId,
           ));
@@ -179,6 +191,59 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     }
 
     widget.onListReorder(reorderedListIndex, newListIndex);
+  }
+
+  _onPointerMove(PointerMoveEvent event) {
+    if (_pointerDown) {
+      _pointerYPosition = event.position.dy;
+      _pointerXPosition = event.position.dx;
+
+      _scrollList();
+    }
+  }
+
+  _onPointerDown(PointerDownEvent event) {
+    _pointerDown = true;
+    _pointerYPosition = event.position.dy;
+    _pointerXPosition = event.position.dx;
+  }
+
+  _onPointerUp(PointerUpEvent event) {
+    _pointerDown = false;
+  }
+
+  _scrollList() async {
+    if (!_scrolling && _pointerDown && _pointerYPosition != null && _pointerXPosition != null) {
+      int duration = 30; // in ms
+      int scrollAreaHeight = 60;
+      double step = 1.5;
+      double overDragMax = 20.0;
+      double overDragCoefficient = 5.0;
+      double newOffset;
+
+      RenderBox rb = context.findRenderObject();
+      var topLeftOffset = rb.localToGlobal(Offset.zero);
+      var bottomRightOffset = rb.localToGlobal(rb.size.bottomRight(Offset.zero));
+      double top = topLeftOffset.dy;
+      double bottom = bottomRightOffset.dy;
+
+
+      if (_pointerYPosition < (top + scrollAreaHeight) && _scrollController.position.pixels > _scrollController.position.minScrollExtent) {
+        final overDrag = max((top + scrollAreaHeight) - _pointerYPosition, overDragMax);
+        newOffset = max(_scrollController.position.minScrollExtent, _scrollController.position.pixels - step * overDrag / overDragCoefficient);
+      }
+      else if (_pointerYPosition > (bottom - scrollAreaHeight) && _scrollController.position.pixels < _scrollController.position.maxScrollExtent) {
+        final overDrag = max<double>(_pointerYPosition - (bottom - scrollAreaHeight), overDragMax);
+        newOffset = min(_scrollController.position.maxScrollExtent, _scrollController.position.pixels + step * overDrag / overDragCoefficient);
+      }
+
+      if (newOffset != null) {
+        _scrolling = true;
+        await _scrollController.animateTo(newOffset, duration: Duration(milliseconds: duration), curve: Curves.linear);
+        _scrolling = false;
+        if (_pointerDown) _scrollList();
+      }
+    }
   }
 }
 
