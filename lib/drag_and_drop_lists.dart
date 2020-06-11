@@ -76,8 +76,7 @@ class _DragAndDropLists extends State<DragAndDropLists> {
         separatorBuilder: (_, index) => widget.listDivider,
         controller: _scrollController,
       );
-    }
-    else {
+    } else {
       listView = ListView(
         children: _draggableLists,
         controller: _scrollController,
@@ -131,6 +130,9 @@ class _DragAndDropLists extends State<DragAndDropLists> {
         draggableListContents: draggableListContents,
         id: listId,
         onReorder: _onListReorder,
+        onPointerMove: _onPointerMove,
+        onPointerDown: _onPointerDown,
+        onPointerUp: _onPointerUp,
       ));
       listId++;
     }
@@ -227,14 +229,16 @@ class _DragAndDropLists extends State<DragAndDropLists> {
       double top = topLeftOffset.dy;
       double bottom = bottomRightOffset.dy;
 
-
-      if (_pointerYPosition < (top + scrollAreaHeight) && _scrollController.position.pixels > _scrollController.position.minScrollExtent) {
+      if (_pointerYPosition < (top + scrollAreaHeight) &&
+          _scrollController.position.pixels > _scrollController.position.minScrollExtent) {
         final overDrag = max((top + scrollAreaHeight) - _pointerYPosition, overDragMax);
-        newOffset = max(_scrollController.position.minScrollExtent, _scrollController.position.pixels - step * overDrag / overDragCoefficient);
-      }
-      else if (_pointerYPosition > (bottom - scrollAreaHeight) && _scrollController.position.pixels < _scrollController.position.maxScrollExtent) {
+        newOffset = max(_scrollController.position.minScrollExtent,
+            _scrollController.position.pixels - step * overDrag / overDragCoefficient);
+      } else if (_pointerYPosition > (bottom - scrollAreaHeight) &&
+          _scrollController.position.pixels < _scrollController.position.maxScrollExtent) {
         final overDrag = max<double>(_pointerYPosition - (bottom - scrollAreaHeight), overDragMax);
-        newOffset = min(_scrollController.position.maxScrollExtent, _scrollController.position.pixels + step * overDrag / overDragCoefficient);
+        newOffset = min(_scrollController.position.maxScrollExtent,
+            _scrollController.position.pixels + step * overDrag / overDragCoefficient);
       }
 
       if (newOffset != null) {
