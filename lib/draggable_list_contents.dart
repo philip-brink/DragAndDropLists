@@ -1,4 +1,5 @@
 import 'package:drag_and_drop_lists/draggable_item.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class DraggableListContents extends StatelessWidget {
@@ -6,21 +7,22 @@ class DraggableListContents extends StatelessWidget {
   final Widget footer;
   final Widget leftSide;
   final Widget rightSide;
+  final DraggableItem contentsWhenEmpty;
   final Decoration decoration;
   final CrossAxisAlignment verticalAlignment;
   final MainAxisAlignment horizontalAlignment;
   final List<DraggableItem> children;
 
-  DraggableListContents(
-      {this.children,
-      this.header,
-      this.footer,
-      this.leftSide,
-      this.rightSide,
-      this.decoration,
-      this.horizontalAlignment,
-      this.verticalAlignment,
-      Key key})
+  DraggableListContents({this.children,
+    this.header,
+    this.footer,
+    this.leftSide,
+    this.rightSide,
+    @required this.contentsWhenEmpty,
+    this.decoration,
+    this.horizontalAlignment,
+    this.verticalAlignment,
+    Key key})
       : super(key: key);
 
   @override
@@ -65,7 +67,7 @@ class DraggableListContents extends StatelessWidget {
     if (leftSide != null) {
       contents.add(leftSide);
     }
-    if (children != null) {
+    if (children != null && children.isNotEmpty) {
       contents.add(
         Expanded(
           child: SingleChildScrollView(
@@ -78,6 +80,9 @@ class DraggableListContents extends StatelessWidget {
           ),
         ),
       );
+    }
+    else {
+      contents.add(contentsWhenEmpty);
     }
     if (rightSide != null) {
       contents.add(rightSide);

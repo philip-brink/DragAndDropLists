@@ -14,6 +14,7 @@ export 'package:drag_and_drop_lists/draggable_list.dart';
 
 class DragAndDropLists extends StatefulWidget {
   final List<DragAndDropList> dragAndDropLists;
+  /// Returns -1 for [oldItemIndex] and [oldListIndex] when adding a new item.
   final Function(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) onItemReorder;
   final Function(int oldListIndex, int newListIndex) onListReorder;
   final double itemDraggingWidth;
@@ -28,6 +29,7 @@ class DragAndDropLists extends StatefulWidget {
   final Decoration listDecoration;
   final Widget listDivider;
   final EdgeInsets listPadding;
+  final Widget listItemWhenEmpty;
   final CrossAxisAlignment verticalAlignment;
   final MainAxisAlignment horizontalAlignment;
 
@@ -47,6 +49,7 @@ class DragAndDropLists extends StatefulWidget {
     this.listDecoration,
     this.listDivider,
     this.listPadding,
+    this.listItemWhenEmpty,
     this.verticalAlignment = CrossAxisAlignment.start,
     this.horizontalAlignment = MainAxisAlignment.start,
     Key key,
@@ -87,8 +90,18 @@ class _DragAndDropLists extends State<DragAndDropLists> {
   }
 
   List<DraggableList> _generateInternalList() {
+    Widget emptyListDraggableContents;
+    if (widget.listItemWhenEmpty != null) {
+      emptyListDraggableContents = widget.listItemWhenEmpty;
+    } else {
+      emptyListDraggableContents = Center(
+        child: Text('No List Contents')
+      );
+    }
+    
     var draggableLists = List<DraggableList>();
     int itemId = 0;
+    int emptyItemId = 0;
     int listId = 0;
 
     for (var list in widget.dragAndDropLists) {
@@ -102,15 +115,24 @@ class _DragAndDropLists extends State<DragAndDropLists> {
             sizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
             dragOnLongPress: widget.itemDragOnLongPress,
             onReorder: _onItemReorder,
-            onPointerMove: _onPointerMove,
-            onPointerDown: _onPointerDown,
-            onPointerUp: _onPointerUp,
             verticalAlignment: widget.verticalAlignment,
             id: itemId,
           ));
           itemId++;
         }
       }
+
+      DraggableItem emptyListItem = DraggableItem.emptyItem(
+        child: emptyListDraggableContents,
+        draggingWidth: widget.itemDraggingWidth,
+        ghostOpacity: widget.itemGhostOpacity,
+        sizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
+        onReorder: _onItemReorder,
+        verticalAlignment: widget.verticalAlignment,
+        id: emptyItemId,
+      );
+      emptyItemId++;
+
       var draggableListContents = DraggableListContents(
         header: list.header,
         footer: list.footer,
@@ -118,6 +140,7 @@ class _DragAndDropLists extends State<DragAndDropLists> {
         rightSide: list.rightSide,
         decoration: widget.listDecoration,
         children: draggableChildren,
+        contentsWhenEmpty: emptyListItem,
         verticalAlignment: widget.verticalAlignment,
         horizontalAlignment: widget.horizontalAlignment,
       );
@@ -147,32 +170,53 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     int reorderedItemIndex = -1;
     int receiverListIndex = -1;
     int receiverItemIndex = -1;
-    for (int i = 0; i < _draggableLists.length; i++) {
-      if (reorderedItemIndex == -1) {
-        reorderedItemIndex = _draggableLists[i].draggableListContents.children.indexWhere((e) => reordered.id == e.id);
-        if (reorderedItemIndex != -1) reorderedListIndex = i;
+
+    if (receiver.isEmptyItem) {
+      print('isEmptyItem');
+      for (int i = 0; i < _draggableLists.length; i++) {
+        if (reorderedItemIndex == -1) {
+          reorderedItemIndex = _draggableLists[i].draggableListContents.children.indexWhere((e) => reordered.id == e.id);
+          if (reorderedItemIndex != -1) reorderedListIndex = i;
+        }
+
+        if (receiverItemIndex == -1 && _draggableLists[i].draggableListContents.contentsWhenEmpty.id == receiver.id) {
+          print('found');
+          receiverListIndex = i;
+          receiverItemIndex = 0;
+        }
+
+        if (reorderedItemIndex != -1 && receiverItemIndex != -1) {
+          break;
+        }
       }
-      if (receiverItemIndex == -1) {
-        receiverItemIndex = _draggableLists[i].draggableListContents.children.indexWhere((e) => receiver.id == e.id);
-        if (receiverItemIndex != -1) receiverListIndex = i;
+    }
+    else {
+      for (int i = 0; i < _draggableLists.length; i++) {
+        if (reorderedItemIndex == -1) {
+          reorderedItemIndex = _draggableLists[i].draggableListContents.children.indexWhere((e) => reordered.id == e.id);
+          if (reorderedItemIndex != -1) reorderedListIndex = i;
+        }
+        if (receiverItemIndex == -1) {
+          receiverItemIndex = _draggableLists[i].draggableListContents.children.indexWhere((e) => receiver.id == e.id);
+          if (receiverItemIndex != -1) receiverListIndex = i;
+        }
+        if (reorderedItemIndex != -1 && receiverItemIndex != -1) {
+          break;
+        }
       }
-      if (reorderedItemIndex != -1 && receiverItemIndex != -1) {
-        break;
+
+      if (!placedBeforeReceiver) {
+        receiverItemIndex++;
+      }
+
+      if (reorderedListIndex == receiverListIndex && receiverItemIndex > reorderedItemIndex) {
+        // same list, so if the new position is after the old position, the removal of the old item must be taken into account
+        receiverItemIndex--;
       }
     }
 
-    int newItemIndex = receiverItemIndex;
-
-    if (!placedBeforeReceiver) {
-      newItemIndex++;
-    }
-
-    if (reorderedListIndex == receiverListIndex && newItemIndex > reorderedItemIndex) {
-      // same list, so if the new position is after the old position, the removal of the old item must be taken into account
-      newItemIndex--;
-    }
-
-    widget.onItemReorder(reorderedItemIndex, reorderedListIndex, newItemIndex, receiverListIndex);
+    print('onItemReorder(reorderedItemIndex: $reorderedItemIndex, reorderedListIndex: $reorderedListIndex, receiverItemIndex: $receiverItemIndex, receiverListIndex: $receiverListIndex)');
+    widget.onItemReorder(reorderedItemIndex, reorderedListIndex, receiverItemIndex, receiverListIndex);
   }
 
   _onListReorder(DraggableList reordered, DraggableList receiver, bool placedBeforeReceiver) {
