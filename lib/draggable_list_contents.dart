@@ -82,7 +82,18 @@ class DraggableListContents extends StatelessWidget {
       );
     }
     else {
-      contents.add(contentsWhenEmpty);
+      contents.add(Expanded(
+        child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: verticalAlignment,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              contentsWhenEmpty,
+            ],
+          ),
+        ),
+      ),);
     }
     if (rightSide != null) {
       contents.add(rightSide);

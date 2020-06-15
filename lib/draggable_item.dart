@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 class DraggableItem extends StatefulWidget {
   final Widget child;
+  final Widget ghost;
   final double draggingWidth;
   final double ghostOpacity;
   final int sizeAnimationDuration;
@@ -19,6 +20,7 @@ class DraggableItem extends StatefulWidget {
 
   DraggableItem(
       {@required this.child,
+      this.ghost,
       this.draggingWidth,
       this.ghostOpacity = 0.3,
       this.sizeAnimationDuration = 300,
@@ -37,6 +39,7 @@ class DraggableItem extends StatefulWidget {
 
   DraggableItem.emptyItem(
       {@required this.child,
+      this.ghost,
       this.ghostOpacity = 0.3,
       this.sizeAnimationDuration = 300,
       this.canDrag = false,
@@ -100,6 +103,7 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
             ? Duration(milliseconds: 1)
             : Duration(milliseconds: widget.sizeAnimationDuration),
         vsync: this,
+        alignment: Alignment.bottomCenter,
         child: _hoveredDraggableAbove != null ? Container() : widget.child,
       );
     }
@@ -114,11 +118,11 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
                   ? Duration(milliseconds: 1)
                   : Duration(milliseconds: widget.sizeAnimationDuration),
               vsync: this,
-              alignment: Alignment.bottomCenter,
+              alignment: widget.doubleDragTarget ? Alignment.bottomCenter : Alignment.topLeft,
               child: _hoveredDraggableAbove != null
                   ? Opacity(
                       opacity: widget.ghostOpacity,
-                      child: _hoveredDraggableAbove.child,
+                      child: widget.ghost ?? _hoveredDraggableAbove.child,
                     )
                   : Container(),
             ),
@@ -138,7 +142,7 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
                     child: _hoveredDraggableBelow != null
                         ? Opacity(
                             opacity: widget.ghostOpacity,
-                            child: _hoveredDraggableBelow.child,
+                            child: widget.ghost ?? _hoveredDraggableBelow.child,
                           )
                         : Container(),
                   )

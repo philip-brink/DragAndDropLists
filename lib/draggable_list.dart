@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 class DraggableList extends StatefulWidget {
   final double draggingWidth;
   final int sizeAnimationDuration;
+  final Widget ghost;
   final double ghostOpacity;
   final bool dragOnLongPress;
   final EdgeInsets padding;
@@ -18,6 +19,7 @@ class DraggableList extends StatefulWidget {
   DraggableList(
       {this.draggingWidth,
       this.sizeAnimationDuration,
+      this.ghost,
       this.ghostOpacity,
       this.dragOnLongPress,
       this.onReorder,
@@ -84,7 +86,7 @@ class _DraggableContainer extends State<DraggableList> with TickerProviderStateM
               child: _hoveredDraggableAbove != null
                   ? Opacity(
                       opacity: widget.ghostOpacity,
-                      child: _hoveredDraggableAbove.draggableListContents,
+                      child: widget.ghost ?? _hoveredDraggableAbove.draggableListContents,
                     )
                   : Container(),
             ),
@@ -103,7 +105,7 @@ class _DraggableContainer extends State<DraggableList> with TickerProviderStateM
               child: _hoveredDraggableBelow != null
                   ? Opacity(
                       opacity: widget.ghostOpacity,
-                      child: _hoveredDraggableBelow.draggableListContents,
+                      child: widget.ghost ?? _hoveredDraggableBelow.draggableListContents,
                     )
                   : Container(),
             ),

@@ -88,6 +88,116 @@ class _BasicTabState extends State<BasicTab> {
           Text('Sub 3'),
         ],
       ),
+      DragAndDropList(
+        header: Row(
+          children: <Widget>[
+            Expanded(
+              child: Divider(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Text('Header 3'),
+            ),
+            Expanded(
+              child: Divider(),
+            ),
+          ],
+        ),
+        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
+        children: <Widget>[
+          Text('Sub 1'),
+          Text('Sub 2'),
+          Text('Sub 3'),
+        ],
+      ),
+      DragAndDropList(
+        header: Row(
+          children: <Widget>[
+            Expanded(
+              child: Divider(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Text('Header 3'),
+            ),
+            Expanded(
+              child: Divider(),
+            ),
+          ],
+        ),
+        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
+        children: <Widget>[
+          Text('Sub 1'),
+          Text('Sub 2'),
+          Text('Sub 3'),
+        ],
+      ),
+      DragAndDropList(
+        header: Row(
+          children: <Widget>[
+            Expanded(
+              child: Divider(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Text('Header 3'),
+            ),
+            Expanded(
+              child: Divider(),
+            ),
+          ],
+        ),
+        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
+        children: <Widget>[
+          Text('Sub 1'),
+          Text('Sub 2'),
+          Text('Sub 3'),
+        ],
+      ),
+      DragAndDropList(
+        header: Row(
+          children: <Widget>[
+            Expanded(
+              child: Divider(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Text('Header 3'),
+            ),
+            Expanded(
+              child: Divider(),
+            ),
+          ],
+        ),
+        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
+        children: <Widget>[
+          Text('Sub 1'),
+          Text('Sub 2'),
+          Text('Sub 3'),
+        ],
+      ),
+      DragAndDropList(
+        header: Row(
+          children: <Widget>[
+            Expanded(
+              child: Divider(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Text('Header 3'),
+            ),
+            Expanded(
+              child: Divider(),
+            ),
+          ],
+        ),
+        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
+        children: <Widget>[
+          Text('Sub 1'),
+          Text('Sub 2'),
+          Text('Sub 3'),
+        ],
+      ),
     ];
   }
 

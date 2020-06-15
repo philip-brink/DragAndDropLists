@@ -1,5 +1,7 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class ListTileTab extends StatefulWidget {
@@ -147,7 +149,37 @@ class _ListTileTabState extends State<ListTileTab> {
       dragAndDropLists: _contents,
       onItemReorder: _onItemReorder,
       onListReorder: _onListReorder,
+      listGhost: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30.0),
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 100.0),
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(7.0),
+            ),
+            child: Icon(Icons.add_box),
+          ),
+        ),
+      ),
       listPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      listItemWhenEmpty: Row(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: 40, right: 10),
+              child: Divider(),
+            ),
+          ),
+          Text('Empty List', style: TextStyle(color: Theme.of(context).textTheme.caption.color, fontStyle: FontStyle.italic),),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: 20, right: 40),
+              child: Divider(),
+            ),
+          ),
+        ],
+      ),
       listDecoration: BoxDecoration(
         color: Theme.of(context).canvasColor,
         borderRadius: BorderRadius.all(Radius.circular(6.0)),

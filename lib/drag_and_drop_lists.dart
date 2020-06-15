@@ -18,11 +18,13 @@ class DragAndDropLists extends StatefulWidget {
   final Function(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) onItemReorder;
   final Function(int oldListIndex, int newListIndex) onListReorder;
   final double itemDraggingWidth;
+  final Widget itemGhost;
   final double itemGhostOpacity;
   final int itemSizeAnimationDurationMilliseconds;
   final bool itemDragOnLongPress;
   final Decoration itemDecoration;
   final double listDraggingWidth;
+  final Widget listGhost;
   final double listGhostOpacity;
   final int listSizeAnimationDurationMilliseconds;
   final bool listDragOnLongPress;
@@ -38,11 +40,13 @@ class DragAndDropLists extends StatefulWidget {
     this.onItemReorder,
     this.onListReorder,
     this.itemDraggingWidth,
+    this.itemGhost,
     this.itemGhostOpacity = 0.3,
     this.itemSizeAnimationDurationMilliseconds = 150,
     this.itemDragOnLongPress = true,
     this.itemDecoration,
     this.listDraggingWidth,
+    this.listGhost,
     this.listGhostOpacity = 0.3,
     this.listSizeAnimationDurationMilliseconds = 150,
     this.listDragOnLongPress = true,
@@ -83,6 +87,7 @@ class _DragAndDropLists extends State<DragAndDropLists> {
       listView = ListView(
         children: _draggableLists,
         controller: _scrollController,
+        padding: EdgeInsets.only(bottom: 48),
       );
     }
 
@@ -94,9 +99,7 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     if (widget.listItemWhenEmpty != null) {
       emptyListDraggableContents = widget.listItemWhenEmpty;
     } else {
-      emptyListDraggableContents = Center(
-        child: Text('No List Contents')
-      );
+      emptyListDraggableContents = Text('Empty list', style: TextStyle(fontStyle: FontStyle.italic,),);
     }
     
     var draggableLists = List<DraggableList>();
@@ -111,6 +114,7 @@ class _DragAndDropLists extends State<DragAndDropLists> {
           draggableChildren.add(DraggableItem(
             child: child,
             draggingWidth: widget.itemDraggingWidth,
+            ghost: widget.itemGhost,
             ghostOpacity: widget.itemGhostOpacity,
             sizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
             dragOnLongPress: widget.itemDragOnLongPress,
@@ -145,6 +149,7 @@ class _DragAndDropLists extends State<DragAndDropLists> {
         horizontalAlignment: widget.horizontalAlignment,
       );
       draggableLists.add(DraggableList(
+        ghost: widget.listGhost,
         ghostOpacity: widget.listGhostOpacity,
         draggingWidth: widget.listDraggingWidth,
         sizeAnimationDuration: widget.listSizeAnimationDurationMilliseconds,
