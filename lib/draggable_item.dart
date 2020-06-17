@@ -11,9 +11,8 @@ class DraggableItem extends StatefulWidget {
   final int id;
   final bool canDrag;
   final bool isEmptyItem;
-  final bool doubleDragTarget;
   final CrossAxisAlignment verticalAlignment;
-  final Function(DraggableItem reordered, DraggableItem receiver, bool placedBeforeReceiver) onReorder;
+  final Function(DraggableItem reordered, DraggableItem receiver) onReorder;
   final Function(PointerMoveEvent event) onPointerMove;
   final Function(PointerDownEvent event) onPointerDown;
   final Function(PointerUpEvent event) onPointerUp;
@@ -26,7 +25,6 @@ class DraggableItem extends StatefulWidget {
       this.sizeAnimationDuration = 300,
       this.canDrag = true,
       this.isEmptyItem = false,
-      this.doubleDragTarget = true,
       this.dragOnLongPress,
       @required this.onReorder,
       this.onPointerMove,
@@ -44,7 +42,6 @@ class DraggableItem extends StatefulWidget {
       this.sizeAnimationDuration = 300,
       this.canDrag = false,
       this.isEmptyItem = true,
-      this.doubleDragTarget = false,
       this.dragOnLongPress,
       this.draggingWidth,
       @required this.onReorder,
@@ -61,8 +58,7 @@ class DraggableItem extends StatefulWidget {
 }
 
 class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin {
-  DraggableItem _hoveredDraggableAbove;
-  DraggableItem _hoveredDraggableBelow;
+  DraggableItem _hoveredDraggable;
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +95,10 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
       }
     } else {
       draggable = AnimatedSize(
-        duration: (_hoveredDraggableAbove == null && _hoveredDraggableBelow == null)
-            ? Duration(milliseconds: 1)
-            : Duration(milliseconds: widget.sizeAnimationDuration),
+        duration: Duration(milliseconds: widget.sizeAnimationDuration),
         vsync: this,
         alignment: Alignment.bottomCenter,
-        child: _hoveredDraggableAbove != null ? Container() : widget.child,
+        child: _hoveredDraggable != null ? Container() : widget.child,
       );
     }
     return Stack(
@@ -114,15 +108,13 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
           crossAxisAlignment: widget.verticalAlignment,
           children: <Widget>[
             AnimatedSize(
-              duration: (_hoveredDraggableAbove == null && _hoveredDraggableBelow == null)
-                  ? Duration(milliseconds: 1)
-                  : Duration(milliseconds: widget.sizeAnimationDuration),
+              duration: Duration(milliseconds: widget.sizeAnimationDuration),
               vsync: this,
-              alignment: widget.doubleDragTarget ? Alignment.bottomCenter : Alignment.topLeft,
-              child: _hoveredDraggableAbove != null
+              alignment: Alignment.topLeft,
+              child: _hoveredDraggable != null
                   ? Opacity(
                       opacity: widget.ghostOpacity,
-                      child: widget.ghost ?? _hoveredDraggableAbove.child,
+                      child: widget.ghost ?? _hoveredDraggable.child,
                     )
                   : Container(),
             ),
@@ -132,85 +124,34 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
               onPointerDown: widget.onPointerDown,
               onPointerUp: widget.onPointerUp,
             ),
-            widget.doubleDragTarget
-                ? AnimatedSize(
-                    duration: (_hoveredDraggableAbove == null && _hoveredDraggableBelow == null)
-                        ? Duration(milliseconds: 1)
-                        : Duration(milliseconds: widget.sizeAnimationDuration),
-                    vsync: this,
-                    alignment: Alignment.topCenter,
-                    child: _hoveredDraggableBelow != null
-                        ? Opacity(
-                            opacity: widget.ghostOpacity,
-                            child: widget.ghost ?? _hoveredDraggableBelow.child,
-                          )
-                        : Container(),
-                  )
-                : Container(),
           ],
         ),
         Positioned.fill(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: DragTarget<DraggableItem>(
-                  builder: (context, candidateData, rejectedData) {
-                    if (candidateData != null && candidateData.isNotEmpty) {}
-                    return Container();
-                  },
-                  onWillAccept: (incoming) {
-                    if (incoming != widget) {
-                      setState(() {
-                        _hoveredDraggableAbove = incoming;
-                      });
-                      return true;
-                    }
-                    return false;
-                  },
-                  onLeave: (incoming) {
-                    setState(() {
-                      _hoveredDraggableAbove = null;
-                    });
-                  },
-                  onAccept: (incoming) {
-                    setState(() {
-                      if (widget.onReorder != null) widget.onReorder(incoming, widget, true);
-                      _hoveredDraggableAbove = null;
-                    });
-                  },
-                ),
-              ),
-              widget.doubleDragTarget
-                  ? Expanded(
-                      child: DragTarget<DraggableItem>(
-                        builder: (context, candidateData, rejectedData) {
-                          if (candidateData != null && candidateData.isNotEmpty) {}
-                          return Container();
-                        },
-                        onWillAccept: (incoming) {
-                          if (incoming != widget) {
-                            setState(() {
-                              _hoveredDraggableBelow = incoming;
-                            });
-                            return true;
-                          }
-                          return false;
-                        },
-                        onLeave: (incoming) {
-                          setState(() {
-                            _hoveredDraggableBelow = null;
-                          });
-                        },
-                        onAccept: (incoming) {
-                          if (widget.onReorder != null) widget.onReorder(incoming, widget, false);
-                          setState(() {
-                            _hoveredDraggableBelow = null;
-                          });
-                        },
-                      ),
-                    )
-                  : Container(),
-            ],
+          child: DragTarget<DraggableItem>(
+            builder: (context, candidateData, rejectedData) {
+              if (candidateData != null && candidateData.isNotEmpty) {}
+              return Container();
+            },
+            onWillAccept: (incoming) {
+              if (incoming != widget) {
+                setState(() {
+                  _hoveredDraggable = incoming;
+                });
+                return true;
+              }
+              return false;
+            },
+            onLeave: (incoming) {
+              setState(() {
+                _hoveredDraggable = null;
+              });
+            },
+            onAccept: (incoming) {
+              setState(() {
+                if (widget.onReorder != null) widget.onReorder(incoming, widget);
+                _hoveredDraggable = null;
+              });
+            },
           ),
         )
       ],

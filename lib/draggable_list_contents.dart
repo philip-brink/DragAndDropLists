@@ -1,4 +1,5 @@
 import 'package:drag_and_drop_lists/draggable_item.dart';
+import 'package:drag_and_drop_lists/draggable_item_target.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -8,6 +9,7 @@ class DraggableListContents extends StatelessWidget {
   final Widget leftSide;
   final Widget rightSide;
   final DraggableItem contentsWhenEmpty;
+  final DraggableItemTarget lastTarget;
   final Decoration decoration;
   final CrossAxisAlignment verticalAlignment;
   final MainAxisAlignment horizontalAlignment;
@@ -19,6 +21,7 @@ class DraggableListContents extends StatelessWidget {
     this.leftSide,
     this.rightSide,
     @required this.contentsWhenEmpty,
+    @required this.lastTarget,
     this.decoration,
     this.horizontalAlignment,
     this.verticalAlignment,
@@ -68,6 +71,9 @@ class DraggableListContents extends StatelessWidget {
       contents.add(leftSide);
     }
     if (children != null && children.isNotEmpty) {
+      List<Widget> allChildren = List<Widget>();
+      children.forEach((element) => allChildren.add(element));
+      allChildren.add(lastTarget);
       contents.add(
         Expanded(
           child: SingleChildScrollView(
@@ -75,7 +81,7 @@ class DraggableListContents extends StatelessWidget {
             child: Column(
               crossAxisAlignment: verticalAlignment,
               mainAxisSize: MainAxisSize.max,
-              children: children,
+              children: allChildren,
             ),
           ),
         ),
@@ -90,6 +96,7 @@ class DraggableListContents extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               contentsWhenEmpty,
+              lastTarget,
             ],
           ),
         ),

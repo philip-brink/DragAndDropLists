@@ -2,6 +2,8 @@ library drag_and_drop_lists;
 
 import 'dart:math';
 
+import 'package:drag_and_drop_lists/draggable_item_target.dart';
+import 'package:drag_and_drop_lists/draggable_list_target.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:drag_and_drop_lists/draggable_item.dart';
@@ -14,16 +16,21 @@ export 'package:drag_and_drop_lists/draggable_list.dart';
 
 class DragAndDropLists extends StatefulWidget {
   final List<DragAndDropList> dragAndDropLists;
+
   /// Returns -1 for [oldItemIndex] and [oldListIndex] when adding a new item.
   final Function(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) onItemReorder;
   final Function(int oldListIndex, int newListIndex) onListReorder;
+  final Function(Widget newItem, int listIndex) onItemAdd;
+  final Function(DragAndDropList newList) onListAdd;
   final double itemDraggingWidth;
+  final Widget itemTarget;
   final Widget itemGhost;
   final double itemGhostOpacity;
   final int itemSizeAnimationDurationMilliseconds;
   final bool itemDragOnLongPress;
   final Decoration itemDecoration;
   final double listDraggingWidth;
+  final Widget listTarget;
   final Widget listGhost;
   final double listGhostOpacity;
   final int listSizeAnimationDurationMilliseconds;
@@ -39,13 +46,17 @@ class DragAndDropLists extends StatefulWidget {
     this.dragAndDropLists,
     this.onItemReorder,
     this.onListReorder,
+    this.onItemAdd,
+    this.onListAdd,
     this.itemDraggingWidth,
+    this.itemTarget,
     this.itemGhost,
     this.itemGhostOpacity = 0.3,
     this.itemSizeAnimationDurationMilliseconds = 150,
     this.itemDragOnLongPress = true,
     this.itemDecoration,
     this.listDraggingWidth,
+    this.listTarget,
     this.listGhost,
     this.listGhostOpacity = 0.3,
     this.listSizeAnimationDurationMilliseconds = 150,
@@ -74,20 +85,29 @@ class _DragAndDropLists extends State<DragAndDropLists> {
   @override
   Widget build(BuildContext context) {
     _draggableLists = _generateInternalList();
+    var list = List<Widget>();
+    _draggableLists.forEach((element) => list.add(element));
+    list.add(DraggableListTarget(
+      sizeAnimationDuration: widget.listSizeAnimationDurationMilliseconds,
+      ghostOpacity: widget.listGhostOpacity,
+      onReorderOrAdd: _onListTargetDrop,
+      ghost: widget.listGhost,
+      target: widget.listTarget,
+    ));
+
     var listView;
 
     if (widget.listDivider != null) {
       listView = ListView.separated(
-        itemCount: _draggableLists.length,
-        itemBuilder: (_, index) => _draggableLists[index],
+        itemCount: list.length,
+        itemBuilder: (_, index) => list[index],
         separatorBuilder: (_, index) => widget.listDivider,
         controller: _scrollController,
       );
     } else {
       listView = ListView(
-        children: _draggableLists,
+        children: list,
         controller: _scrollController,
-        padding: EdgeInsets.only(bottom: 48),
       );
     }
 
@@ -101,10 +121,11 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     } else {
       emptyListDraggableContents = Text('Empty list', style: TextStyle(fontStyle: FontStyle.italic,),);
     }
-    
+
     var draggableLists = List<DraggableList>();
     int itemId = 0;
     int emptyItemId = 0;
+    int itemTargetId = 0;
     int listId = 0;
 
     for (var list in widget.dragAndDropLists) {
@@ -137,6 +158,16 @@ class _DragAndDropLists extends State<DragAndDropLists> {
       );
       emptyItemId++;
 
+      var itemTarget = DraggableItemTarget(
+        sizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
+        ghostOpacity: widget.itemGhostOpacity,
+        onReorderOrAdd: _onItemTargetDrop,
+        ghost: widget.itemGhost,
+        target: widget.itemTarget,
+        id: itemTargetId,
+      );
+      itemTargetId++;
+
       var draggableListContents = DraggableListContents(
         header: list.header,
         footer: list.footer,
@@ -145,6 +176,7 @@ class _DragAndDropLists extends State<DragAndDropLists> {
         decoration: widget.listDecoration,
         children: draggableChildren,
         contentsWhenEmpty: emptyListItem,
+        lastTarget: itemTarget,
         verticalAlignment: widget.verticalAlignment,
         horizontalAlignment: widget.horizontalAlignment,
       );
@@ -168,7 +200,7 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     return draggableLists;
   }
 
-  _onItemReorder(DraggableItem reordered, DraggableItem receiver, bool placedBeforeReceiver) {
+  _onItemReorder(DraggableItem reordered, DraggableItem receiver) {
     if (widget.onItemReorder == null) return;
 
     int reorderedListIndex = -1;
@@ -177,15 +209,14 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     int receiverItemIndex = -1;
 
     if (receiver.isEmptyItem) {
-      print('isEmptyItem');
       for (int i = 0; i < _draggableLists.length; i++) {
         if (reorderedItemIndex == -1) {
-          reorderedItemIndex = _draggableLists[i].draggableListContents.children.indexWhere((e) => reordered.id == e.id);
+          reorderedItemIndex =
+              _draggableLists[i].draggableListContents.children.indexWhere((e) => reordered.id == e.id);
           if (reorderedItemIndex != -1) reorderedListIndex = i;
         }
 
         if (receiverItemIndex == -1 && _draggableLists[i].draggableListContents.contentsWhenEmpty.id == receiver.id) {
-          print('found');
           receiverListIndex = i;
           receiverItemIndex = 0;
         }
@@ -198,7 +229,8 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     else {
       for (int i = 0; i < _draggableLists.length; i++) {
         if (reorderedItemIndex == -1) {
-          reorderedItemIndex = _draggableLists[i].draggableListContents.children.indexWhere((e) => reordered.id == e.id);
+          reorderedItemIndex =
+              _draggableLists[i].draggableListContents.children.indexWhere((e) => reordered.id == e.id);
           if (reorderedItemIndex != -1) reorderedListIndex = i;
         }
         if (receiverItemIndex == -1) {
@@ -210,21 +242,16 @@ class _DragAndDropLists extends State<DragAndDropLists> {
         }
       }
 
-      if (!placedBeforeReceiver) {
-        receiverItemIndex++;
-      }
-
       if (reorderedListIndex == receiverListIndex && receiverItemIndex > reorderedItemIndex) {
         // same list, so if the new position is after the old position, the removal of the old item must be taken into account
         receiverItemIndex--;
       }
     }
 
-    print('onItemReorder(reorderedItemIndex: $reorderedItemIndex, reorderedListIndex: $reorderedListIndex, receiverItemIndex: $receiverItemIndex, receiverListIndex: $receiverListIndex)');
     widget.onItemReorder(reorderedItemIndex, reorderedListIndex, receiverItemIndex, receiverListIndex);
   }
 
-  _onListReorder(DraggableList reordered, DraggableList receiver, bool placedBeforeReceiver) {
+  _onListReorder(DraggableList reordered, DraggableList receiver) {
     if (widget.onListReorder == null) return;
 
     int reorderedListIndex = _draggableLists.indexWhere((e) => reordered.id == e.id);
@@ -232,16 +259,68 @@ class _DragAndDropLists extends State<DragAndDropLists> {
 
     int newListIndex = receiverListIndex;
 
-    if (!placedBeforeReceiver) {
-      newListIndex++;
-    }
-
     if (newListIndex > reorderedListIndex) {
       // same list, so if the new position is after the old position, the removal of the old item must be taken into account
       newListIndex--;
     }
 
     widget.onListReorder(reorderedListIndex, newListIndex);
+  }
+
+  _onItemTargetDrop(DraggableItem newOrReordered, DraggableItemTarget receiver) {
+    int reorderedListIndex = -1;
+    int reorderedItemIndex = -1;
+    int receiverListIndex = -1;
+    int receiverItemIndex = -1;
+
+    for (int i = 0; i < _draggableLists.length; i++) {
+      if (reorderedItemIndex == -1) {
+        reorderedItemIndex =
+            _draggableLists[i].draggableListContents.children.indexWhere((e) => newOrReordered.id == e.id);
+        if (reorderedItemIndex != -1) reorderedListIndex = i;
+      }
+
+      if (receiverItemIndex == -1 && _draggableLists[i].draggableListContents.lastTarget.id == receiver.id) {
+        receiverListIndex = i;
+        receiverItemIndex = _draggableLists[i].draggableListContents.children.length;
+      }
+
+      if (reorderedItemIndex != -1 && receiverItemIndex != -1) {
+        break;
+      }
+    }
+
+    if (reorderedItemIndex == -1) {
+      if (widget.onItemAdd != null) {
+        widget.onItemAdd(newOrReordered.child, receiverListIndex);
+      }
+    }
+    else {
+      if (reorderedListIndex == receiverListIndex && receiverItemIndex > reorderedItemIndex) {
+        // same list, so if the new position is after the old position, the removal of the old item must be taken into account
+        receiverItemIndex--;
+      }
+
+      widget.onItemReorder(reorderedItemIndex, reorderedListIndex, receiverItemIndex, receiverListIndex);
+    }
+  }
+
+  _onListTargetDrop(DraggableList newOrReordered, DraggableListTarget receiver) {
+    // determine if newOrReordered is new or existing
+    int reorderedListIndex = _draggableLists.indexWhere((e) => newOrReordered.id == e.id);
+    if (reorderedListIndex >= 0) {
+      widget.onListReorder(reorderedListIndex, _draggableLists.length - 1);
+    }
+    else {
+      if (widget.onListAdd != null) {
+        widget.onListAdd(DragAndDropList(header: newOrReordered.draggableListContents.header,
+            footer: newOrReordered.draggableListContents.footer,
+            leftSide: newOrReordered.draggableListContents.footer,
+            rightSide: newOrReordered.draggableListContents.rightSide,
+            children: newOrReordered.draggableListContents.children.map((e) => e.child).toList()),
+        );
+      }
+    }
   }
 
   _onPointerMove(PointerMoveEvent event) {

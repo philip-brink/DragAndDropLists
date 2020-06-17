@@ -96,7 +96,7 @@ class _BasicTabState extends State<BasicTab> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 3'),
+              child: Text('Header 4'),
             ),
             Expanded(
               child: Divider(),
@@ -118,7 +118,7 @@ class _BasicTabState extends State<BasicTab> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 3'),
+              child: Text('Header 5'),
             ),
             Expanded(
               child: Divider(),
@@ -140,7 +140,7 @@ class _BasicTabState extends State<BasicTab> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 3'),
+              child: Text('Header 6'),
             ),
             Expanded(
               child: Divider(),
@@ -162,7 +162,7 @@ class _BasicTabState extends State<BasicTab> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 3'),
+              child: Text('Header 7'),
             ),
             Expanded(
               child: Divider(),
@@ -184,7 +184,7 @@ class _BasicTabState extends State<BasicTab> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 3'),
+              child: Text('Header 8'),
             ),
             Expanded(
               child: Divider(),
