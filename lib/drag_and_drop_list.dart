@@ -1,6 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_item_target_internal.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -17,6 +17,7 @@ class DragAndDropList {
   final CrossAxisAlignment verticalAlignment;
   final MainAxisAlignment horizontalAlignment;
   final List<DragAndDropItem> children;
+  final DragAndDropBuilderParameters parameters;
 
   DragAndDropList(
       {this.children,
@@ -29,7 +30,8 @@ class DragAndDropList {
       this.lastTarget,
       this.decoration,
       this.horizontalAlignment = MainAxisAlignment.start,
-      this.verticalAlignment = CrossAxisAlignment.start});
+      this.verticalAlignment = CrossAxisAlignment.start,
+      this.parameters});
 
   static Widget generateDragAndDropListContents(DragAndDropList dragAndDropList, DragAndDropBuilderParameters params) {
     var contents = List<Widget>();
@@ -82,12 +84,10 @@ class DragAndDropList {
             axis: params.axis,
             verticalAlignment: params.verticalAlignment,
           )));
-      allChildren.add(DragAndDropItemTargetInternal(
-        onItemDropOnLastTarget: params.onItemDropOnLastTarget,
-        ghost: params.itemGhost,
-        ghostOpacity: params.itemGhostOpacity,
-        sizeAnimationDuration: params.itemSizeAnimationDuration,
+      allChildren.add(DragAndDropItemTarget(
         parent: dragAndDropList,
+        parameters: params,
+        onReorderOrAdd: params.onItemDropOnLastTarget,
         child: dragAndDropList.lastTarget ??
             Container(
               height: 20,
@@ -114,8 +114,14 @@ class DragAndDropList {
               crossAxisAlignment: dragAndDropList.verticalAlignment,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                dragAndDropList.contentsWhenEmpty,
-                dragAndDropList.lastTarget,
+                dragAndDropList.contentsWhenEmpty ??
+                    Text(
+                      'Empty list',
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                dragAndDropList.lastTarget ?? Container(height: 20,),
               ],
             ),
           ),

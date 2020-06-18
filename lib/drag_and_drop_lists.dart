@@ -3,6 +3,7 @@ library drag_and_drop_lists;
 import 'dart:math';
 
 import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
@@ -133,9 +134,9 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     } else {
       listView = ListView.builder(
         controller: _scrollController,
-        itemCount: widget.children.length + 1,
+        itemCount: widget.children?.length ?? 0 + 1,
         itemBuilder: (context, index) {
-          if (index < widget.children.length) {
+          if (index < widget.children?.length) {
             return DragAndDropListWrapper(
               dragAndDropList: widget.children[index],
               parameters: parameters,
@@ -200,7 +201,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     widget.onListReorder(reorderedListIndex, newListIndex);
   }
 
-  _internalOnItemDropOnLastTarget(DragAndDropItem newOrReordered, DragAndDropList receiver) {
+  _internalOnItemDropOnLastTarget(DragAndDropItem newOrReordered, DragAndDropList parentList, DragAndDropItemTarget receiver) {
     int reorderedListIndex = -1;
     int reorderedItemIndex = -1;
     int receiverListIndex = -1;
@@ -212,7 +213,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
         if (reorderedItemIndex != -1) reorderedListIndex = i;
       }
 
-      if (receiverItemIndex == -1 && widget.children[i] == receiver) {
+      if (receiverItemIndex == -1 && widget.children[i] == parentList) {
         receiverListIndex = i;
         receiverItemIndex = widget.children[i].children.length;
       }

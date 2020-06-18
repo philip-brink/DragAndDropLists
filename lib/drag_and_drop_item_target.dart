@@ -1,19 +1,18 @@
+import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class DragAndDropItemTarget extends StatefulWidget {
   final Widget child;
-  final Function(DragAndDropItem reordered, DragAndDropItemTarget receiver) onReorderOrAdd;
-  final int sizeAnimationDuration;
-  final Widget ghost;
-  final double ghostOpacity;
+  final DragAndDropList parent;
+  final DragAndDropBuilderParameters parameters;
+  final Function(DragAndDropItem reordered, DragAndDropList parentList, DragAndDropItemTarget receiver) onReorderOrAdd;
 
   DragAndDropItemTarget({@required this.child,
     @required this.onReorderOrAdd,
-    this.sizeAnimationDuration = 150,
-    this.ghost,
-    this.ghostOpacity = 0.3,
+    @required this.parameters,
+    this.parent,
     Key key})
       : super(key: key);
 
@@ -31,13 +30,13 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget> with TickerPro
         Column(
           children: <Widget>[
             AnimatedSize(
-              duration: Duration(milliseconds: widget.sizeAnimationDuration),
+              duration: Duration(milliseconds: widget.parameters.itemSizeAnimationDuration),
               vsync: this,
               alignment: Alignment.bottomCenter,
               child: _hoveredDraggable != null
                   ? Opacity(
-                opacity: widget.ghostOpacity,
-                child: widget.ghost ?? _hoveredDraggable.child,
+                opacity: widget.parameters.itemGhostOpacity,
+                child: widget.parameters.itemGhost ?? _hoveredDraggable.child,
               )
                   : Container(),
             ),
@@ -66,7 +65,7 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget> with TickerPro
             },
             onAccept: (incoming) {
               setState(() {
-                if (widget.onReorderOrAdd != null) widget.onReorderOrAdd(incoming, widget);
+                if (widget.onReorderOrAdd != null) widget.onReorderOrAdd(incoming, widget.parent, widget);
                 _hoveredDraggable = null;
               });
             },
