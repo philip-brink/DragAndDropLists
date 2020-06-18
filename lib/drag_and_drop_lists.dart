@@ -2,25 +2,28 @@ library drag_and_drop_lists;
 
 import 'dart:math';
 
-import 'package:drag_and_drop_lists/draggable_item_target.dart';
-import 'package:drag_and_drop_lists/draggable_list_target.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:drag_and_drop_lists/draggable_item.dart';
-import 'package:drag_and_drop_lists/draggable_list_contents.dart';
-import 'package:drag_and_drop_lists/draggable_list.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
 
-export 'package:drag_and_drop_lists/draggable_item.dart';
-export 'package:drag_and_drop_lists/draggable_list_contents.dart';
-export 'package:drag_and_drop_lists/draggable_list.dart';
+export 'package:drag_and_drop_lists/drag_and_drop_item.dart';
+export 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
+export 'package:drag_and_drop_lists/drag_and_drop_item_wrapper.dart';
+export 'package:drag_and_drop_lists/drag_and_drop_list.dart';
+export 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
+export 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
 
 class DragAndDropLists extends StatefulWidget {
-  final List<DragAndDropList> dragAndDropLists;
+  final List<DragAndDropList> children;
 
   /// Returns -1 for [oldItemIndex] and [oldListIndex] when adding a new item.
   final Function(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) onItemReorder;
   final Function(int oldListIndex, int newListIndex) onListReorder;
-  final Function(Widget newItem, int listIndex) onItemAdd;
+  final Function(DragAndDropItem newItem, int listIndex) onItemAdd;
   final Function(DragAndDropList newList) onListAdd;
   final double itemDraggingWidth;
   final Widget itemTarget;
@@ -41,9 +44,10 @@ class DragAndDropLists extends StatefulWidget {
   final Widget listItemWhenEmpty;
   final CrossAxisAlignment verticalAlignment;
   final MainAxisAlignment horizontalAlignment;
+  final Axis axis;
 
   DragAndDropLists({
-    this.dragAndDropLists,
+    this.children,
     this.onItemReorder,
     this.onListReorder,
     this.onItemAdd,
@@ -67,15 +71,15 @@ class DragAndDropLists extends StatefulWidget {
     this.listItemWhenEmpty,
     this.verticalAlignment = CrossAxisAlignment.start,
     this.horizontalAlignment = MainAxisAlignment.start,
+    this.axis = Axis.vertical,
     Key key,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DragAndDropLists();
+  State<StatefulWidget> createState() => DragAndDropListsState();
 }
 
-class _DragAndDropLists extends State<DragAndDropLists> {
-  List<DraggableList> _draggableLists;
+class DragAndDropListsState extends State<DragAndDropLists> {
   ScrollController _scrollController = ScrollController();
   bool _pointerDown = false;
   double _pointerYPosition;
@@ -84,123 +88,73 @@ class _DragAndDropLists extends State<DragAndDropLists> {
 
   @override
   Widget build(BuildContext context) {
-    _draggableLists = _generateInternalList();
-    var list = List<Widget>();
-    _draggableLists.forEach((element) => list.add(element));
-    list.add(DraggableListTarget(
-      sizeAnimationDuration: widget.listSizeAnimationDurationMilliseconds,
-      ghostOpacity: widget.listGhostOpacity,
-      onReorderOrAdd: _onListTargetDrop,
-      ghost: widget.listGhost,
-      target: widget.listTarget,
-    ));
+    Widget listView;
 
-    var listView;
+    var parameters = DragAndDropBuilderParameters(
+      listGhost: widget.listGhost,
+      listGhostOpacity: widget.listGhostOpacity,
+      draggingWidth: widget.listDraggingWidth,
+      listSizeAnimationDuration: widget.listSizeAnimationDurationMilliseconds,
+      dragOnLongPress: widget.listDragOnLongPress,
+      padding: widget.listPadding,
+      itemSizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
+      onPointerDown: _onPointerDown,
+      onPointerUp: _onPointerUp,
+      onPointerMove: _onPointerMove,
+      onItemReordered: _internalOnItemReorder,
+      onItemDropOnLastTarget: _internalOnItemDropOnLastTarget,
+      onListReordered: _internalOnListReorder,
+      itemGhostOpacity: widget.itemGhostOpacity,
+      verticalAlignment: widget.verticalAlignment,
+      axis: widget.axis,
+      itemGhost: widget.itemGhost,
+    );
 
     if (widget.listDivider != null) {
       listView = ListView.separated(
-        itemCount: list.length,
-        itemBuilder: (_, index) => list[index],
-        separatorBuilder: (_, index) => widget.listDivider,
         controller: _scrollController,
+        separatorBuilder: (_, index) => widget.listDivider,
+        itemCount: widget.children.length + 1,
+        itemBuilder: (context, index) {
+          if (index < widget.children.length) {
+            return DragAndDropListWrapper(
+              dragAndDropList: widget.children[index],
+              parameters: parameters,
+            );
+          } else {
+            return DragAndDropListTarget(
+              child: widget.listTarget,
+              parameters: parameters,
+              onDropOnLastTarget: _internalOnListDropOnLastTarget,
+            );
+          }
+        },
       );
     } else {
-      listView = ListView(
-        children: list,
+      listView = ListView.builder(
         controller: _scrollController,
+        itemCount: widget.children.length + 1,
+        itemBuilder: (context, index) {
+          if (index < widget.children.length) {
+            return DragAndDropListWrapper(
+              dragAndDropList: widget.children[index],
+              parameters: parameters,
+            );
+          } else {
+            return DragAndDropListTarget(
+              child: widget.listTarget,
+              parameters: parameters,
+              onDropOnLastTarget: _internalOnListDropOnLastTarget,
+            );
+          }
+        },
       );
     }
 
     return listView;
   }
 
-  List<DraggableList> _generateInternalList() {
-    Widget emptyListDraggableContents;
-    if (widget.listItemWhenEmpty != null) {
-      emptyListDraggableContents = widget.listItemWhenEmpty;
-    } else {
-      emptyListDraggableContents = Text('Empty list', style: TextStyle(fontStyle: FontStyle.italic,),);
-    }
-
-    var draggableLists = List<DraggableList>();
-    int itemId = 0;
-    int emptyItemId = 0;
-    int itemTargetId = 0;
-    int listId = 0;
-
-    for (var list in widget.dragAndDropLists) {
-      var draggableChildren = List<DraggableItem>();
-      if (list.children != null) {
-        for (var child in list.children) {
-          draggableChildren.add(DraggableItem(
-            child: child,
-            draggingWidth: widget.itemDraggingWidth,
-            ghost: widget.itemGhost,
-            ghostOpacity: widget.itemGhostOpacity,
-            sizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
-            dragOnLongPress: widget.itemDragOnLongPress,
-            onReorder: _onItemReorder,
-            verticalAlignment: widget.verticalAlignment,
-            id: itemId,
-          ));
-          itemId++;
-        }
-      }
-
-      DraggableItem emptyListItem = DraggableItem.emptyItem(
-        child: emptyListDraggableContents,
-        draggingWidth: widget.itemDraggingWidth,
-        ghostOpacity: widget.itemGhostOpacity,
-        sizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
-        onReorder: _onItemReorder,
-        verticalAlignment: widget.verticalAlignment,
-        id: emptyItemId,
-      );
-      emptyItemId++;
-
-      var itemTarget = DraggableItemTarget(
-        sizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
-        ghostOpacity: widget.itemGhostOpacity,
-        onReorderOrAdd: _onItemTargetDrop,
-        ghost: widget.itemGhost,
-        target: widget.itemTarget,
-        id: itemTargetId,
-      );
-      itemTargetId++;
-
-      var draggableListContents = DraggableListContents(
-        header: list.header,
-        footer: list.footer,
-        leftSide: list.leftSide,
-        rightSide: list.rightSide,
-        decoration: widget.listDecoration,
-        children: draggableChildren,
-        contentsWhenEmpty: emptyListItem,
-        lastTarget: itemTarget,
-        verticalAlignment: widget.verticalAlignment,
-        horizontalAlignment: widget.horizontalAlignment,
-      );
-      draggableLists.add(DraggableList(
-        ghost: widget.listGhost,
-        ghostOpacity: widget.listGhostOpacity,
-        draggingWidth: widget.listDraggingWidth,
-        sizeAnimationDuration: widget.listSizeAnimationDurationMilliseconds,
-        dragOnLongPress: widget.listDragOnLongPress,
-        padding: widget.listPadding,
-        draggableListContents: draggableListContents,
-        id: listId,
-        onReorder: _onListReorder,
-        onPointerMove: _onPointerMove,
-        onPointerDown: _onPointerDown,
-        onPointerUp: _onPointerUp,
-      ));
-      listId++;
-    }
-
-    return draggableLists;
-  }
-
-  _onItemReorder(DraggableItem reordered, DraggableItem receiver) {
+  _internalOnItemReorder(DragAndDropItem reordered, DragAndDropItem receiver) {
     if (widget.onItemReorder == null) return;
 
     int reorderedListIndex = -1;
@@ -208,54 +162,33 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     int receiverListIndex = -1;
     int receiverItemIndex = -1;
 
-    if (receiver.isEmptyItem) {
-      for (int i = 0; i < _draggableLists.length; i++) {
-        if (reorderedItemIndex == -1) {
-          reorderedItemIndex =
-              _draggableLists[i].draggableListContents.children.indexWhere((e) => reordered.id == e.id);
-          if (reorderedItemIndex != -1) reorderedListIndex = i;
-        }
-
-        if (receiverItemIndex == -1 && _draggableLists[i].draggableListContents.contentsWhenEmpty.id == receiver.id) {
-          receiverListIndex = i;
-          receiverItemIndex = 0;
-        }
-
-        if (reorderedItemIndex != -1 && receiverItemIndex != -1) {
-          break;
-        }
+    for (int i = 0; i < widget.children.length; i++) {
+      if (reorderedItemIndex == -1) {
+        reorderedItemIndex = widget.children[i].children.indexWhere((e) => reordered == e);
+        if (reorderedItemIndex != -1) reorderedListIndex = i;
+      }
+      if (receiverItemIndex == -1) {
+        receiverItemIndex = widget.children[i].children.indexWhere((e) => receiver == e);
+        if (receiverItemIndex != -1) receiverListIndex = i;
+      }
+      if (reorderedItemIndex != -1 && receiverItemIndex != -1) {
+        break;
       }
     }
-    else {
-      for (int i = 0; i < _draggableLists.length; i++) {
-        if (reorderedItemIndex == -1) {
-          reorderedItemIndex =
-              _draggableLists[i].draggableListContents.children.indexWhere((e) => reordered.id == e.id);
-          if (reorderedItemIndex != -1) reorderedListIndex = i;
-        }
-        if (receiverItemIndex == -1) {
-          receiverItemIndex = _draggableLists[i].draggableListContents.children.indexWhere((e) => receiver.id == e.id);
-          if (receiverItemIndex != -1) receiverListIndex = i;
-        }
-        if (reorderedItemIndex != -1 && receiverItemIndex != -1) {
-          break;
-        }
-      }
 
-      if (reorderedListIndex == receiverListIndex && receiverItemIndex > reorderedItemIndex) {
-        // same list, so if the new position is after the old position, the removal of the old item must be taken into account
-        receiverItemIndex--;
-      }
+    if (reorderedListIndex == receiverListIndex && receiverItemIndex > reorderedItemIndex) {
+      // same list, so if the new position is after the old position, the removal of the old item must be taken into account
+      receiverItemIndex--;
     }
 
     widget.onItemReorder(reorderedItemIndex, reorderedListIndex, receiverItemIndex, receiverListIndex);
   }
 
-  _onListReorder(DraggableList reordered, DraggableList receiver) {
+  _internalOnListReorder(DragAndDropList reordered, DragAndDropList receiver) {
     if (widget.onListReorder == null) return;
 
-    int reorderedListIndex = _draggableLists.indexWhere((e) => reordered.id == e.id);
-    int receiverListIndex = _draggableLists.indexWhere((e) => receiver.id == e.id);
+    int reorderedListIndex = widget.children.indexWhere((e) => reordered == e);
+    int receiverListIndex = widget.children.indexWhere((e) => receiver == e);
 
     int newListIndex = receiverListIndex;
 
@@ -267,22 +200,21 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     widget.onListReorder(reorderedListIndex, newListIndex);
   }
 
-  _onItemTargetDrop(DraggableItem newOrReordered, DraggableItemTarget receiver) {
+  _internalOnItemDropOnLastTarget(DragAndDropItem newOrReordered, DragAndDropList receiver) {
     int reorderedListIndex = -1;
     int reorderedItemIndex = -1;
     int receiverListIndex = -1;
     int receiverItemIndex = -1;
 
-    for (int i = 0; i < _draggableLists.length; i++) {
+    for (int i = 0; i < widget.children.length; i++) {
       if (reorderedItemIndex == -1) {
-        reorderedItemIndex =
-            _draggableLists[i].draggableListContents.children.indexWhere((e) => newOrReordered.id == e.id);
+        reorderedItemIndex = widget.children[i].children.indexWhere((e) => newOrReordered == e);
         if (reorderedItemIndex != -1) reorderedListIndex = i;
       }
 
-      if (receiverItemIndex == -1 && _draggableLists[i].draggableListContents.lastTarget.id == receiver.id) {
+      if (receiverItemIndex == -1 && widget.children[i] == receiver) {
         receiverListIndex = i;
-        receiverItemIndex = _draggableLists[i].draggableListContents.children.length;
+        receiverItemIndex = widget.children[i].children.length;
       }
 
       if (reorderedItemIndex != -1 && receiverItemIndex != -1) {
@@ -291,35 +223,24 @@ class _DragAndDropLists extends State<DragAndDropLists> {
     }
 
     if (reorderedItemIndex == -1) {
-      if (widget.onItemAdd != null) {
-        widget.onItemAdd(newOrReordered.child, receiverListIndex);
-      }
-    }
-    else {
+      if (widget.onItemAdd != null) widget.onItemAdd(newOrReordered, receiverListIndex);
+    } else {
       if (reorderedListIndex == receiverListIndex && receiverItemIndex > reorderedItemIndex) {
         // same list, so if the new position is after the old position, the removal of the old item must be taken into account
         receiverItemIndex--;
       }
-
-      widget.onItemReorder(reorderedItemIndex, reorderedListIndex, receiverItemIndex, receiverListIndex);
+      if (widget.onItemReorder != null)
+        widget.onItemReorder(reorderedItemIndex, reorderedListIndex, receiverItemIndex, receiverListIndex);
     }
   }
 
-  _onListTargetDrop(DraggableList newOrReordered, DraggableListTarget receiver) {
+  _internalOnListDropOnLastTarget(DragAndDropList newOrReordered, DragAndDropListTarget receiver) {
     // determine if newOrReordered is new or existing
-    int reorderedListIndex = _draggableLists.indexWhere((e) => newOrReordered.id == e.id);
+    int reorderedListIndex = widget.children.indexWhere((e) => newOrReordered == e);
     if (reorderedListIndex >= 0) {
-      widget.onListReorder(reorderedListIndex, _draggableLists.length - 1);
-    }
-    else {
-      if (widget.onListAdd != null) {
-        widget.onListAdd(DragAndDropList(header: newOrReordered.draggableListContents.header,
-            footer: newOrReordered.draggableListContents.footer,
-            leftSide: newOrReordered.draggableListContents.footer,
-            rightSide: newOrReordered.draggableListContents.rightSide,
-            children: newOrReordered.draggableListContents.children.map((e) => e.child).toList()),
-        );
-      }
+      if (widget.onListReorder != null) widget.onListReorder(reorderedListIndex, widget.children.length - 1);
+    } else {
+      if (widget.onListAdd != null) widget.onListAdd(newOrReordered);
     }
   }
 
@@ -377,14 +298,4 @@ class _DragAndDropLists extends State<DragAndDropLists> {
       }
     }
   }
-}
-
-class DragAndDropList {
-  Widget header;
-  Widget footer;
-  Widget leftSide;
-  Widget rightSide;
-  List<Widget> children;
-
-  DragAndDropList({this.header, this.footer, this.leftSide, this.rightSide, this.children});
 }

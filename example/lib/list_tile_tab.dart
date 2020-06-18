@@ -19,15 +19,15 @@ class _ListTileTabState extends State<ListTileTab> {
   void initState() {
     super.initState();
 
-    _contents = <DragAndDropList>[
-      DragAndDropList(
+    _contents = List.generate(4, (index) {
+      return DragAndDropList(
         header: Column(
           children: <Widget>[
             ListTile(
               title: Text(
-                'Header 1',
+                'Header $index',
               ),
-              subtitle: Text('Header 1 subtitle'),
+              subtitle: Text('Header $index subtitle'),
             ),
             Divider(),
           ],
@@ -37,116 +37,46 @@ class _ListTileTabState extends State<ListTileTab> {
             Divider(),
             ListTile(
               title: Text(
-                'Footer 1',
+                'Footer $index',
               ),
-              subtitle: Text('Footer 1 subtitle'),
+              subtitle: Text('Footer $index subtitle'),
             ),
           ],
         ),
-        children: <Widget>[
-          ListTile(
-            title: Text(
-              'Sub 1.1',
+        children: <DragAndDropItem>[
+          DragAndDropItem(
+            child: ListTile(
+              title: Text(
+                'Sub $index.1',
+              ),
+              trailing: Icon(Icons.access_alarm),
             ),
-            trailing: Icon(Icons.access_alarm),
           ),
-          ListTile(
-            title: Text('Sub 1.2'),
-            trailing: Icon(Icons.alarm_add),
+          DragAndDropItem(
+            child: ListTile(
+              title: Text(
+                'Sub $index.2',
+              ),
+              trailing: Icon(Icons.access_alarm),
+            ),
           ),
-          ListTile(
-            title: Text('Sub 1.3'),
-            trailing: Icon(Icons.alarm_off),
+          DragAndDropItem(
+            child: ListTile(
+              title: Text(
+                'Sub $index.3',
+              ),
+              trailing: Icon(Icons.access_alarm),
+            ),
           ),
         ],
-      ),
-      DragAndDropList(
-        header: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                'Header 2',
-              ),
-              subtitle: Text('Header 2 subtitle'),
-            ),
-            Divider(),
-          ],
-        ),
-        footer: Column(
-          children: <Widget>[
-            Divider(),
-            ListTile(
-              title: Text(
-                'Footer 2',
-              ),
-              subtitle: Text('Footer 2 subtitle'),
-            ),
-          ],
-        ),
-        children: <Widget>[
-          ListTile(
-            title: Text(
-              'Sub 2.1',
-            ),
-            trailing: Icon(Icons.access_alarm),
-          ),
-          ListTile(
-            title: Text('Sub 2.2'),
-            trailing: Icon(Icons.alarm_add),
-          ),
-          ListTile(
-            title: Text('Sub 2.3'),
-            trailing: Icon(Icons.alarm_off),
-          ),
-        ],
-      ),
-      DragAndDropList(
-        header: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                'Header 3',
-              ),
-              subtitle: Text('Header 3 subtitle'),
-            ),
-            Divider(),
-          ],
-        ),
-        footer: Column(
-          children: <Widget>[
-            Divider(),
-            ListTile(
-              title: Text(
-                'Footer 3',
-              ),
-              subtitle: Text('Footer 3 subtitle'),
-            ),
-          ],
-        ),
-        children: <Widget>[
-          ListTile(
-            title: Text(
-              'Sub 3.1',
-            ),
-            trailing: Icon(Icons.access_alarm),
-          ),
-          ListTile(
-            title: Text('Sub 3.2'),
-            trailing: Icon(Icons.alarm_add),
-          ),
-          ListTile(
-            title: Text('Sub 3.3'),
-            trailing: Icon(Icons.alarm_off),
-          ),
-        ],
-      ),
-    ];
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return DragAndDropLists(
-      dragAndDropLists: _contents,
+      children: _contents,
       onItemReorder: _onItemReorder,
       onListReorder: _onListReorder,
       listGhost: Padding(
@@ -171,7 +101,11 @@ class _ListTileTabState extends State<ListTileTab> {
               child: Divider(),
             ),
           ),
-          Text('Empty List', style: TextStyle(color: Theme.of(context).textTheme.caption.color, fontStyle: FontStyle.italic),),
+          Text('Empty List', style: TextStyle(color: Theme
+              .of(context)
+              .textTheme
+              .caption
+              .color, fontStyle: FontStyle.italic),),
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(left: 20, right: 40),
@@ -181,7 +115,9 @@ class _ListTileTabState extends State<ListTileTab> {
         ],
       ),
       listDecoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
+        color: Theme
+            .of(context)
+            .canvasColor,
         borderRadius: BorderRadius.all(Radius.circular(6.0)),
         boxShadow: [
           BoxShadow(

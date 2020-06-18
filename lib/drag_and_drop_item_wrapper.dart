@@ -1,92 +1,72 @@
+import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DraggableItem extends StatefulWidget {
-  final Widget child;
+class DragAndDropItemWrapper extends StatefulWidget {
+  final DragAndDropItem child;
+  final Function(PointerMoveEvent event) onPointerMove;
+  final Function(PointerUpEvent event) onPointerUp;
+  final Function(PointerDownEvent event) onPointerDown;
+  final Function(DragAndDropItem reorderedItem, DragAndDropItem receiverItem) onItemReordered;
   final Widget ghost;
   final double draggingWidth;
   final double ghostOpacity;
   final int sizeAnimationDuration;
   final bool dragOnLongPress;
-  final int id;
-  final bool canDrag;
-  final bool isEmptyItem;
   final CrossAxisAlignment verticalAlignment;
-  final Function(DraggableItem reordered, DraggableItem receiver) onReorder;
-  final Function(PointerMoveEvent event) onPointerMove;
-  final Function(PointerDownEvent event) onPointerDown;
-  final Function(PointerUpEvent event) onPointerUp;
+  final Axis axis;
 
-  DraggableItem(
+  DragAndDropItemWrapper(
       {@required this.child,
+      @required this.onPointerMove,
+      @required this.onPointerUp,
+      @required this.onPointerDown,
+      @required this.onItemReordered,
       this.ghost,
       this.draggingWidth,
       this.ghostOpacity = 0.3,
       this.sizeAnimationDuration = 300,
-      this.canDrag = true,
-      this.isEmptyItem = false,
-      this.dragOnLongPress,
-      @required this.onReorder,
-      this.onPointerMove,
-      this.onPointerDown,
-      this.onPointerUp,
-      this.verticalAlignment,
-      this.id,
-      Key key})
-      : super(key: key);
-
-  DraggableItem.emptyItem(
-      {@required this.child,
-      this.ghost,
-      this.ghostOpacity = 0.3,
-      this.sizeAnimationDuration = 300,
-      this.canDrag = false,
-      this.isEmptyItem = true,
-      this.dragOnLongPress,
-      this.draggingWidth,
-      @required this.onReorder,
-      this.onPointerMove,
-      this.onPointerDown,
-      this.onPointerUp,
-      this.verticalAlignment,
-      this.id,
+      this.dragOnLongPress = true,
+      this.verticalAlignment = CrossAxisAlignment.start,
+      this.axis = Axis.vertical,
       Key key})
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DraggableItem();
+  State<StatefulWidget> createState() => _DragAndDropItemWrapper();
 }
 
-class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin {
-  DraggableItem _hoveredDraggable;
+class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerProviderStateMixin {
+  DragAndDropItem _hoveredDraggable;
 
   @override
   Widget build(BuildContext context) {
     Widget draggable;
-    if (widget.canDrag) {
+    if (widget.child.canDrag) {
       if (widget.dragOnLongPress) {
-        draggable = LongPressDraggable<DraggableItem>(
-          data: widget,
-          axis: Axis.vertical,
-          child: widget.child,
+        draggable = LongPressDraggable<DragAndDropItem>(
+          data: widget.child,
+          axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+          child: widget.child.child,
           feedback: Container(
             width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
             child: Material(
-              child: widget.child,
+              child: widget.child.child,
               color: Colors.transparent,
             ),
           ),
           childWhenDragging: Container(),
         );
       } else {
-        draggable = Draggable<DraggableItem>(
-          data: widget,
-          axis: Axis.vertical,
-          child: widget.child,
+        draggable = Draggable<DragAndDropItem>(
+          data: widget.child,
+          axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+          child: widget.child.child,
           feedback: Container(
             width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
             child: Material(
-              child: widget.child,
+              child: widget.child.child,
               color: Colors.transparent,
             ),
           ),
@@ -98,7 +78,7 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
         duration: Duration(milliseconds: widget.sizeAnimationDuration),
         vsync: this,
         alignment: Alignment.bottomCenter,
-        child: _hoveredDraggable != null ? Container() : widget.child,
+        child: _hoveredDraggable != null ? Container() : widget.child.child,
       );
     }
     return Stack(
@@ -127,19 +107,16 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
           ],
         ),
         Positioned.fill(
-          child: DragTarget<DraggableItem>(
+          child: DragTarget<DragAndDropItem>(
             builder: (context, candidateData, rejectedData) {
               if (candidateData != null && candidateData.isNotEmpty) {}
               return Container();
             },
             onWillAccept: (incoming) {
-              if (incoming != widget) {
-                setState(() {
-                  _hoveredDraggable = incoming;
-                });
-                return true;
-              }
-              return false;
+              setState(() {
+                _hoveredDraggable = incoming;
+              });
+              return true;
             },
             onLeave: (incoming) {
               setState(() {
@@ -148,7 +125,7 @@ class _DraggableItem extends State<DraggableItem> with TickerProviderStateMixin 
             },
             onAccept: (incoming) {
               setState(() {
-                if (widget.onReorder != null) widget.onReorder(incoming, widget);
+                if (widget.onItemReordered != null) widget.onItemReordered(incoming, widget.child);
                 _hoveredDraggable = null;
               });
             },

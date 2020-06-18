@@ -1,4 +1,5 @@
 
+import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,8 +19,8 @@ class _BasicTabState extends State<BasicTab> {
   void initState() {
     super.initState();
 
-    _contents = <DragAndDropList>[
-      DragAndDropList(
+    _contents = List.generate(10, (index) {
+      return DragAndDropList(
         header: Row(
           children: <Widget>[
             Expanded(
@@ -28,7 +29,7 @@ class _BasicTabState extends State<BasicTab> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 1'),
+              child: Text('Header $index'),
             ),
             Expanded(
               flex: 1,
@@ -36,175 +37,25 @@ class _BasicTabState extends State<BasicTab> {
             ),
           ],
         ),
-        children: <Widget>[
-          Text('Sub 1'),
-          Text('Sub 2'),
-          Text('Sub 3'),
+        children: <DragAndDropItem>[
+          DragAndDropItem(
+            child: Text('$index.1'),
+          ),
+          DragAndDropItem(
+            child: Text('$index.2'),
+          ),
+          DragAndDropItem(
+            child: Text('$index.3'),
+          ),
         ],
-      ),
-      DragAndDropList(
-        header: Row(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Divider(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 2'),
-            ),
-            Expanded(
-              flex: 1,
-              child: Divider(),
-            ),
-          ],
-        ),
-        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
-        children: <Widget>[
-          Text('Sub 1'),
-          Text('Sub 2'),
-          Text('Sub 3'),
-        ],
-      ),
-      DragAndDropList(
-        header: Row(
-          children: <Widget>[
-            Expanded(
-              child: Divider(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 3'),
-            ),
-            Expanded(
-              child: Divider(),
-            ),
-          ],
-        ),
-        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
-        children: <Widget>[
-          Text('Sub 1'),
-          Text('Sub 2'),
-          Text('Sub 3'),
-        ],
-      ),
-      DragAndDropList(
-        header: Row(
-          children: <Widget>[
-            Expanded(
-              child: Divider(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 4'),
-            ),
-            Expanded(
-              child: Divider(),
-            ),
-          ],
-        ),
-        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
-        children: <Widget>[
-          Text('Sub 1'),
-          Text('Sub 2'),
-          Text('Sub 3'),
-        ],
-      ),
-      DragAndDropList(
-        header: Row(
-          children: <Widget>[
-            Expanded(
-              child: Divider(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 5'),
-            ),
-            Expanded(
-              child: Divider(),
-            ),
-          ],
-        ),
-        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
-        children: <Widget>[
-          Text('Sub 1'),
-          Text('Sub 2'),
-          Text('Sub 3'),
-        ],
-      ),
-      DragAndDropList(
-        header: Row(
-          children: <Widget>[
-            Expanded(
-              child: Divider(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 6'),
-            ),
-            Expanded(
-              child: Divider(),
-            ),
-          ],
-        ),
-        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
-        children: <Widget>[
-          Text('Sub 1'),
-          Text('Sub 2'),
-          Text('Sub 3'),
-        ],
-      ),
-      DragAndDropList(
-        header: Row(
-          children: <Widget>[
-            Expanded(
-              child: Divider(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 7'),
-            ),
-            Expanded(
-              child: Divider(),
-            ),
-          ],
-        ),
-        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
-        children: <Widget>[
-          Text('Sub 1'),
-          Text('Sub 2'),
-          Text('Sub 3'),
-        ],
-      ),
-      DragAndDropList(
-        header: Row(
-          children: <Widget>[
-            Expanded(
-              child: Divider(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text('Header 8'),
-            ),
-            Expanded(
-              child: Divider(),
-            ),
-          ],
-        ),
-        footer: Padding(padding: EdgeInsets.symmetric(vertical: 5),),
-        children: <Widget>[
-          Text('Sub 1'),
-          Text('Sub 2'),
-          Text('Sub 3'),
-        ],
-      ),
-    ];
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return DragAndDropLists(
-      dragAndDropLists: _contents,
+      children: _contents,
       onItemReorder: _onItemReorder,
       onListReorder: _onListReorder,
     );

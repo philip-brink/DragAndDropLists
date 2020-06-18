@@ -1,29 +1,31 @@
-import 'package:drag_and_drop_lists/draggable_list.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DraggableListTarget extends StatefulWidget {
-  final Widget target;
+class DragAndDropItemTargetInternal extends StatefulWidget {
+  final Widget child;
+  final DragAndDropList parent;
+  final Function(DragAndDropItem newOrReorderedItem, DragAndDropList receiverList) onItemDropOnLastTarget;
   final int sizeAnimationDuration;
   final Widget ghost;
   final double ghostOpacity;
-  final Function(DraggableList reordered, DraggableListTarget receiver) onReorderOrAdd;
 
-  DraggableListTarget(
-      {this.target,
-      @required this.sizeAnimationDuration,
+  DragAndDropItemTargetInternal(
+      {@required this.child,
+      @required this.parent,
+      @required this.onItemDropOnLastTarget,
+      this.sizeAnimationDuration = 150,
+      this.ghostOpacity = 0.3,
       this.ghost,
-      @required this.ghostOpacity,
-      this.onReorderOrAdd,
       Key key})
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DraggableListTarget();
+  State<StatefulWidget> createState() => _DragAndDropItemTargetInternal();
 }
 
-class _DraggableListTarget extends State<DraggableListTarget> with TickerProviderStateMixin {
-  DraggableList _hoveredDraggable;
+class _DragAndDropItemTargetInternal extends State<DragAndDropItemTargetInternal> with TickerProviderStateMixin {
+  DragAndDropItem _hoveredDraggable;
 
   @override
   Widget build(BuildContext context) {
@@ -38,30 +40,27 @@ class _DraggableListTarget extends State<DraggableListTarget> with TickerProvide
               child: _hoveredDraggable != null
                   ? Opacity(
                       opacity: widget.ghostOpacity,
-                      child: widget.ghost ?? _hoveredDraggable.draggableListContents,
+                      child: widget.ghost ?? _hoveredDraggable.child,
                     )
                   : Container(),
             ),
-            widget.target ??
+            widget.child ??
                 Container(
-                  height: 80,
+                  height: 20,
                 ),
           ],
         ),
         Positioned.fill(
-          child: DragTarget<DraggableList>(
+          child: DragTarget<DragAndDropItem>(
             builder: (context, candidateData, rejectedData) {
               if (candidateData != null && candidateData.isNotEmpty) {}
               return Container();
             },
             onWillAccept: (incoming) {
-              if (incoming != widget) {
-                setState(() {
-                  _hoveredDraggable = incoming;
-                });
-                return true;
-              }
-              return false;
+              setState(() {
+                _hoveredDraggable = incoming;
+              });
+              return true;
             },
             onLeave: (incoming) {
               setState(() {
@@ -70,7 +69,7 @@ class _DraggableListTarget extends State<DraggableListTarget> with TickerProvide
             },
             onAccept: (incoming) {
               setState(() {
-                if (widget.onReorderOrAdd != null) widget.onReorderOrAdd(incoming, widget);
+                widget.onItemDropOnLastTarget(incoming, widget.parent);
                 _hoveredDraggable = null;
               });
             },
