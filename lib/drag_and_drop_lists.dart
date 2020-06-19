@@ -89,15 +89,13 @@ class DragAndDropListsState extends State<DragAndDropLists> {
 
   @override
   Widget build(BuildContext context) {
-    Widget listView;
-
     var parameters = DragAndDropBuilderParameters(
       listGhost: widget.listGhost,
       listGhostOpacity: widget.listGhostOpacity,
       draggingWidth: widget.listDraggingWidth,
       listSizeAnimationDuration: widget.listSizeAnimationDurationMilliseconds,
       dragOnLongPress: widget.listDragOnLongPress,
-      padding: widget.listPadding,
+      listPadding: widget.listPadding,
       itemSizeAnimationDuration: widget.itemSizeAnimationDurationMilliseconds,
       onPointerDown: _onPointerDown,
       onPointerUp: _onPointerUp,
@@ -109,44 +107,44 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       verticalAlignment: widget.verticalAlignment,
       axis: widget.axis,
       itemGhost: widget.itemGhost,
+      listDecoration: widget.listDecoration,
     );
 
+    DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(
+      child: widget.listTarget,
+      parameters: parameters,
+      onDropOnLastTarget: _internalOnListDropOnLastTarget,
+    );
+
+    Widget listView;
     if (widget.listDivider != null) {
       listView = ListView.separated(
         controller: _scrollController,
         separatorBuilder: (_, index) => widget.listDivider,
-        itemCount: widget.children.length + 1,
+        itemCount: (widget.children?.length ?? 0) + 1,
         itemBuilder: (context, index) {
-          if (index < widget.children.length) {
+          if (index < (widget.children?.length ?? 0)) {
             return DragAndDropListWrapper(
               dragAndDropList: widget.children[index],
               parameters: parameters,
             );
           } else {
-            return DragAndDropListTarget(
-              child: widget.listTarget,
-              parameters: parameters,
-              onDropOnLastTarget: _internalOnListDropOnLastTarget,
-            );
+            return dragAndDropListTarget;
           }
         },
       );
     } else {
       listView = ListView.builder(
         controller: _scrollController,
-        itemCount: widget.children?.length ?? 0 + 1,
+        itemCount: (widget.children?.length ?? 0) + 1,
         itemBuilder: (context, index) {
-          if (index < widget.children?.length) {
+          if (index < (widget.children?.length ?? 0)) {
             return DragAndDropListWrapper(
               dragAndDropList: widget.children[index],
               parameters: parameters,
             );
           } else {
-            return DragAndDropListTarget(
-              child: widget.listTarget,
-              parameters: parameters,
-              onDropOnLastTarget: _internalOnListDropOnLastTarget,
-            );
+            return dragAndDropListTarget;
           }
         },
       );
@@ -267,7 +265,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   _scrollList() async {
     if (!_scrolling && _pointerDown && _pointerYPosition != null && _pointerXPosition != null) {
       int duration = 30; // in ms
-      int scrollAreaHeight = 60;
+      int scrollAreaHeight = 20;
       double step = 1.5;
       double overDragMax = 20.0;
       double overDragCoefficient = 5.0;

@@ -53,7 +53,7 @@ class DragAndDropList {
     }
 
     return Container(
-      decoration: dragAndDropList.decoration,
+      decoration: dragAndDropList.decoration ?? params.listDecoration,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: dragAndDropList.verticalAlignment,
@@ -121,7 +121,15 @@ class DragAndDropList {
                         fontStyle: FontStyle.italic,
                       ),
                     ),
-                dragAndDropList.lastTarget ?? Container(height: 20,),
+                DragAndDropItemTarget(
+                  parent: dragAndDropList,
+                  parameters: params,
+                  onReorderOrAdd: params.onItemDropOnLastTarget,
+                  child: dragAndDropList.lastTarget ??
+                      Container(
+                        height: 20,
+                      ),
+                ),
               ],
             ),
           ),

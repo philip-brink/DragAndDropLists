@@ -103,9 +103,9 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
         ),
       ],
     );
-    if (widget.parameters.padding != null) {
+    if (widget.parameters.listPadding != null) {
       return Padding(
-        padding: widget.parameters.padding,
+        padding: widget.parameters.listPadding,
         child: stack,
       );
     } else {

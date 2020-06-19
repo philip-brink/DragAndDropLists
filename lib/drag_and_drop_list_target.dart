@@ -1,6 +1,6 @@
-import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
 
 class DragAndDropListTarget extends StatefulWidget {
@@ -38,7 +38,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget> with TickerPro
             ),
             widget.child ??
                 Container(
-                  height: 80,
+                  height: 110,
                 ),
           ],
         ),

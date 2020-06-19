@@ -20,7 +20,8 @@ class DragAndDropBuilderParameters {
   final int listSizeAnimationDuration;
   final Widget listGhost;
   final double listGhostOpacity;
-  final EdgeInsets padding;
+  final EdgeInsets listPadding;
+  final Decoration listDecoration;
 
   DragAndDropBuilderParameters({
     @required this.onPointerMove,
@@ -39,6 +40,7 @@ class DragAndDropBuilderParameters {
     this.listSizeAnimationDuration = 150,
     this.listGhostOpacity = 0.3,
     this.listGhost,
-    this.padding,
+    this.listPadding,
+    this.listDecoration,
   });
 }

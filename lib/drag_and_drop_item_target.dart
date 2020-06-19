@@ -28,6 +28,7 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget> with TickerPro
     return Stack(
       children: <Widget>[
         Column(
+          crossAxisAlignment: widget.parameters.verticalAlignment,
           children: <Widget>[
             AnimatedSize(
               duration: Duration(milliseconds: widget.parameters.itemSizeAnimationDuration),
