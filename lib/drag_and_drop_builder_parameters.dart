@@ -1,15 +1,15 @@
 import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:flutter/widgets.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
 
 class DragAndDropBuilderParameters {
   final Function(PointerMoveEvent event) onPointerMove;
   final Function(PointerUpEvent event) onPointerUp;
   final Function(PointerDownEvent event) onPointerDown;
   final Function(DragAndDropItem reorderedItem, DragAndDropItem receiverItem) onItemReordered;
-  final Function(DragAndDropItem newOrReorderedItem, DragAndDropList parentList, DragAndDropItemTarget receiver) onItemDropOnLastTarget;
-  final Function(DragAndDropList reorderedList, DragAndDropList receiverList) onListReordered;
+  final Function(DragAndDropItem newOrReorderedItem, DragAndDropListInterface parentList, DragAndDropItemTarget receiver) onItemDropOnLastTarget;
+  final Function(DragAndDropListInterface reorderedList, DragAndDropListInterface receiverList) onListReordered;
   final Axis axis;
   final CrossAxisAlignment verticalAlignment;
   final double draggingWidth;

@@ -1,12 +1,12 @@
+import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
 
 class DragAndDropListTarget extends StatefulWidget {
   final Widget child;
   final DragAndDropBuilderParameters parameters;
-  final Function(DragAndDropList newOrReordered, DragAndDropListTarget receiver) onDropOnLastTarget;
+  final Function(DragAndDropListInterface newOrReordered, DragAndDropListTarget receiver) onDropOnLastTarget;
 
   DragAndDropListTarget({this.child, @required this.parameters, @required this.onDropOnLastTarget, Key key})
       : super(key: key);
@@ -16,7 +16,7 @@ class DragAndDropListTarget extends StatefulWidget {
 }
 
 class _DragAndDropListTarget extends State<DragAndDropListTarget> with TickerProviderStateMixin {
-  DragAndDropList _hoveredDraggable;
+  DragAndDropListInterface _hoveredDraggable;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget> with TickerPro
                   ? Opacity(
                       opacity: widget.parameters.listGhostOpacity,
                       child: widget.parameters.listGhost ??
-                          DragAndDropList.generateDragAndDropListContents(_hoveredDraggable, widget.parameters),
+                          _hoveredDraggable.generateWidget(widget.parameters),
                     )
                   : Container(),
             ),
@@ -43,7 +43,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget> with TickerPro
           ],
         ),
         Positioned.fill(
-          child: DragTarget<DragAndDropList>(
+          child: DragTarget<DragAndDropListInterface>(
             builder: (context, candidateData, rejectedData) {
               if (candidateData != null && candidateData.isNotEmpty) {}
               return Container();

@@ -4,11 +4,11 @@ import 'dart:math';
 
 import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
 
 export 'package:drag_and_drop_lists/drag_and_drop_item.dart';
@@ -19,13 +19,13 @@ export 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
 
 class DragAndDropLists extends StatefulWidget {
-  final List<DragAndDropList> children;
+  final List<DragAndDropListInterface> children;
 
   /// Returns -1 for [oldItemIndex] and [oldListIndex] when adding a new item.
   final Function(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) onItemReorder;
   final Function(int oldListIndex, int newListIndex) onListReorder;
   final Function(DragAndDropItem newItem, int listIndex) onItemAdd;
-  final Function(DragAndDropList newList) onListAdd;
+  final Function(DragAndDropListInterface newList) onListAdd;
   final double itemDraggingWidth;
   final Widget itemTarget;
   final Widget itemGhost;
@@ -183,7 +183,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     widget.onItemReorder(reorderedItemIndex, reorderedListIndex, receiverItemIndex, receiverListIndex);
   }
 
-  _internalOnListReorder(DragAndDropList reordered, DragAndDropList receiver) {
+  _internalOnListReorder(DragAndDropListInterface reordered, DragAndDropListInterface receiver) {
     if (widget.onListReorder == null) return;
 
     int reorderedListIndex = widget.children.indexWhere((e) => reordered == e);
@@ -199,7 +199,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     widget.onListReorder(reorderedListIndex, newListIndex);
   }
 
-  _internalOnItemDropOnLastTarget(DragAndDropItem newOrReordered, DragAndDropList parentList, DragAndDropItemTarget receiver) {
+  _internalOnItemDropOnLastTarget(DragAndDropItem newOrReordered, DragAndDropListInterface parentList, DragAndDropItemTarget receiver) {
     int reorderedListIndex = -1;
     int reorderedItemIndex = -1;
     int receiverListIndex = -1;
@@ -233,7 +233,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     }
   }
 
-  _internalOnListDropOnLastTarget(DragAndDropList newOrReordered, DragAndDropListTarget receiver) {
+  _internalOnListDropOnLastTarget(DragAndDropListInterface newOrReordered, DragAndDropListTarget receiver) {
     // determine if newOrReordered is new or existing
     int reorderedListIndex = widget.children.indexWhere((e) => newOrReordered == e);
     if (reorderedListIndex >= 0) {

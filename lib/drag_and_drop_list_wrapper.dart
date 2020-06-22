@@ -1,11 +1,10 @@
 import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class DragAndDropListWrapper extends StatefulWidget {
-  final DragAndDropList dragAndDropList;
+  final DragAndDropListInterface dragAndDropList;
   final DragAndDropBuilderParameters parameters;
 
   DragAndDropListWrapper({this.dragAndDropList, this.parameters, Key key}) : super(key: key);
@@ -15,17 +14,22 @@ class DragAndDropListWrapper extends StatefulWidget {
 }
 
 class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerProviderStateMixin {
-  DragAndDropList _hoveredDraggable;
+  DragAndDropListInterface _hoveredDraggable;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget dragAndDropListContents = DragAndDropList.generateDragAndDropListContents(widget.dragAndDropList, widget.parameters);
+    Widget dragAndDropListContents = widget.dragAndDropList.generateWidget(widget.parameters);
 
     Widget draggable;
     if (widget.parameters.dragOnLongPress) {
-      draggable = LongPressDraggable<DragAndDropList>(
+      draggable = LongPressDraggable<DragAndDropListInterface>(
         data: widget.dragAndDropList,
-        axis: Axis.vertical,
+        axis: widget.parameters.axis,
         child: dragAndDropListContents,
         feedback: Container(
           width: widget.parameters.draggingWidth ?? MediaQuery.of(context).size.width,
@@ -37,9 +41,9 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
         childWhenDragging: Container(),
       );
     } else {
-      draggable = Draggable<DragAndDropList>(
+      draggable = Draggable<DragAndDropListInterface>(
         data: widget.dragAndDropList,
-        axis: Axis.vertical,
+        axis: widget.parameters.axis,
         child: dragAndDropListContents,
         feedback: Container(
           width: widget.parameters.draggingWidth ?? MediaQuery.of(context).size.width,
@@ -64,7 +68,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
                   ? Opacity(
                       opacity: widget.parameters.listGhostOpacity,
                       child: widget.parameters.listGhost ??
-                          DragAndDropList.generateDragAndDropListContents(_hoveredDraggable, widget.parameters),
+                          _hoveredDraggable.generateWidget(widget.parameters),
                     )
                   : Container(),
             ),
@@ -77,7 +81,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
           ],
         ),
         Positioned.fill(
-          child: DragTarget<DragAndDropList>(
+          child: DragTarget<DragAndDropListInterface>(
             builder: (context, candidateData, rejectedData) {
               if (candidateData != null && candidateData.isNotEmpty) {}
               return Container();
@@ -89,9 +93,11 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
               return true;
             },
             onLeave: (incoming) {
-              setState(() {
-                _hoveredDraggable = null;
-              });
+              if (_hoveredDraggable != null) {
+                setState(() {
+                  _hoveredDraggable = null;
+                });
+              }
             },
             onAccept: (incoming) {
               setState(() {

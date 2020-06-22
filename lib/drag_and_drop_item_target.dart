@@ -1,13 +1,14 @@
 import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class DragAndDropItemTarget extends StatefulWidget {
   final Widget child;
-  final DragAndDropList parent;
+  final DragAndDropListInterface parent;
   final DragAndDropBuilderParameters parameters;
-  final Function(DragAndDropItem reordered, DragAndDropList parentList, DragAndDropItemTarget receiver) onReorderOrAdd;
+  final Function(DragAndDropItem reordered, DragAndDropListInterface parentList, DragAndDropItemTarget receiver) onReorderOrAdd;
 
   DragAndDropItemTarget({@required this.child,
     @required this.onReorderOrAdd,

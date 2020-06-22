@@ -1,18 +1,19 @@
 
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class BasicTab extends StatefulWidget {
-  BasicTab({Key key, this.title}) : super(key: key);
+class BasicExample extends StatefulWidget {
+  BasicExample({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _BasicTabState createState() => _BasicTabState();
+  _BasicExample createState() => _BasicExample();
 }
 
-class _BasicTabState extends State<BasicTab> {
+class _BasicExample extends State<BasicExample> {
   List<DragAndDropList> _contents;
 
   @override
@@ -54,10 +55,16 @@ class _BasicTabState extends State<BasicTab> {
 
   @override
   Widget build(BuildContext context) {
-    return DragAndDropLists(
-      children: _contents,
-      onItemReorder: _onItemReorder,
-      onListReorder: _onListReorder,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Basic'),
+      ),
+      drawer: NavigationDrawer(),
+      body: DragAndDropLists(
+        children: _contents,
+        onItemReorder: _onItemReorder,
+        onListReorder: _onListReorder,
+      ),
     );
   }
 

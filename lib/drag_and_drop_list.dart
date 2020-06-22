@@ -2,75 +2,72 @@ import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_wrapper.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DragAndDropList {
+class DragAndDropList implements DragAndDropListInterface {
   final Widget header;
   final Widget footer;
   final Widget leftSide;
   final Widget rightSide;
-  final bool initiallyExpanded;
   final Widget contentsWhenEmpty;
   final Widget lastTarget;
   final Decoration decoration;
   final CrossAxisAlignment verticalAlignment;
   final MainAxisAlignment horizontalAlignment;
   final List<DragAndDropItem> children;
-  final DragAndDropBuilderParameters parameters;
 
-  DragAndDropList(
+  DragAndDropList (
       {this.children,
       this.header,
       this.footer,
       this.leftSide,
       this.rightSide,
-      this.initiallyExpanded = true,
       this.contentsWhenEmpty,
       this.lastTarget,
       this.decoration,
       this.horizontalAlignment = MainAxisAlignment.start,
-      this.verticalAlignment = CrossAxisAlignment.start,
-      this.parameters});
+      this.verticalAlignment = CrossAxisAlignment.start});
 
-  static Widget generateDragAndDropListContents(DragAndDropList dragAndDropList, DragAndDropBuilderParameters params) {
+  @override
+  Widget generateWidget(DragAndDropBuilderParameters params) {
     var contents = List<Widget>();
-    if (dragAndDropList.header != null) {
-      contents.add(Flexible(child: dragAndDropList.header));
+    if (header != null) {
+      contents.add(Flexible(child: header));
     }
     contents.add(
       IntrinsicHeight(
         child: Row(
-          mainAxisAlignment: dragAndDropList.horizontalAlignment,
+          mainAxisAlignment: horizontalAlignment,
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: generateDragAndDropListInnerContents(dragAndDropList, params),
+          children: _generateDragAndDropListInnerContents(params),
         ),
       ),
     );
-    if (dragAndDropList.footer != null) {
-      contents.add(Flexible(child: dragAndDropList.footer));
+    if (footer != null) {
+      contents.add(Flexible(child: footer));
     }
 
     return Container(
-      decoration: dragAndDropList.decoration ?? params.listDecoration,
+      decoration: decoration ?? params.listDecoration,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: dragAndDropList.verticalAlignment,
+        crossAxisAlignment: verticalAlignment,
         children: contents,
       ),
     );
   }
 
-  static List<Widget> generateDragAndDropListInnerContents(
-      DragAndDropList dragAndDropList, DragAndDropBuilderParameters params) {
+  List<Widget> _generateDragAndDropListInnerContents(DragAndDropBuilderParameters params) {
     var contents = List<Widget>();
-    if (dragAndDropList.leftSide != null) {
-      contents.add(dragAndDropList.leftSide);
+    if (leftSide != null) {
+      contents.add(leftSide);
     }
-    if (dragAndDropList.children != null && dragAndDropList.children.isNotEmpty) {
+    if (children != null && children.isNotEmpty) {
       List<Widget> allChildren = List<Widget>();
-      dragAndDropList.children.forEach((element) => allChildren.add(DragAndDropItemWrapper(
+      children.forEach((element) => allChildren.add(DragAndDropItemWrapper(
             child: element,
             onPointerDown: params.onPointerDown,
             onPointerUp: params.onPointerUp,
@@ -85,10 +82,10 @@ class DragAndDropList {
             verticalAlignment: params.verticalAlignment,
           )));
       allChildren.add(DragAndDropItemTarget(
-        parent: dragAndDropList,
+        parent: this,
         parameters: params,
         onReorderOrAdd: params.onItemDropOnLastTarget,
-        child: dragAndDropList.lastTarget ??
+        child: lastTarget ??
             Container(
               height: 20,
             ),
@@ -98,7 +95,7 @@ class DragAndDropList {
           child: SingleChildScrollView(
             physics: NeverScrollableScrollPhysics(),
             child: Column(
-              crossAxisAlignment: dragAndDropList.verticalAlignment,
+              crossAxisAlignment: verticalAlignment,
               mainAxisSize: MainAxisSize.max,
               children: allChildren,
             ),
@@ -111,10 +108,9 @@ class DragAndDropList {
           child: SingleChildScrollView(
             physics: NeverScrollableScrollPhysics(),
             child: Column(
-              crossAxisAlignment: dragAndDropList.verticalAlignment,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                dragAndDropList.contentsWhenEmpty ??
+                contentsWhenEmpty ??
                     Text(
                       'Empty list',
                       style: TextStyle(
@@ -122,10 +118,10 @@ class DragAndDropList {
                       ),
                     ),
                 DragAndDropItemTarget(
-                  parent: dragAndDropList,
+                  parent: this,
                   parameters: params,
                   onReorderOrAdd: params.onItemDropOnLastTarget,
-                  child: dragAndDropList.lastTarget ??
+                  child: lastTarget ??
                       Container(
                         height: 20,
                       ),
@@ -136,8 +132,8 @@ class DragAndDropList {
         ),
       );
     }
-    if (dragAndDropList.rightSide != null) {
-      contents.add(dragAndDropList.rightSide);
+    if (rightSide != null) {
+      contents.add(rightSide);
     }
     return contents;
   }
