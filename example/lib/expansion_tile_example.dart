@@ -13,17 +13,24 @@ class ExpansionTileExample extends StatefulWidget {
   _ListTileExample createState() => _ListTileExample();
 }
 
+class InnerList {
+  final String name;
+  List<String> children;
+  InnerList({this.name, this.children});
+}
+
 class _ListTileExample extends State<ExpansionTileExample> {
-  List<List<String>> _lists;
+  List<InnerList> _lists;
 
   @override
   void initState() {
     super.initState();
 
     _lists = List.generate(4, (outerIndex) {
-      return List.generate(6, (innerIndex) {
-        return '$outerIndex.$innerIndex';
-      });
+      return InnerList(
+        name: outerIndex.toString(),
+        children: List.generate(6, (innerIndex) => '$outerIndex.$innerIndex'),
+      );
     });
   }
 
@@ -57,13 +64,13 @@ class _ListTileExample extends State<ExpansionTileExample> {
   }
 
   _buildList(int outerIndex) {
-    var outerList = _lists[outerIndex];
+    var innerList = _lists[outerIndex];
     return DragAndDropListExpansion(
-      title: Text('Outer List $outerIndex'),
-      subtitle: Text('Subtitle $outerIndex'),
+      title: Text('List ${innerList.name}'),
+      subtitle: Text('Subtitle ${innerList.name}'),
       leading: Icon(Icons.ac_unit),
-      children: List.generate(outerList.length, (index) => _buildItem(outerList[index])),
-      key: PageStorageKey<int>(outerIndex),
+      children: List.generate(innerList.children.length, (index) => _buildItem(innerList.children[index])),
+      key: PageStorageKey<InnerList>(innerList),
     );
   }
 
@@ -77,8 +84,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
 
   _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
-      var movedItem = _lists[oldListIndex].removeAt(oldItemIndex);
-      _lists[newListIndex].insert(newItemIndex, movedItem);
+      var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
+      _lists[newListIndex].children.insert(newItemIndex, movedItem);
     });
   }
 

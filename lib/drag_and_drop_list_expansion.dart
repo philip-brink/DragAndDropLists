@@ -18,6 +18,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   final Function(bool) onExpansionChanged;
   final Color backgroundColor;
   final List<DragAndDropItem> children;
+
   /// Required to maintain expanded/collapsed states
   final PageStorageKey key;
   final Widget contentsWhenEmpty;
@@ -36,7 +37,8 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       this.onExpansionChanged,
       this.contentsWhenEmpty,
       this.lastTarget,
-      this.key}) : assert(key != null) {
+      this.key})
+      : assert(key != null) {
     _expanded.value = initiallyExpanded;
   }
 
@@ -92,14 +94,12 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
                   onLeave: (incoming) {
                     _stopExpansionTimer();
                   },
-                  onAccept: (incoming) {
-                  },
+                  onAccept: (incoming) {},
                 ),
               )
             ],
           );
-        }
-        else {
+        } else {
           return child;
         }
       },
@@ -186,14 +186,14 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   _onSetExpansion(bool expanded) {
     _expanded.value = expanded;
 
-    if (onExpansionChanged != null)
-      onExpansionChanged(expanded);
+    if (onExpansionChanged != null) onExpansionChanged(expanded);
   }
 
   @override
   get isExpanded => _expanded.value;
 
   Timer _expansionTimer;
+
   _startExpansionTimer() async {
     _expansionTimer = Timer(Duration(milliseconds: 400), _expansionCallback);
   }
