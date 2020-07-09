@@ -14,44 +14,16 @@ class ExpansionTileExample extends StatefulWidget {
 }
 
 class _ListTileExample extends State<ExpansionTileExample> {
-  List<DragAndDropListExpansion> _contents;
+  List<List<String>> _lists;
 
   @override
   void initState() {
     super.initState();
 
-    _contents = List.generate(4, (index) {
-      return DragAndDropListExpansion(
-        title: Text('Expansion Tile $index'),
-        subtitle: Text('Subtitle $index'),
-        leading: Icon(Icons.ac_unit),
-        children: <DragAndDropItem>[
-          DragAndDropItem(
-            child: ListTile(
-              title: Text(
-                'Sub $index.1',
-              ),
-              trailing: Icon(Icons.cast),
-            ),
-          ),
-          DragAndDropItem(
-            child: ListTile(
-              title: Text(
-                'Sub $index.2',
-              ),
-              trailing: Icon(Icons.map),
-            ),
-          ),
-          DragAndDropItem(
-            child: ListTile(
-              title: Text(
-                'Sub $index.3',
-              ),
-              trailing: Icon(Icons.adb),
-            ),
-          ),
-        ],
-      );
+    _lists = List.generate(4, (outerIndex) {
+      return List.generate(6, (innerIndex) {
+        return '$outerIndex.$innerIndex';
+      });
     });
   }
 
@@ -63,7 +35,7 @@ class _ListTileExample extends State<ExpansionTileExample> {
       ),
       drawer: NavigationDrawer(),
       body: DragAndDropLists(
-        children: _contents,
+        children: List.generate(_lists.length, (index) => _buildList(index)),
         onItemReorder: _onItemReorder,
         onListReorder: _onListReorder,
         // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
@@ -84,17 +56,36 @@ class _ListTileExample extends State<ExpansionTileExample> {
     );
   }
 
+  _buildList(int outerIndex) {
+    var outerList = _lists[outerIndex];
+    return DragAndDropListExpansion(
+      title: Text('Outer List $outerIndex'),
+      subtitle: Text('Subtitle $outerIndex'),
+      leading: Icon(Icons.ac_unit),
+      children: List.generate(outerList.length, (index) => _buildItem(outerList[index])),
+      key: PageStorageKey<int>(outerIndex),
+    );
+  }
+
+  _buildItem(String item) {
+    return DragAndDropItem(
+      child: ListTile(
+        title: Text(item),
+      ),
+    );
+  }
+
   _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
-      var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
-      _contents[newListIndex].children.insert(newItemIndex, movedItem);
+      var movedItem = _lists[oldListIndex].removeAt(oldItemIndex);
+      _lists[newListIndex].insert(newItemIndex, movedItem);
     });
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
     setState(() {
-      var movedList = _contents.removeAt(oldListIndex);
-      _contents.insert(newListIndex, movedList);
+      var movedList = _lists.removeAt(oldListIndex);
+      _lists.insert(newListIndex, movedList);
     });
   }
 }

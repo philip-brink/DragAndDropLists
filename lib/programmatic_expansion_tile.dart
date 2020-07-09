@@ -133,24 +133,27 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile> wi
     _setExpanded(!_isExpanded);
   }
 
-  void _setExpanded(bool isExpanded) {
-    setState(() {
-      _isExpanded = !_isExpanded;
-      if (_isExpanded) {
-        _controller.forward();
-      } else {
-        _controller.reverse().then<void>((void value) {
-          if (!mounted)
-            return;
-          setState(() {
-            // Rebuild without widget.children.
+  void _setExpanded(bool expanded) {
+    if (_isExpanded != expanded) {
+      setState(() {
+        _isExpanded = expanded;
+        if (_isExpanded) {
+          _controller.forward();
+        } else {
+          _controller.reverse().then<void>((void value) {
+            if (!mounted)
+              return;
+            setState(() {
+              // Rebuild without widget.children.
+            });
           });
-        });
+        }
+        PageStorage.of(context)?.writeState(context, _isExpanded);
+      });
+      if (widget.onExpansionChanged != null) {
+        widget.onExpansionChanged(_isExpanded);
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
-    });
-    if (widget.onExpansionChanged != null)
-      widget.onExpansionChanged(_isExpanded);
+    }
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {

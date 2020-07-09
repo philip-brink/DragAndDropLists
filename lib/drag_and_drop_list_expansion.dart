@@ -18,7 +18,8 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   final Function(bool) onExpansionChanged;
   final Color backgroundColor;
   final List<DragAndDropItem> children;
-  final Key key;
+  /// Required to maintain expanded/collapsed states
+  final PageStorageKey key;
   final Widget contentsWhenEmpty;
   final Widget lastTarget;
   ValueNotifier<bool> _expanded = ValueNotifier<bool>(true);
@@ -35,7 +36,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       this.onExpansionChanged,
       this.contentsWhenEmpty,
       this.lastTarget,
-      this.key}) {
+      this.key}) : assert(key != null) {
     _expanded.value = initiallyExpanded;
   }
 
@@ -75,6 +76,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       builder: (context, error, child) {
         if (!_expanded.value) {
           return Stack(
+            key: key,
             children: <Widget>[
               child,
               Positioned.fill(
@@ -159,7 +161,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
 
   @override
   toggleExpanded() {
-    if (_expanded.value)
+    if (isExpanded)
       collapse();
     else
       expand();
@@ -167,7 +169,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
 
   @override
   collapse() {
-    if (!_expanded.value) {
+    if (!isExpanded) {
       _expanded.value = false;
       _expansionKey.currentState.collapse();
     }
@@ -175,7 +177,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
 
   @override
   expand() {
-    if (!_expanded.value) {
+    if (!isExpanded) {
       _expanded.value = true;
       _expansionKey.currentState.expand();
     }
@@ -189,7 +191,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   }
 
   @override
-  get isExpanded => _expanded;
+  get isExpanded => _expanded.value;
 
   Timer _expansionTimer;
   _startExpansionTimer() async {

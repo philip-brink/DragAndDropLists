@@ -17,6 +17,8 @@ export 'package:drag_and_drop_lists/drag_and_drop_item_wrapper.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
+export 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
+
 
 class DragAndDropLists extends StatefulWidget {
   final List<DragAndDropListInterface> children;
