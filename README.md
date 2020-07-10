@@ -10,6 +10,12 @@ Two-level drag and drop reorderable lists.
 - Can be used in slivers
 - Easy to extend with custom layouts
 
+![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/basic.gif)
+![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/list_tiles.gif)
+![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/slivers.gif)
+![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/expansion_tiles.gif)
+![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/horizontal.gif)
+
 ## Usage
 To use this plugin, add `drag_and_drop_lists` as a [dependency in your pubspec.yaml file.](https://flutter.dev/docs/development/packages-and-plugins/using-packages)
 For example:
@@ -51,5 +57,3 @@ _buildItem(String item) {
   );
 }
 ```
-
-![](https://raw.githubusercontent.com/pbrink/google-fonts-flutter/master/readme_images/main.gif)
