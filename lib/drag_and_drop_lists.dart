@@ -39,8 +39,8 @@ class DragAndDropLists extends StatefulWidget {
   /// Returns -1 for [oldItemIndex] and [oldListIndex] when adding a new item.
   final Function(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) onItemReorder;
   final Function(int oldListIndex, int newListIndex) onListReorder;
-  final Function(DragAndDropItem newItem, int listIndex) onItemAdd;
-  final Function(DragAndDropListInterface newList) onListAdd;
+  final Function(DragAndDropItem newItem, int listIndex, int newItemIndex) onItemAdd;
+  final Function(DragAndDropListInterface newList, int newListIndex) onListAdd;
   final double itemDraggingWidth;
   final Widget itemTarget;
   final Widget itemGhost;
@@ -240,8 +240,6 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   }
 
   _internalOnItemReorder(DragAndDropItem reordered, DragAndDropItem receiver) {
-    if (widget.onItemReorder == null) return;
-
     int reorderedListIndex = -1;
     int reorderedItemIndex = -1;
     int receiverListIndex = -1;
@@ -261,28 +259,35 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       }
     }
 
-    if (reorderedListIndex == receiverListIndex && receiverItemIndex > reorderedItemIndex) {
-      // same list, so if the new position is after the old position, the removal of the old item must be taken into account
-      receiverItemIndex--;
-    }
+    if (reorderedItemIndex == -1) {
+      // this is a new item
+      if (widget.onItemAdd != null) widget.onItemAdd(reordered, receiverItemIndex, receiverListIndex);
+    } else {
+      if (reorderedListIndex == receiverListIndex && receiverItemIndex > reorderedItemIndex) {
+        // same list, so if the new position is after the old position, the removal of the old item must be taken into account
+        receiverItemIndex--;
+      }
 
-    widget.onItemReorder(reorderedItemIndex, reorderedListIndex, receiverItemIndex, receiverListIndex);
+      if (widget.onItemReorder != null) widget.onItemReorder(reorderedItemIndex, reorderedListIndex, receiverItemIndex, receiverListIndex);
+    }
   }
 
   _internalOnListReorder(DragAndDropListInterface reordered, DragAndDropListInterface receiver) {
-    if (widget.onListReorder == null) return;
-
     int reorderedListIndex = widget.children.indexWhere((e) => reordered == e);
     int receiverListIndex = widget.children.indexWhere((e) => receiver == e);
 
     int newListIndex = receiverListIndex;
 
-    if (newListIndex > reorderedListIndex) {
-      // same list, so if the new position is after the old position, the removal of the old item must be taken into account
-      newListIndex--;
+    if (reorderedListIndex == -1) {
+      // this is a new list
+      if (widget.onListAdd != null) widget.onListAdd(reordered, newListIndex);
+    } else {
+      if (newListIndex > reorderedListIndex) {
+        // same list, so if the new position is after the old position, the removal of the old item must be taken into account
+        newListIndex--;
+      }
+      if (widget.onListReorder != null) widget.onListReorder(reorderedListIndex, newListIndex);
     }
-
-    widget.onListReorder(reorderedListIndex, newListIndex);
   }
 
   _internalOnItemDropOnLastTarget(
@@ -311,7 +316,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     }
 
     if (reorderedItemIndex == -1) {
-      if (widget.onItemAdd != null) widget.onItemAdd(newOrReordered, receiverListIndex);
+      if (widget.onItemAdd != null) widget.onItemAdd(newOrReordered, receiverListIndex, reorderedItemIndex);
     } else {
       if (reorderedListIndex == receiverListIndex && receiverItemIndex > reorderedItemIndex) {
         // same list, so if the new position is after the old position, the removal of the old item must be taken into account
@@ -328,7 +333,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     if (reorderedListIndex >= 0) {
       if (widget.onListReorder != null) widget.onListReorder(reorderedListIndex, widget.children.length - 1);
     } else {
-      if (widget.onListAdd != null) widget.onListAdd(newOrReordered);
+      if (widget.onListAdd != null) widget.onListAdd(newOrReordered, reorderedListIndex);
     }
   }
 

@@ -63,10 +63,12 @@ class _DragIntoListExample extends State<DragIntoListExample> {
                 Expanded(
                   child: Container(
                     color: Colors.orange,
-                    child: Draggable<DragAndDropItem>(
-                      feedback: Icon(Icons.photo),
-                      child: Icon(Icons.photo),
-                      data: DragAndDropItem(child: Text('New default item')),
+                    child: Center(
+                      child: Draggable<DragAndDropItem>(
+                        feedback: Icon(Icons.photo),
+                        child: Icon(Icons.photo),
+                        data: DragAndDropItem(child: Text('New default item')),
+                      ),
                     ),
                   ),
                 ),
@@ -92,17 +94,19 @@ class _DragIntoListExample extends State<DragIntoListExample> {
     });
   }
 
-  _onItemAdd(DragAndDropItem newItem, int listIndex) {
+  _onItemAdd(DragAndDropItem newItem, int listIndex, int itemIndex) {
     print('adding new item');
     setState(() {
-      _contents[listIndex].children.add(newItem);
+      if (itemIndex == -1) _contents[listIndex].children.add(newItem);
+      else _contents[listIndex].children.insert(itemIndex, newItem);
     });
   }
 
-  _onListAdd(DragAndDropListInterface newList) {
+  _onListAdd(DragAndDropListInterface newList, int listIndex) {
     print('adding new list');
     setState(() {
-      _contents.add(newList);
+      if (listIndex == -1) _contents.add(newList);
+      else _contents.insert(listIndex, newList);
     });
   }
 }
