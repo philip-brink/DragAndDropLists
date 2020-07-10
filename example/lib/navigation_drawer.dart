@@ -48,14 +48,6 @@ class NavigationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Drag Handle'),
-            leading: Icon(Icons.drag_handle),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/');
-            },
-          ),
-          ListTile(
             title: Text('Horizontal'),
             leading: Icon(Icons.swap_horiz),
             onTap: () {
