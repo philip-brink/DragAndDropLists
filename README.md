@@ -10,11 +10,13 @@ Two-level drag and drop reorderable lists.
 - Can be used in slivers
 - Easy to extend with custom layouts
 
-![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/basic.gif)
-![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/list_tiles.gif)
-![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/slivers.gif)
-![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/expansion_tiles.gif)
-![](https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/horizontal.gif)
+<p>
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/basic.gif" width="180" title="Basic">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/list_tiles.gif" width="180" title="List Tiles">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/expansion_tiles.gif" width="180" title="Expansion Tiles">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/slivers.gif" width="180" title="Slivers">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/horizontal.gif" width="180" title="Horizontal">
+</p>
 
 ## Usage
 To use this plugin, add `drag_and_drop_lists` as a [dependency in your pubspec.yaml file.](https://flutter.dev/docs/development/packages-and-plugins/using-packages)
