@@ -20,28 +20,41 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget> with TickerPro
 
   @override
   Widget build(BuildContext context) {
+    Widget visibleContents = Column(
+      children: <Widget>[
+        AnimatedSize(
+          duration: Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
+          vsync: this,
+          alignment: widget.parameters.axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerLeft,
+          child: _hoveredDraggable != null
+              ? Opacity(
+                  opacity: widget.parameters.listGhostOpacity,
+                  child: widget.parameters.listGhost ?? _hoveredDraggable.generateWidget(widget.parameters),
+                )
+              : Container(),
+        ),
+        widget.child ??
+            Container(
+              height: widget.parameters.axis == Axis.vertical ? 110 : null,
+              width: widget.parameters.axis == Axis.horizontal ? 110 : null,
+            ),
+      ],
+    );
+
+    if (widget.parameters.listPadding != null) {
+      visibleContents = Padding(
+        padding: widget.parameters.listPadding,
+        child: visibleContents,
+      );
+    }
+
+    if (widget.parameters.axis == Axis.horizontal) {
+      visibleContents = SingleChildScrollView(child: visibleContents);
+    }
+
     return Stack(
       children: <Widget>[
-        Column(
-          children: <Widget>[
-            AnimatedSize(
-              duration: Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
-              vsync: this,
-              alignment: Alignment.bottomCenter,
-              child: _hoveredDraggable != null
-                  ? Opacity(
-                      opacity: widget.parameters.listGhostOpacity,
-                      child: widget.parameters.listGhost ??
-                          _hoveredDraggable.generateWidget(widget.parameters),
-                    )
-                  : Container(),
-            ),
-            widget.child ??
-                Container(
-                  height: 110,
-                ),
-          ],
-        ),
+        visibleContents,
         Positioned.fill(
           child: DragTarget<DragAndDropListInterface>(
             builder: (context, candidateData, rejectedData) {

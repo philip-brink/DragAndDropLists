@@ -44,7 +44,7 @@ class NavigationDrawer extends StatelessWidget {
             leading: Icon(Icons.add),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/');
+              Navigator.of(context).pushReplacementNamed('/drag_into_list_example');
             },
           ),
           ListTile(

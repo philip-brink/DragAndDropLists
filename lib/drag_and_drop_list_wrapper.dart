@@ -63,7 +63,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
       AnimatedSize(
         duration: Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
         vsync: this,
-        alignment: widget.parameters.axis == Axis.vertical ? Alignment.bottomCenter : Alignment.topLeft,
+        alignment: widget.parameters.axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerLeft,
         child: _hoveredDraggable != null
             ? Opacity(
                 opacity: widget.parameters.listGhostOpacity,
@@ -92,7 +92,8 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
                 children: rowOrColumnChildren,
               )
             : Row(
-                children: rowOrColumnChildren,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: rowOrColumnChildren,
               ),
         Positioned.fill(
           child: DragTarget<DragAndDropListInterface>(

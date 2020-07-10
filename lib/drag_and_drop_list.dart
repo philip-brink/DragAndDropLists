@@ -16,10 +16,10 @@ class DragAndDropList implements DragAndDropListInterface {
   final Decoration decoration;
   final CrossAxisAlignment verticalAlignment;
   final MainAxisAlignment horizontalAlignment;
-  final List<DragAndDropItem> children;
+  final List<DragAndDropItem> children = List<DragAndDropItem>();
 
   DragAndDropList (
-      {this.children,
+      {List<DragAndDropItem> children,
       this.header,
       this.footer,
       this.leftSide,
@@ -28,7 +28,11 @@ class DragAndDropList implements DragAndDropListInterface {
       this.lastTarget,
       this.decoration,
       this.horizontalAlignment = MainAxisAlignment.start,
-      this.verticalAlignment = CrossAxisAlignment.start});
+      this.verticalAlignment = CrossAxisAlignment.start}) {
+    if (children != null) {
+      children.forEach((element) => this.children.add(element));
+    }
+  }
 
   @override
   Widget generateWidget(DragAndDropBuilderParameters params) {
