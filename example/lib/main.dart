@@ -1,6 +1,8 @@
 import 'package:example/basic_example.dart';
 import 'package:example/expansion_tile_example.dart';
+import 'package:example/horizontal_example.dart';
 import 'package:example/list_tile_example.dart';
+import 'package:example/sliver_example.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => BasicExample(),
         '/list_tile_example': (context) => ListTileExample(),
         '/expansion_tile_example': (context) => ExpansionTileExample(),
+        '/sliver_example': (context) => SliverExample(),
+        '/horizontal_example': (context) => HorizontalExample(),
       },
     );
   }

@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
@@ -45,9 +46,12 @@ class DragAndDropLists extends StatefulWidget {
   final Widget listDivider;
   final EdgeInsets listPadding;
   final Widget listItemWhenEmpty;
+  final double listWidth;
   final CrossAxisAlignment verticalAlignment;
   final MainAxisAlignment horizontalAlignment;
   final Axis axis;
+  final bool sliverList;
+  final ScrollController scrollController;
 
   DragAndDropLists({
     this.children,
@@ -72,18 +76,33 @@ class DragAndDropLists extends StatefulWidget {
     this.listDivider,
     this.listPadding,
     this.listItemWhenEmpty,
+    this.listWidth = double.infinity,
     this.verticalAlignment = CrossAxisAlignment.start,
     this.horizontalAlignment = MainAxisAlignment.start,
     this.axis = Axis.vertical,
+    this.sliverList = false,
+    this.scrollController,
     Key key,
-  }) : super(key: key);
+  }) : super(key: key) {
+    if (listGhost == null && children.where((element) => element is DragAndDropListExpansionInterface).isNotEmpty)
+      throw Exception('If using DragAndDropListExpansion, you must provide a non-null listGhost');
+    if (sliverList && scrollController == null) {
+      throw Exception('A scroll controller must be provided when using sliver lists');
+    }
+    if (axis == Axis.horizontal && listWidth == double.infinity) {
+      throw Exception('A finite width must be provided when setting the axis to horizontal');
+    }
+    if (axis == Axis.horizontal && sliverList) {
+      throw Exception('Combining a sliver list with a horizontal list is currently unsupported');
+    }
+  }
 
   @override
   State<StatefulWidget> createState() => DragAndDropListsState();
 }
 
 class DragAndDropListsState extends State<DragAndDropLists> {
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
   bool _pointerDown = false;
   double _pointerYPosition;
   double _pointerXPosition;
@@ -91,6 +110,13 @@ class DragAndDropListsState extends State<DragAndDropLists> {
 
   @override
   Widget build(BuildContext context) {
+    if (_scrollController == null) {
+      if (widget.scrollController != null)
+        _scrollController = widget.scrollController;
+      else
+        _scrollController = ScrollController();
+    }
+
     var parameters = DragAndDropBuilderParameters(
       listGhost: widget.listGhost,
       listGhostOpacity: widget.listGhostOpacity,
@@ -110,6 +136,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       axis: widget.axis,
       itemGhost: widget.itemGhost,
       listDecoration: widget.listDecoration,
+      listWidth: widget.listWidth,
     );
 
     DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(
@@ -119,39 +146,65 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     );
 
     Widget listView;
-    if (widget.listDivider != null) {
-      listView = ListView.separated(
-        controller: _scrollController,
-        separatorBuilder: (_, index) => widget.listDivider,
-        itemCount: (widget.children?.length ?? 0) + 1,
-        itemBuilder: (context, index) {
-          if (index < (widget.children?.length ?? 0)) {
+
+
+    if (widget.sliverList) {
+      int childrenCount;
+      bool includeSeparators = widget.listDivider != null;
+      if (includeSeparators) childrenCount = (widget.children?.length ?? 0) * 2;
+      else childrenCount = (widget.children?.length ?? 0) + 1;
+      listView = SliverList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          if (index == childrenCount - 1) {
+            return dragAndDropListTarget;
+          } else if (includeSeparators && index.isOdd) {
+            return widget.listDivider;
+          } else {
             return DragAndDropListWrapper(
               dragAndDropList: widget.children[index],
               parameters: parameters,
             );
-          } else {
-            return dragAndDropListTarget;
           }
         },
+        childCount: childrenCount,
+        ),
       );
     } else {
-      listView = ListView.builder(
-        controller: _scrollController,
-        itemCount: (widget.children?.length ?? 0) + 1,
-        itemBuilder: (context, index) {
-          if (index < (widget.children?.length ?? 0)) {
-            return DragAndDropListWrapper(
-              dragAndDropList: widget.children[index],
-              parameters: parameters,
-            );
-          } else {
-            return dragAndDropListTarget;
-          }
-        },
-      );
+      if (widget.listDivider != null) {
+        listView = ListView.separated(
+          scrollDirection: widget.axis,
+          controller: _scrollController,
+          separatorBuilder: (_, index) => widget.listDivider,
+          itemCount: (widget.children?.length ?? 0) + 1,
+          itemBuilder: (context, index) {
+            if (index < (widget.children?.length ?? 0)) {
+              return DragAndDropListWrapper(
+                dragAndDropList: widget.children[index],
+                parameters: parameters,
+              );
+            } else {
+              return dragAndDropListTarget;
+            }
+          },
+        );
+      } else {
+        listView = ListView.builder(
+          scrollDirection: widget.axis,
+          controller: _scrollController,
+          itemCount: (widget.children?.length ?? 0) + 1,
+          itemBuilder: (context, index) {
+            if (index < (widget.children?.length ?? 0)) {
+              return DragAndDropListWrapper(
+                dragAndDropList: widget.children[index],
+                parameters: parameters,
+              );
+            } else {
+              return dragAndDropListTarget;
+            }
+          },
+        );
+      }
     }
-
     return listView;
   }
 
@@ -273,9 +326,14 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       double overDragCoefficient = 5.0;
       double newOffset;
 
-      RenderBox rb = context.findRenderObject();
-      var topLeftOffset = rb.localToGlobal(Offset.zero);
-      var bottomRightOffset = rb.localToGlobal(rb.size.bottomRight(Offset.zero));
+      var rb = context.findRenderObject();
+      Size size;
+      if (rb is RenderBox)
+        size = rb.size;
+      else if (rb is RenderSliver)
+        size = rb.paintBounds.size;
+      var topLeftOffset = localToGlobal(rb, Offset.zero);
+      var bottomRightOffset = localToGlobal(rb, size.bottomRight(Offset.zero));
       double top = topLeftOffset.dy;
       double bottom = bottomRightOffset.dy;
 
@@ -298,5 +356,9 @@ class DragAndDropListsState extends State<DragAndDropLists> {
         if (_pointerDown) _scrollList();
       }
     }
+  }
+
+  static Offset localToGlobal(RenderObject object, Offset point, { RenderObject ancestor }) {
+    return MatrixUtils.transformPoint(object.getTransformTo(ancestor), point);
   }
 }

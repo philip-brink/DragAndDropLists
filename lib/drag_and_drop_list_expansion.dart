@@ -52,7 +52,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       trailing: trailing,
       leading: leading,
       backgroundColor: backgroundColor,
-      initiallyExpanded: _expanded.value,
+      initiallyExpanded: initiallyExpanded,
       onExpansionChanged: _onSetExpansion,
       key: _expansionKey,
       children: contents,

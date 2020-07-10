@@ -32,6 +32,14 @@ class NavigationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            title: Text('Slivers'),
+            leading: Icon(Icons.assignment),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/sliver_example');
+            },
+          ),
+          ListTile(
             title: Text('Drag Into List'),
             leading: Icon(Icons.add),
             onTap: () {
@@ -52,7 +60,7 @@ class NavigationDrawer extends StatelessWidget {
             leading: Icon(Icons.swap_horiz),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/');
+              Navigator.of(context).pushReplacementNamed('/horizontal_example');
             },
           ),
         ],

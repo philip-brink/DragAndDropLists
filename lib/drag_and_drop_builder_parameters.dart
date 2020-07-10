@@ -22,6 +22,7 @@ class DragAndDropBuilderParameters {
   final double listGhostOpacity;
   final EdgeInsets listPadding;
   final Decoration listDecoration;
+  final double listWidth;
 
   DragAndDropBuilderParameters({
     @required this.onPointerMove,
@@ -42,5 +43,6 @@ class DragAndDropBuilderParameters {
     this.listGhost,
     this.listPadding,
     this.listDecoration,
+    this.listWidth = double.infinity,
   });
 }

@@ -36,21 +36,28 @@ class DragAndDropList implements DragAndDropListInterface {
     if (header != null) {
       contents.add(Flexible(child: header));
     }
-    contents.add(
-      IntrinsicHeight(
-        child: Row(
-          mainAxisAlignment: horizontalAlignment,
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: _generateDragAndDropListInnerContents(params),
-        ),
+    Widget intrinsicHeight = IntrinsicHeight(
+      child: Row(
+        mainAxisAlignment: horizontalAlignment,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: _generateDragAndDropListInnerContents(params),
       ),
     );
+    if (params.axis == Axis.horizontal) {
+      intrinsicHeight = Container(
+        width: params.listWidth,
+        child: intrinsicHeight,
+      );
+    }
+    contents.add(intrinsicHeight);
+
     if (footer != null) {
       contents.add(Flexible(child: footer));
     }
 
     return Container(
+      width: params.axis == Axis.vertical ? double.infinity : params.listWidth - params.listPadding.horizontal,
       decoration: decoration ?? params.listDecoration,
       child: Column(
         mainAxisSize: MainAxisSize.min,

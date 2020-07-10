@@ -45,8 +45,11 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
         data: widget.dragAndDropList,
         axis: widget.parameters.axis,
         child: dragAndDropListContents,
+        // TODO: This width for horizontal dragging isn't functioning properly when no draggingWidth set
         feedback: Container(
-          width: widget.parameters.draggingWidth ?? MediaQuery.of(context).size.width,
+          width: widget.parameters.axis == Axis.vertical
+              ? (widget.parameters.draggingWidth ?? MediaQuery.of(context).size.width)
+              : (widget.parameters.draggingWidth ?? widget.parameters.listWidth),
           child: Material(
             child: dragAndDropListContents,
             color: Colors.transparent,
@@ -56,30 +59,41 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
       );
     }
 
+    var rowOrColumnChildren = <Widget>[
+      AnimatedSize(
+        duration: Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
+        vsync: this,
+        alignment: widget.parameters.axis == Axis.vertical ? Alignment.bottomCenter : Alignment.topLeft,
+        child: _hoveredDraggable != null
+            ? Opacity(
+                opacity: widget.parameters.listGhostOpacity,
+                child: widget.parameters.listGhost ??
+                    Container(
+                      padding: widget.parameters.axis == Axis.vertical
+                          ? EdgeInsets.all(0)
+                          : EdgeInsets.symmetric(horizontal: widget.parameters.listPadding.horizontal),
+                      child: _hoveredDraggable.generateWidget(widget.parameters),
+                    ),
+              )
+            : Container(),
+      ),
+      Listener(
+        child: draggable,
+        onPointerMove: widget.parameters.onPointerMove,
+        onPointerDown: widget.parameters.onPointerDown,
+        onPointerUp: widget.parameters.onPointerUp,
+      ),
+    ];
+
     var stack = Stack(
       children: <Widget>[
-        Column(
-          children: <Widget>[
-            AnimatedSize(
-              duration: Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
-              vsync: this,
-              alignment: Alignment.bottomCenter,
-              child: _hoveredDraggable != null
-                  ? Opacity(
-                      opacity: widget.parameters.listGhostOpacity,
-                      child: widget.parameters.listGhost ??
-                          _hoveredDraggable.generateWidget(widget.parameters),
-                    )
-                  : Container(),
-            ),
-            Listener(
-              child: draggable,
-              onPointerMove: widget.parameters.onPointerMove,
-              onPointerDown: widget.parameters.onPointerDown,
-              onPointerUp: widget.parameters.onPointerUp,
-            ),
-          ],
-        ),
+        widget.parameters.axis == Axis.vertical
+            ? Column(
+                children: rowOrColumnChildren,
+              )
+            : Row(
+                children: rowOrColumnChildren,
+              ),
         Positioned.fill(
           child: DragTarget<DragAndDropListInterface>(
             builder: (context, candidateData, rejectedData) {
@@ -109,13 +123,22 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
         ),
       ],
     );
+
+    Widget toReturn = stack;
     if (widget.parameters.listPadding != null) {
-      return Padding(
+      toReturn = Padding(
         padding: widget.parameters.listPadding,
         child: stack,
       );
-    } else {
-      return stack;
     }
+    if (widget.parameters.axis == Axis.horizontal) {
+      toReturn = SingleChildScrollView(
+        child: Container(
+          child: toReturn,
+        ),
+      );
+    }
+
+    return toReturn;
   }
 }
