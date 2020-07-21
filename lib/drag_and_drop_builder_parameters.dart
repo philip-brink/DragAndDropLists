@@ -7,9 +7,14 @@ class DragAndDropBuilderParameters {
   final Function(PointerMoveEvent event) onPointerMove;
   final Function(PointerUpEvent event) onPointerUp;
   final Function(PointerDownEvent event) onPointerDown;
-  final Function(DragAndDropItem reorderedItem, DragAndDropItem receiverItem) onItemReordered;
-  final Function(DragAndDropItem newOrReorderedItem, DragAndDropListInterface parentList, DragAndDropItemTarget receiver) onItemDropOnLastTarget;
-  final Function(DragAndDropListInterface reorderedList, DragAndDropListInterface receiverList) onListReordered;
+  final Function(DragAndDropItem reorderedItem, DragAndDropItem receiverItem)
+      onItemReordered;
+  final Function(
+      DragAndDropItem newOrReorderedItem,
+      DragAndDropListInterface parentList,
+      DragAndDropItemTarget receiver) onItemDropOnLastTarget;
+  final Function(DragAndDropListInterface reorderedList,
+      DragAndDropListInterface receiverList) onListReordered;
   final Axis axis;
   final CrossAxisAlignment verticalAlignment;
   final double draggingWidth;
