@@ -99,7 +99,7 @@ class _ListTileExample extends State<ListTileExample> {
           ),
         ),
         listPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        listItemWhenEmpty: Row(
+        contentsWhenEmpty: Row(
           children: <Widget>[
             Expanded(
               child: Padding(

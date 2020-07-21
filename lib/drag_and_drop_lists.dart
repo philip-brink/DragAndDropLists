@@ -34,36 +34,106 @@ export 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
 
 class DragAndDropLists extends StatefulWidget {
+  /// The child lists to be displayed.
+  /// If any of these children are [DragAndDropListExpansion] or inherit from
+  /// [DragAndDropListExpansionInterface], [listGhost] must not be null.
   final List<DragAndDropListInterface> children;
 
-  /// Returns -1 for [oldItemIndex] and [oldListIndex] when adding a new item.
+  /// Calls this function when a list element is reordered.
+  /// Takes into account the index change when removing an item, so the
+  /// [newItemIndex] can be used directly when inserting.
   final Function(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) onItemReorder;
+
+  /// Calls this function when a list is reordered.
+  /// Takes into account the index change when removing a list, so the
+  /// [newListIndex] can be used directly when inserting.
   final Function(int oldListIndex, int newListIndex) onListReorder;
+
+  /// Calls this function when a new item has been added.
   final Function(DragAndDropItem newItem, int listIndex, int newItemIndex) onItemAdd;
+
+  /// Calls this function when a new list has been added.
   final Function(DragAndDropListInterface newList, int newListIndex) onListAdd;
+
+  /// Width of a list item when it is being dragged.
   final double itemDraggingWidth;
-  final Widget itemTarget;
+
+  /// The widget that will be displayed at a potential drop position in a list
+  /// when an item is being dragged.
   final Widget itemGhost;
+
+  /// The opacity of the [itemGhost]. This must be between 0 and 1.
   final double itemGhostOpacity;
+
+  /// Length of animation for the change in an item size when displaying the [itemGhost].
   final int itemSizeAnimationDurationMilliseconds;
+
+  /// If true, drag an item after doing a long press. If false, drag immediately.
   final bool itemDragOnLongPress;
+
+  /// The decoration surrounding an item.
   final Decoration itemDecoration;
+
+  /// The width of a list when dragging.
   final double listDraggingWidth;
+
+  /// The widget to be displayed as the last element in the DragAndDropLists,
+  /// where a list will be accepted as the last list.
   final Widget listTarget;
+
+  /// The widget to be displayed at a potential list position while a list is being dragged.
+  /// This must not be null when [children] includes one or more
+  /// [DragAndDropListExpansion] or other class that inherit from [DragAndDropListExpansionInterface].
   final Widget listGhost;
+
+  /// The opacity of [listGhost]. It must be between 0 and 1.
   final double listGhostOpacity;
+
+  /// The duration of the animation for the change in size when a [listGhost] is
+  /// displayed at list position.
   final int listSizeAnimationDurationMilliseconds;
+
+  /// Whether a list should be dragged on a long or short press.
+  /// When true, the list will be dragged after a long press.
+  /// When false, it will be dragged immediately.
   final bool listDragOnLongPress;
+
+  /// The decoration surrounding a list.
   final Decoration listDecoration;
+
+  /// A widget that will be displayed between each individual list.
   final Widget listDivider;
+
+  /// The padding between each individual list.
   final EdgeInsets listPadding;
-  final Widget listItemWhenEmpty;
+
+  /// A widget that will be displayed whenever a list contains no items.
   final Widget contentsWhenEmpty;
+
+  /// The width of each individual list. This must be set to a finite value when
+  /// [axis] is set to Axis.horizontal.
   final double listWidth;
+
+  /// The default vertical alignment of list contents.
   final CrossAxisAlignment verticalAlignment;
+
+  /// The default horizontal alignment of list contents.
   final MainAxisAlignment horizontalAlignment;
+
+  /// Determines whether the DragAndDropLists are displayed in a horizontal or
+  /// vertical manner.
+  /// Set [axis] to Axis.vertical for vertical arrangement of the lists.
+  /// Set [axis] to Axis.horizontal for horizontal arrangement of the lists.
+  /// If [axis] is set to Axis.horizontal, [listWidth] must be set to some finite number.
   final Axis axis;
+
+  /// Whether or not to return a widget or a sliver-compatible list.
+  /// Set to true if using as a sliver. If true, a [scrollController] must be provided.
+  /// Set to false if using in a widget only.
   final bool sliverList;
+
+  /// A scroll controller that can be used for the scrolling of the first level lists.
+  /// This must be set if [sliverList] is set to true.
   final ScrollController scrollController;
 
   DragAndDropLists({
@@ -73,7 +143,6 @@ class DragAndDropLists extends StatefulWidget {
     this.onItemAdd,
     this.onListAdd,
     this.itemDraggingWidth,
-    this.itemTarget,
     this.itemGhost,
     this.itemGhostOpacity = 0.3,
     this.itemSizeAnimationDurationMilliseconds = 150,
@@ -88,7 +157,6 @@ class DragAndDropLists extends StatefulWidget {
     this.listDecoration,
     this.listDivider,
     this.listPadding,
-    this.listItemWhenEmpty,
     this.contentsWhenEmpty,
     this.listWidth = double.infinity,
     this.verticalAlignment = CrossAxisAlignment.start,

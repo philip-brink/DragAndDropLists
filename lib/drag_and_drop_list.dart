@@ -7,15 +7,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class DragAndDropList implements DragAndDropListInterface {
+  /// The widget that is displayed at the top of the list.
   final Widget header;
+
+  /// The widget that is displayed at the bottom of the list.
   final Widget footer;
+
+  /// The widget that is displayed to the left of the list.
   final Widget leftSide;
+
+  /// The widget that is displayed to the right of the list.
   final Widget rightSide;
+
+  /// The widget to be displayed when a list is empty.
+  /// If this is not null, it will override that set in [DragAndDropLists.contentsWhenEmpty].
   final Widget contentsWhenEmpty;
+
+  /// The widget to be displayed as the last element in the list that will accept
+  /// a dragged item.
   final Widget lastTarget;
+
+  /// The decoration displayed around a list.
+  /// If this is not null, it will override that set in [DragAndDropLists.listDecoration].
   final Decoration decoration;
+
+  /// The vertical alignment of the contents in this list.
+  /// If this is not null, it will override that set in [DragAndDropLists.verticalAlignment].
   final CrossAxisAlignment verticalAlignment;
+
+  /// The horizontal alignment of the contents in this list.
+  /// If this is not null, it will override that set in [DragAndDropLists.horizontalAlignment].
   final MainAxisAlignment horizontalAlignment;
+
+  /// The child elements that will be contained in this list.
+  /// It is possible to not provide any children when an empty list is desired.
   final List<DragAndDropItem> children = List<DragAndDropItem>();
 
   DragAndDropList (
