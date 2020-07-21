@@ -36,7 +36,7 @@ class ProgrammaticExpansionTile extends StatefulWidget {
     this.children = const <Widget>[],
     this.trailing,
     this.initiallyExpanded = false,
-  }) : assert(initiallyExpanded != null),
+  })  : assert(initiallyExpanded != null),
         super(key: key);
 
   /// A widget to display before the title.
@@ -76,13 +76,18 @@ class ProgrammaticExpansionTile extends StatefulWidget {
   final bool initiallyExpanded;
 
   @override
-  ProgrammaticExpansionTileState createState() => ProgrammaticExpansionTileState();
+  ProgrammaticExpansionTileState createState() =>
+      ProgrammaticExpansionTileState();
 }
 
-class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile> with SingleTickerProviderStateMixin {
-  static final Animatable<double> _easeOutTween = CurveTween(curve: Curves.easeOut);
-  static final Animatable<double> _easeInTween = CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween = Tween<double>(begin: 0.0, end: 0.5);
+class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
+    with SingleTickerProviderStateMixin {
+  static final Animatable<double> _easeOutTween =
+      CurveTween(curve: Curves.easeOut);
+  static final Animatable<double> _easeInTween =
+      CurveTween(curve: Curves.easeIn);
+  static final Animatable<double> _halfTween =
+      Tween<double>(begin: 0.0, end: 0.5);
 
   final ColorTween _borderColorTween = ColorTween();
   final ColorTween _headerColorTween = ColorTween();
@@ -108,11 +113,12 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile> wi
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
-    _backgroundColor = _controller.drive(_backgroundColorTween.chain(_easeOutTween));
+    _backgroundColor =
+        _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
-    _isExpanded = PageStorage.of(context)?.readState(context) as bool ?? widget.initiallyExpanded;
-    if (_isExpanded)
-      _controller.value = 1.0;
+    _isExpanded = PageStorage.of(context)?.readState(context) as bool ??
+        widget.initiallyExpanded;
+    if (_isExpanded) _controller.value = 1.0;
   }
 
   @override
@@ -141,8 +147,7 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile> wi
           _controller.forward();
         } else {
           _controller.reverse().then<void>((void value) {
-            if (!mounted)
-              return;
+            if (!mounted) return;
             setState(() {
               // Rebuild without widget.children.
             });
@@ -178,10 +183,11 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile> wi
               leading: widget.leading,
               title: widget.title,
               subtitle: widget.subtitle,
-              trailing: widget.trailing ?? RotationTransition(
-                turns: _iconTurns,
-                child: const Icon(Icons.expand_more),
-              ),
+              trailing: widget.trailing ??
+                  RotationTransition(
+                    turns: _iconTurns,
+                    child: const Icon(Icons.expand_more),
+                  ),
             ),
           ),
           ClipRect(
@@ -217,6 +223,5 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile> wi
       builder: _buildChildren,
       child: closed ? null : Column(children: widget.children),
     );
-
   }
 }

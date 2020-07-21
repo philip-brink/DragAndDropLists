@@ -6,16 +6,22 @@ import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 class DragAndDropListTarget extends StatefulWidget {
   final Widget child;
   final DragAndDropBuilderParameters parameters;
-  final Function(DragAndDropListInterface newOrReordered, DragAndDropListTarget receiver) onDropOnLastTarget;
+  final Function(DragAndDropListInterface newOrReordered,
+      DragAndDropListTarget receiver) onDropOnLastTarget;
 
-  DragAndDropListTarget({this.child, @required this.parameters, @required this.onDropOnLastTarget, Key key})
+  DragAndDropListTarget(
+      {this.child,
+      @required this.parameters,
+      @required this.onDropOnLastTarget,
+      Key key})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _DragAndDropListTarget();
 }
 
-class _DragAndDropListTarget extends State<DragAndDropListTarget> with TickerProviderStateMixin {
+class _DragAndDropListTarget extends State<DragAndDropListTarget>
+    with TickerProviderStateMixin {
   DragAndDropListInterface _hoveredDraggable;
 
   @override
@@ -23,13 +29,17 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget> with TickerPro
     Widget visibleContents = Column(
       children: <Widget>[
         AnimatedSize(
-          duration: Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
+          duration: Duration(
+              milliseconds: widget.parameters.listSizeAnimationDuration),
           vsync: this,
-          alignment: widget.parameters.axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerLeft,
+          alignment: widget.parameters.axis == Axis.vertical
+              ? Alignment.bottomCenter
+              : Alignment.centerLeft,
           child: _hoveredDraggable != null
               ? Opacity(
                   opacity: widget.parameters.listGhostOpacity,
-                  child: widget.parameters.listGhost ?? _hoveredDraggable.generateWidget(widget.parameters),
+                  child: widget.parameters.listGhost ??
+                      _hoveredDraggable.generateWidget(widget.parameters),
                 )
               : Container(),
         ),
@@ -74,7 +84,8 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget> with TickerPro
             },
             onAccept: (incoming) {
               setState(() {
-                if (widget.onDropOnLastTarget != null) widget.onDropOnLastTarget(incoming, widget);
+                if (widget.onDropOnLastTarget != null)
+                  widget.onDropOnLastTarget(incoming, widget);
                 _hoveredDraggable = null;
               });
             },

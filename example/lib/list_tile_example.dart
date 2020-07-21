@@ -109,7 +109,9 @@ class _ListTileExample extends State<ListTileExample> {
             ),
             Text(
               'Empty List',
-              style: TextStyle(color: Theme.of(context).textTheme.caption.color, fontStyle: FontStyle.italic),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.caption.color,
+                  fontStyle: FontStyle.italic),
             ),
             Expanded(
               child: Padding(
@@ -135,7 +137,8 @@ class _ListTileExample extends State<ListTileExample> {
     );
   }
 
-  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+  _onItemReorder(
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
       var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
       _contents[newListIndex].children.insert(newItemIndex, movedItem);

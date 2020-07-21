@@ -24,7 +24,7 @@ For example:
 
 ```
 dependencies:
-  drag_and_drop_lists: ^1.0.0
+  drag_and_drop_lists: ^0.0.3
 ``` 
 
 Now in your Dart code, you can use: `import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';`

@@ -67,7 +67,10 @@ class _SliverExample extends State<SliverExample> {
               color: Colors.pinkAccent,
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: Text('Slivers', style: Theme.of(context).primaryTextTheme.headline1,),
+                child: Text(
+                  'Slivers',
+                  style: Theme.of(context).primaryTextTheme.headline1,
+                ),
               ),
             ),
           ),
@@ -86,7 +89,8 @@ class _SliverExample extends State<SliverExample> {
     );
   }
 
-  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+  _onItemReorder(
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
       var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
       _contents[newListIndex].children.insert(newItemIndex, movedItem);

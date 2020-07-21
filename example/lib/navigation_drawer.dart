@@ -28,7 +28,8 @@ class NavigationDrawer extends StatelessWidget {
             leading: Icon(Icons.keyboard_arrow_down),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/expansion_tile_example');
+              Navigator.of(context)
+                  .pushReplacementNamed('/expansion_tile_example');
             },
           ),
           ListTile(
@@ -44,7 +45,8 @@ class NavigationDrawer extends StatelessWidget {
             leading: Icon(Icons.add),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/drag_into_list_example');
+              Navigator.of(context)
+                  .pushReplacementNamed('/drag_into_list_example');
             },
           ),
           ListTile(

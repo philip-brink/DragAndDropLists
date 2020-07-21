@@ -43,7 +43,7 @@ class DragAndDropList implements DragAndDropListInterface {
   /// It is possible to not provide any children when an empty list is desired.
   final List<DragAndDropItem> children = List<DragAndDropItem>();
 
-  DragAndDropList (
+  DragAndDropList(
       {List<DragAndDropItem> children,
       this.header,
       this.footer,
@@ -86,7 +86,9 @@ class DragAndDropList implements DragAndDropListInterface {
     }
 
     return Container(
-      width: params.axis == Axis.vertical ? double.infinity : params.listWidth - params.listPadding.horizontal,
+      width: params.axis == Axis.vertical
+          ? double.infinity
+          : params.listWidth - params.listPadding.horizontal,
       decoration: decoration ?? params.listDecoration,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -96,7 +98,8 @@ class DragAndDropList implements DragAndDropListInterface {
     );
   }
 
-  List<Widget> _generateDragAndDropListInnerContents(DragAndDropBuilderParameters params) {
+  List<Widget> _generateDragAndDropListInnerContents(
+      DragAndDropBuilderParameters params) {
     var contents = List<Widget>();
     if (leftSide != null) {
       contents.add(leftSide);

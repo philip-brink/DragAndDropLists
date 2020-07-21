@@ -8,7 +8,8 @@ class DragAndDropItemWrapper extends StatefulWidget {
   final Function(PointerMoveEvent event) onPointerMove;
   final Function(PointerUpEvent event) onPointerUp;
   final Function(PointerDownEvent event) onPointerDown;
-  final Function(DragAndDropItem reorderedItem, DragAndDropItem receiverItem) onItemReordered;
+  final Function(DragAndDropItem reorderedItem, DragAndDropItem receiverItem)
+      onItemReordered;
   final Widget ghost;
   final double draggingWidth;
   final double ghostOpacity;
@@ -37,7 +38,8 @@ class DragAndDropItemWrapper extends StatefulWidget {
   State<StatefulWidget> createState() => _DragAndDropItemWrapper();
 }
 
-class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerProviderStateMixin {
+class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
+    with TickerProviderStateMixin {
   DragAndDropItem _hoveredDraggable;
 
   @override
@@ -125,7 +127,8 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
             },
             onAccept: (incoming) {
               setState(() {
-                if (widget.onItemReordered != null) widget.onItemReordered(incoming, widget.child);
+                if (widget.onItemReordered != null)
+                  widget.onItemReordered(incoming, widget.child);
                 _hoveredDraggable = null;
               });
             },

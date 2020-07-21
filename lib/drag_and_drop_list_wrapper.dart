@@ -7,13 +7,15 @@ class DragAndDropListWrapper extends StatefulWidget {
   final DragAndDropListInterface dragAndDropList;
   final DragAndDropBuilderParameters parameters;
 
-  DragAndDropListWrapper({this.dragAndDropList, this.parameters, Key key}) : super(key: key);
+  DragAndDropListWrapper({this.dragAndDropList, this.parameters, Key key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _DragAndDropListWrapper();
 }
 
-class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerProviderStateMixin {
+class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
+    with TickerProviderStateMixin {
   DragAndDropListInterface _hoveredDraggable;
 
   @override
@@ -23,7 +25,8 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
 
   @override
   Widget build(BuildContext context) {
-    Widget dragAndDropListContents = widget.dragAndDropList.generateWidget(widget.parameters);
+    Widget dragAndDropListContents =
+        widget.dragAndDropList.generateWidget(widget.parameters);
 
     Widget draggable;
     if (widget.parameters.dragOnLongPress) {
@@ -32,7 +35,8 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
         axis: widget.parameters.axis,
         child: dragAndDropListContents,
         feedback: Container(
-          width: widget.parameters.draggingWidth ?? MediaQuery.of(context).size.width,
+          width: widget.parameters.draggingWidth ??
+              MediaQuery.of(context).size.width,
           child: Material(
             child: dragAndDropListContents,
             color: Colors.transparent,
@@ -48,8 +52,10 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
         // TODO: This width for horizontal dragging isn't functioning properly when no draggingWidth set
         feedback: Container(
           width: widget.parameters.axis == Axis.vertical
-              ? (widget.parameters.draggingWidth ?? MediaQuery.of(context).size.width)
-              : (widget.parameters.draggingWidth ?? widget.parameters.listWidth),
+              ? (widget.parameters.draggingWidth ??
+                  MediaQuery.of(context).size.width)
+              : (widget.parameters.draggingWidth ??
+                  widget.parameters.listWidth),
           child: Material(
             child: dragAndDropListContents,
             color: Colors.transparent,
@@ -61,9 +67,12 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
 
     var rowOrColumnChildren = <Widget>[
       AnimatedSize(
-        duration: Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
+        duration:
+            Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
         vsync: this,
-        alignment: widget.parameters.axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerLeft,
+        alignment: widget.parameters.axis == Axis.vertical
+            ? Alignment.bottomCenter
+            : Alignment.centerLeft,
         child: _hoveredDraggable != null
             ? Opacity(
                 opacity: widget.parameters.listGhostOpacity,
@@ -71,8 +80,11 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
                     Container(
                       padding: widget.parameters.axis == Axis.vertical
                           ? EdgeInsets.all(0)
-                          : EdgeInsets.symmetric(horizontal: widget.parameters.listPadding.horizontal),
-                      child: _hoveredDraggable.generateWidget(widget.parameters),
+                          : EdgeInsets.symmetric(
+                              horizontal:
+                                  widget.parameters.listPadding.horizontal),
+                      child:
+                          _hoveredDraggable.generateWidget(widget.parameters),
                     ),
               )
             : Container(),
@@ -92,8 +104,8 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
                 children: rowOrColumnChildren,
               )
             : Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: rowOrColumnChildren,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: rowOrColumnChildren,
               ),
         Positioned.fill(
           child: DragTarget<DragAndDropListInterface>(
@@ -116,7 +128,8 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper> with TickerP
             },
             onAccept: (incoming) {
               setState(() {
-                widget.parameters.onListReordered(incoming, widget.dragAndDropList);
+                widget.parameters
+                    .onListReordered(incoming, widget.dragAndDropList);
                 _hoveredDraggable = null;
               });
             },

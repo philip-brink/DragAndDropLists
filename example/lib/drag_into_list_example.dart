@@ -80,7 +80,8 @@ class _DragIntoListExample extends State<DragIntoListExample> {
     );
   }
 
-  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+  _onItemReorder(
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
       var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
       _contents[newListIndex].children.insert(newItemIndex, movedItem);
@@ -97,16 +98,20 @@ class _DragIntoListExample extends State<DragIntoListExample> {
   _onItemAdd(DragAndDropItem newItem, int listIndex, int itemIndex) {
     print('adding new item');
     setState(() {
-      if (itemIndex == -1) _contents[listIndex].children.add(newItem);
-      else _contents[listIndex].children.insert(itemIndex, newItem);
+      if (itemIndex == -1)
+        _contents[listIndex].children.add(newItem);
+      else
+        _contents[listIndex].children.insert(itemIndex, newItem);
     });
   }
 
   _onListAdd(DragAndDropListInterface newList, int listIndex) {
     print('adding new list');
     setState(() {
-      if (listIndex == -1) _contents.add(newList);
-      else _contents.insert(listIndex, newList);
+      if (listIndex == -1)
+        _contents.add(newList);
+      else
+        _contents.insert(listIndex, newList);
     });
   }
 }

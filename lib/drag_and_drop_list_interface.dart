@@ -11,7 +11,8 @@ abstract class DragAndDropListInterface implements DragAndDropInterface {
   Widget generateWidget(DragAndDropBuilderParameters params);
 }
 
-abstract class DragAndDropListExpansionInterface implements DragAndDropListInterface {
+abstract class DragAndDropListExpansionInterface
+    implements DragAndDropListInterface {
   final List<DragAndDropItem> children;
 
   DragAndDropListExpansionInterface({this.children});

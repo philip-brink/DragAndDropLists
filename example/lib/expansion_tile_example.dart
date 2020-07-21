@@ -69,7 +69,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
       title: Text('List ${innerList.name}'),
       subtitle: Text('Subtitle ${innerList.name}'),
       leading: Icon(Icons.ac_unit),
-      children: List.generate(innerList.children.length, (index) => _buildItem(innerList.children[index])),
+      children: List.generate(innerList.children.length,
+          (index) => _buildItem(innerList.children[index])),
       key: PageStorageKey<InnerList>(innerList),
     );
   }
@@ -82,7 +83,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
     );
   }
 
-  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+  _onItemReorder(
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
       var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
       _lists[newListIndex].children.insert(newItemIndex, movedItem);
