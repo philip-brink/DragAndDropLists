@@ -1,8 +1,7 @@
 name: drag_and_drop_lists
-description: A new Flutter package project.
+description: A flutter package to allow drag-and-drop reordering of two-level lists.
 version: 0.0.1
-author:
-homepage:
+homepage: https://github.com/philip-brink/DragAndDropLists
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

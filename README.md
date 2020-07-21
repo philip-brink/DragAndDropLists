@@ -59,3 +59,5 @@ _buildItem(String item) {
   );
 }
 ```
+
+For further examples, see the example app or [view the example code](https://github.com/philip-brink/DragAndDropLists/tree/master/example/lib) directly.
