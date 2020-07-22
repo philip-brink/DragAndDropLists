@@ -16,6 +16,7 @@ Two-level drag and drop reorderable lists.
 <img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/expansion_tiles.gif" width="180" title="Expansion Tiles">
 <img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/slivers.gif" width="180" title="Slivers">
 <img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/horizontal.gif" width="180" title="Horizontal">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/drag_into_list.gif" width="180" title="Drag Into Lists">
 </p>
 
 ## Usage
@@ -24,7 +25,7 @@ For example:
 
 ```
 dependencies:
-  drag_and_drop_lists: ^0.0.3
+  drag_and_drop_lists: ^0.0.4
 ``` 
 
 Now in your Dart code, you can use: `import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';`
