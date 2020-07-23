@@ -159,8 +159,6 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile> wi
       });
       if (widget.onExpansionChanged != null) {
         widget.onExpansionChanged(_isExpanded);
-      } else {
-        print('EXPANSION CHANGED NULL');
       }
     }
   }
