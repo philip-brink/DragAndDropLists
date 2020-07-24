@@ -8,9 +8,9 @@
 
 * Updated example project for web compatibility
 
- ## [0.0.3] - 21 July 2020
+## [0.0.3] - 21 July 2020
  
- * Formatted all with dartfmt
+* Formatted all with dartfmt
  
 ## [0.0.2] - 21 July 2020
 
