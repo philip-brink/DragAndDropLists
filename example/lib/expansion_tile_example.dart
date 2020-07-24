@@ -26,7 +26,7 @@ class _ListTileExample extends State<ExpansionTileExample> {
   void initState() {
     super.initState();
 
-    _lists = List.generate(4, (outerIndex) {
+    _lists = List.generate(10, (outerIndex) {
       return InnerList(
         name: outerIndex.toString(),
         children: List.generate(6, (innerIndex) => '$outerIndex.$innerIndex'),
@@ -71,7 +71,7 @@ class _ListTileExample extends State<ExpansionTileExample> {
       leading: Icon(Icons.ac_unit),
       children: List.generate(innerList.children.length,
           (index) => _buildItem(innerList.children[index])),
-      key: PageStorageKey<InnerList>(innerList),
+      listKey: ObjectKey(innerList),
     );
   }
 

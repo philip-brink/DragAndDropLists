@@ -14,6 +14,6 @@
 
 * Updated example project for web compatibility
 
-## [0.0.5] - 23 July 2020
+## [0.0.5] - 24 July 2020
 
 * ProgrammaticExpansionTile: ensure that parent widget will always know its expanded/collapsed state 

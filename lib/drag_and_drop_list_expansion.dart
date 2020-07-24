@@ -17,18 +17,19 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   final Widget leading;
   final bool initiallyExpanded;
 
+  /// Set this to a unique key that will remain unchanged over the lifetime of the list.
+  /// Used to maintain the expanded/collapsed states
+  final Key listKey;
+
   /// This function will be called when the expansion of a tile is changed.
   final Function(bool) onExpansionChanged;
   final Color backgroundColor;
   final List<DragAndDropItem> children;
-
-  /// Required to maintain expanded/collapsed states
-  final PageStorageKey key;
   final Widget contentsWhenEmpty;
   final Widget lastTarget;
+
   ValueNotifier<bool> _expanded = ValueNotifier<bool>(true);
-  GlobalKey<ProgrammaticExpansionTileState> _expansionKey =
-      GlobalKey<ProgrammaticExpansionTileState>();
+  GlobalKey<ProgrammaticExpansionTileState> _expansionKey = GlobalKey<ProgrammaticExpansionTileState>();
 
   DragAndDropListExpansion(
       {this.children,
@@ -41,8 +42,8 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       this.onExpansionChanged,
       this.contentsWhenEmpty,
       this.lastTarget,
-      this.key})
-      : assert(key != null) {
+      this.listKey})
+      : assert(listKey != null) {
     _expanded.value = initiallyExpanded;
   }
 
@@ -52,6 +53,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
 
     Widget expandable = ProgrammaticExpansionTile(
       title: title,
+      listKey: listKey,
       subtitle: subtitle,
       trailing: trailing,
       leading: leading,
@@ -82,7 +84,6 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       builder: (context, error, child) {
         if (!_expanded.value) {
           return Stack(
-            key: key,
             children: <Widget>[
               child,
               Positioned.fill(
@@ -112,8 +113,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
     return toReturn;
   }
 
-  List<Widget> _generateDragAndDropListInnerContents(
-      DragAndDropBuilderParameters params) {
+  List<Widget> _generateDragAndDropListInnerContents(DragAndDropBuilderParameters params) {
     var contents = List<Widget>();
     if (children != null && children.isNotEmpty) {
       children.forEach((element) => contents.add(DragAndDropItemWrapper(

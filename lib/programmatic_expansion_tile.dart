@@ -29,6 +29,7 @@ class ProgrammaticExpansionTile extends StatefulWidget {
   /// be non-null.
   const ProgrammaticExpansionTile({
     Key key,
+    this.listKey,
     this.leading,
     @required this.title,
     this.subtitle,
@@ -38,7 +39,11 @@ class ProgrammaticExpansionTile extends StatefulWidget {
     this.trailing,
     this.initiallyExpanded = false,
   })  : assert(initiallyExpanded != null),
+        assert(listKey != null),
+        assert(key != null),
         super(key: key);
+
+  final Key listKey;
 
   /// A widget to display before the title.
   ///
@@ -111,13 +116,14 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile> wi
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
     _backgroundColor = _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
-    _isExpanded = PageStorage.of(context)?.readState(context) as bool ?? widget.initiallyExpanded;
+    _isExpanded =
+        PageStorage.of(context)?.readState(context, identifier: widget.listKey) as bool ?? widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
 
     // Schedule the notification that widget has changed for after init
     // to ensure that the parent widget maintains the correct state
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-      if (widget.onExpansionChanged != null) {
+      if (widget.onExpansionChanged != null && _isExpanded != widget.initiallyExpanded) {
         widget.onExpansionChanged(_isExpanded);
       }
     });
@@ -155,7 +161,7 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile> wi
             });
           });
         }
-        PageStorage.of(context)?.writeState(context, _isExpanded);
+        PageStorage.of(context)?.writeState(context, _isExpanded, identifier: widget.listKey);
       });
       if (widget.onExpansionChanged != null) {
         widget.onExpansionChanged(_isExpanded);
