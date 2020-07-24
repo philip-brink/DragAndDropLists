@@ -33,6 +33,7 @@ class ProgrammaticExpansionTile extends StatefulWidget {
     @required this.leading,
     @required this.title,
     this.subtitle,
+    this.isThreeLine = false,
     this.backgroundColor,
     this.onExpansionChanged,
     this.children = const <Widget>[],
@@ -59,6 +60,11 @@ class ProgrammaticExpansionTile extends StatefulWidget {
   ///
   /// Typically a [Text] widget.
   final Widget subtitle;
+
+  /// Additional content displayed below the title.
+  ///
+  /// Typically a [Text] widget.
+  final bool isThreeLine;
 
   /// Called when the tile expands or collapses.
   ///
@@ -200,6 +206,7 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
               leading: widget.leading,
               title: widget.title,
               subtitle: widget.subtitle,
+              isThreeLine: widget.isThreeLine,
               trailing: widget.trailing ??
                   RotationTransition(
                     turns: _iconTurns,

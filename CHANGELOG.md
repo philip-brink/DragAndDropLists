@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.6] - 24 July 2020
+
+* ProgrammaticExpansionTile: include option for isThreeLine of ListTile
+
 ## [0.0.5] - 24 July 2020
 
 * ProgrammaticExpansionTile: ensure that parent widget will always know its expanded/collapsed state
