@@ -2,7 +2,7 @@
 Two-level drag and drop reorderable lists.
 
 ## Features
-- Reorder elements within a single list
+- Reorder elements between multiple lists
 - Reorder lists
 - Drag and drop new elements from outside of the lists
 - Vertical or horizontal layout
@@ -25,7 +25,7 @@ For example:
 
 ```
 dependencies:
-  drag_and_drop_lists: ^0.0.4
+  drag_and_drop_lists: ^0.0.5
 ``` 
 
 Now in your Dart code, you can use: `import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';`
