@@ -29,7 +29,8 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   final Widget lastTarget;
 
   ValueNotifier<bool> _expanded = ValueNotifier<bool>(true);
-  GlobalKey<ProgrammaticExpansionTileState> _expansionKey = GlobalKey<ProgrammaticExpansionTileState>();
+  GlobalKey<ProgrammaticExpansionTileState> _expansionKey =
+      GlobalKey<ProgrammaticExpansionTileState>();
 
   DragAndDropListExpansion(
       {this.children,
@@ -113,7 +114,8 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
     return toReturn;
   }
 
-  List<Widget> _generateDragAndDropListInnerContents(DragAndDropBuilderParameters params) {
+  List<Widget> _generateDragAndDropListInnerContents(
+      DragAndDropBuilderParameters params) {
     var contents = List<Widget>();
     if (children != null && children.isNotEmpty) {
       children.forEach((element) => contents.add(DragAndDropItemWrapper(
