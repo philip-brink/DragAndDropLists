@@ -28,9 +28,9 @@ class ProgrammaticExpansionTile extends StatefulWidget {
   /// the tile to reveal or hide the [children]. The [initiallyExpanded] property must
   /// be non-null.
   const ProgrammaticExpansionTile({
-    Key key,
-    this.listKey,
-    this.leading,
+    @required Key key,
+    @required this.listKey,
+    @required this.leading,
     @required this.title,
     this.subtitle,
     this.backgroundColor,
