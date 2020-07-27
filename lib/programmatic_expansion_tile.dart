@@ -30,7 +30,7 @@ class ProgrammaticExpansionTile extends StatefulWidget {
   const ProgrammaticExpansionTile({
     @required Key key,
     @required this.listKey,
-    @required this.leading,
+    this.leading,
     @required this.title,
     this.subtitle,
     this.isThreeLine = false,
