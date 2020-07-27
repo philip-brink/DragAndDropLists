@@ -3,6 +3,7 @@
 ## [0.0.6] - 24 July 2020
 
 * ProgrammaticExpansionTile: include option for isThreeLine of ListTile
+* ProgrammaticExpansionTile: Remove required annotation for leading
 
 ## [0.0.5] - 24 July 2020
 
