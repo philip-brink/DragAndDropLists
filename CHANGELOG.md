@@ -2,6 +2,7 @@
 
 ## [0.0.6] - 24 July 2020
 
+* Fixed wrong parameter order for onItemAdd (thanks @khauns)
 * ProgrammaticExpansionTile: include option for isThreeLine of ListTile
 * ProgrammaticExpansionTile: Remove required annotation for leading
 
