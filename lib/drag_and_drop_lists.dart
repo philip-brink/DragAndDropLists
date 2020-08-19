@@ -351,7 +351,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     if (reorderedItemIndex == -1) {
       // this is a new item
       if (widget.onItemAdd != null)
-        widget.onItemAdd(reordered, receiverItemIndex, receiverListIndex);
+        widget.onItemAdd(reordered, receiverListIndex, receiverItemIndex);
     } else {
       if (reorderedListIndex == receiverListIndex &&
           receiverItemIndex > reorderedItemIndex) {
