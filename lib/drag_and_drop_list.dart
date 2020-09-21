@@ -43,6 +43,11 @@ class DragAndDropList implements DragAndDropListInterface {
   /// It is possible to not provide any children when an empty list is desired.
   final List<DragAndDropItem> children = List<DragAndDropItem>();
 
+  /// Whether or not this item can be dragged.
+  /// Set to true if it can be reordered.
+  /// Set to false if it must remain fixed.
+  final bool canDrag;
+
   DragAndDropList(
       {List<DragAndDropItem> children,
       this.header,
@@ -53,7 +58,8 @@ class DragAndDropList implements DragAndDropListInterface {
       this.lastTarget,
       this.decoration,
       this.horizontalAlignment = MainAxisAlignment.start,
-      this.verticalAlignment = CrossAxisAlignment.start}) {
+      this.verticalAlignment = CrossAxisAlignment.start,
+      this.canDrag = true}) {
     if (children != null) {
       children.forEach((element) => this.children.add(element));
     }

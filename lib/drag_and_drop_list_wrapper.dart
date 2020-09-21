@@ -29,40 +29,45 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
         widget.dragAndDropList.generateWidget(widget.parameters);
 
     Widget draggable;
-    if (widget.parameters.dragOnLongPress) {
-      draggable = LongPressDraggable<DragAndDropListInterface>(
-        data: widget.dragAndDropList,
-        axis: widget.parameters.axis,
-        child: dragAndDropListContents,
-        feedback: Container(
-          width: widget.parameters.draggingWidth ??
-              MediaQuery.of(context).size.width,
-          child: Material(
-            child: dragAndDropListContents,
-            color: Colors.transparent,
+    if (widget.dragAndDropList.canDrag) {
+      if (widget.parameters.dragOnLongPress) {
+        draggable = LongPressDraggable<DragAndDropListInterface>(
+          data: widget.dragAndDropList,
+          axis: widget.parameters.axis,
+          child: dragAndDropListContents,
+          feedback: Container(
+            width: widget.parameters.draggingWidth ??
+                MediaQuery.of(context).size.width,
+            child: Material(
+              child: dragAndDropListContents,
+              color: Colors.transparent,
+            ),
           ),
-        ),
-        childWhenDragging: Container(),
-      );
-    } else {
-      draggable = Draggable<DragAndDropListInterface>(
-        data: widget.dragAndDropList,
-        axis: widget.parameters.axis,
-        child: dragAndDropListContents,
-        // TODO: This width for horizontal dragging isn't functioning properly when no draggingWidth set
-        feedback: Container(
-          width: widget.parameters.axis == Axis.vertical
-              ? (widget.parameters.draggingWidth ??
-                  MediaQuery.of(context).size.width)
-              : (widget.parameters.draggingWidth ??
-                  widget.parameters.listWidth),
-          child: Material(
-            child: dragAndDropListContents,
-            color: Colors.transparent,
+          childWhenDragging: Container(),
+        );
+      } else {
+        draggable = Draggable<DragAndDropListInterface>(
+          data: widget.dragAndDropList,
+          axis: widget.parameters.axis,
+          child: dragAndDropListContents,
+          // TODO: This width for horizontal dragging isn't functioning properly when no draggingWidth set
+          feedback: Container(
+            width: widget.parameters.axis == Axis.vertical
+                ? (widget.parameters.draggingWidth ??
+                    MediaQuery.of(context).size.width)
+                : (widget.parameters.draggingWidth ??
+                    widget.parameters.listWidth),
+            child: Material(
+              child: dragAndDropListContents,
+              color: Colors.transparent,
+            ),
           ),
-        ),
-        childWhenDragging: Container(),
-      );
+          childWhenDragging: Container(),
+        );
+      }
+    }
+    else {
+      draggable = dragAndDropListContents;
     }
 
     var rowOrColumnChildren = <Widget>[

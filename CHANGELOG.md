@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.7] - 21 September 2020
+
+* Added canDrag option for lists
+* **Interface Change:** Any classes implementing `DragAndDropListInterface` need to add `canDrag` 
+
 ## [0.0.6] - 24 July 2020
 
 * Fixed wrong parameter order for onItemAdd (thanks @khauns)

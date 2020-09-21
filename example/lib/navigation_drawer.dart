@@ -57,6 +57,14 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed('/horizontal_example');
             },
           ),
+          ListTile(
+            title: Text('Fixed Items'),
+            leading: Icon(Icons.block),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/fixed_example');
+            },
+          ),
         ],
       ),
     );

@@ -28,6 +28,11 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   final Widget contentsWhenEmpty;
   final Widget lastTarget;
 
+  /// Whether or not this item can be dragged.
+  /// Set to true if it can be reordered.
+  /// Set to false if it must remain fixed.
+  final bool canDrag;
+
   ValueNotifier<bool> _expanded = ValueNotifier<bool>(true);
   GlobalKey<ProgrammaticExpansionTileState> _expansionKey =
       GlobalKey<ProgrammaticExpansionTileState>();
@@ -43,7 +48,8 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       this.onExpansionChanged,
       this.contentsWhenEmpty,
       this.lastTarget,
-      this.listKey})
+      this.listKey,
+      this.canDrag = true})
       : assert(listKey != null) {
     _expanded.value = initiallyExpanded;
   }
