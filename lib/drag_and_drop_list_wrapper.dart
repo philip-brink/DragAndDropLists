@@ -50,7 +50,6 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
           data: widget.dragAndDropList,
           axis: widget.parameters.axis,
           child: dragAndDropListContents,
-          // TODO: This width for horizontal dragging isn't functioning properly when no draggingWidth set
           feedback: Container(
             width: widget.parameters.axis == Axis.vertical
                 ? (widget.parameters.draggingWidth ??
@@ -65,8 +64,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
           childWhenDragging: Container(),
         );
       }
-    }
-    else {
+    } else {
       draggable = dragAndDropListContents;
     }
 

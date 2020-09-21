@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.0.7] - 21 September 2020
+## [0.1.0] - 21 September 2020
 
 * Added canDrag option for lists
 * **Interface Change:** Any classes implementing `DragAndDropListInterface` need to add `canDrag` 
