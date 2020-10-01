@@ -1,4 +1,5 @@
 import 'package:example/basic_example.dart';
+import 'package:example/drag_handle_example.dart';
 import 'package:example/drag_into_list_example.dart';
 import 'package:example/expansion_tile_example.dart';
 import 'package:example/fixed_example.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/horizontal_example': (context) => HorizontalExample(),
         '/drag_into_list_example': (context) => DragIntoListExample(),
         '/fixed_example': (context) => FixedExample(),
+        '/drag_handle_example': (context) => DragHandleExample(),
       },
     );
   }

@@ -65,6 +65,15 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed('/fixed_example');
             },
           ),
+          ListTile(
+            title: Text('Drag Handle'),
+            leading: Icon(Icons.drag_handle),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context)
+                  .pushReplacementNamed('/drag_handle_example');
+            },
+          ),
         ],
       ),
     );

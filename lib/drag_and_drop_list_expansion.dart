@@ -137,6 +137,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
             draggingWidth: params.draggingWidth,
             axis: params.axis,
             verticalAlignment: params.verticalAlignment,
+            dragHandle: params.dragHandle,
           )));
       contents.add(DragAndDropItemTarget(
         parent: this,

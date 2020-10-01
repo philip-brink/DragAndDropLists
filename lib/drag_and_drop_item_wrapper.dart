@@ -18,6 +18,10 @@ class DragAndDropItemWrapper extends StatefulWidget {
   final CrossAxisAlignment verticalAlignment;
   final Axis axis;
 
+  /// Set a custom drag handle to use iOS-like handles to drag rather than long
+  /// or short presses
+  final Widget dragHandle;
+
   DragAndDropItemWrapper(
       {@required this.child,
       @required this.onPointerMove,
@@ -31,6 +35,7 @@ class DragAndDropItemWrapper extends StatefulWidget {
       this.dragOnLongPress = true,
       this.verticalAlignment = CrossAxisAlignment.start,
       this.axis = Axis.vertical,
+      this.dragHandle,
       Key key})
       : super(key: key);
 
@@ -46,7 +51,31 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
   Widget build(BuildContext context) {
     Widget draggable;
     if (widget.child.canDrag) {
-      if (widget.dragOnLongPress) {
+      if (widget.dragHandle != null) {
+        Widget childWithHandle = Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IgnorePointer(
+              ignoring: true,
+              child: widget.child.child,
+            ),
+            widget.dragHandle,
+          ],
+        );
+        draggable = Draggable<DragAndDropItem>(
+          data: widget.child,
+          axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+          child: childWithHandle,
+          feedback: Container(
+            width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
+            alignment: Alignment.centerLeft,
+            child: Material(
+              child: childWithHandle,
+            ),
+          ),
+          childWhenDragging: Container(),
+        );
+      } else if (widget.dragOnLongPress) {
         draggable = LongPressDraggable<DragAndDropItem>(
           data: widget.child,
           axis: widget.axis == Axis.vertical ? Axis.vertical : null,

@@ -1,7 +1,8 @@
+import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/widgets.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 
 class DragAndDropBuilderParameters {
   final Function(PointerMoveEvent event) onPointerMove;
@@ -22,12 +23,17 @@ class DragAndDropBuilderParameters {
   final int itemSizeAnimationDuration;
   final Widget itemGhost;
   final double itemGhostOpacity;
+  final Widget itemDivider;
   final int listSizeAnimationDuration;
   final Widget listGhost;
   final double listGhostOpacity;
   final EdgeInsets listPadding;
   final Decoration listDecoration;
+  final Decoration listInnerDecoration;
   final double listWidth;
+  final double lastItemTargetHeight;
+  final bool addLastItemTargetHeightToTop;
+  final Widget dragHandle;
 
   DragAndDropBuilderParameters({
     @required this.onPointerMove,
@@ -43,11 +49,16 @@ class DragAndDropBuilderParameters {
     this.itemSizeAnimationDuration = 150,
     this.itemGhostOpacity = 0.3,
     this.itemGhost,
+    this.itemDivider,
     this.listSizeAnimationDuration = 150,
     this.listGhostOpacity = 0.3,
     this.listGhost,
     this.listPadding,
     this.listDecoration,
+    this.listInnerDecoration,
     this.listWidth = double.infinity,
+    this.lastItemTargetHeight = 20,
+    this.addLastItemTargetHeightToTop = false,
+    this.dragHandle,
   });
 }

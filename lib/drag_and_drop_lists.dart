@@ -14,24 +14,23 @@ library drag_and_drop_lists;
 
 import 'dart:math';
 
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart';
-
 import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 export 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_item_wrapper.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list.dart';
+export 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
-export 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
 
 class DragAndDropLists extends StatefulWidget {
   /// The child lists to be displayed.
@@ -76,6 +75,9 @@ class DragAndDropLists extends StatefulWidget {
   /// The decoration surrounding an item.
   final Decoration itemDecoration;
 
+  /// A widget that will be displayed between each individual item.
+  final Widget itemDivider;
+
   /// The width of a list when dragging.
   final double listDraggingWidth;
 
@@ -103,6 +105,9 @@ class DragAndDropLists extends StatefulWidget {
   /// The decoration surrounding a list.
   final Decoration listDecoration;
 
+  /// The decoration surrounding the inner list of items.
+  final Decoration listInnerDecoration;
+
   /// A widget that will be displayed between each individual list.
   final Widget listDivider;
 
@@ -115,6 +120,19 @@ class DragAndDropLists extends StatefulWidget {
   /// The width of each individual list. This must be set to a finite value when
   /// [axis] is set to Axis.horizontal.
   final double listWidth;
+
+  /// The height of the target for the last item in a list. This should be large
+  /// enough to easily drag an item into the last position of a list.
+  final double lastItemTargetHeight;
+
+  /// Add the same height as the lastItemTargetHeight to the top of the list.
+  /// This is useful when setting the [listInnerDecoration] to maintain visual
+  /// continuity between the top and the bottom
+  final bool addLastItemTargetHeightToTop;
+
+  /// The height of the target for the last list. This should be large
+  /// enough to easily drag a list to the last position in the DragAndDropLists.
+  final double lastListTargetSize;
 
   /// The default vertical alignment of list contents.
   final CrossAxisAlignment verticalAlignment;
@@ -138,6 +156,10 @@ class DragAndDropLists extends StatefulWidget {
   /// This must be set if [sliverList] is set to true.
   final ScrollController scrollController;
 
+  /// Set a custom drag handle to use iOS-like handles to drag rather than long
+  /// or short presses
+  final Widget dragHandle;
+
   DragAndDropLists({
     this.children,
     this.onItemReorder,
@@ -150,6 +172,7 @@ class DragAndDropLists extends StatefulWidget {
     this.itemSizeAnimationDurationMilliseconds = 150,
     this.itemDragOnLongPress = true,
     this.itemDecoration,
+    this.itemDivider,
     this.listDraggingWidth,
     this.listTarget,
     this.listGhost,
@@ -157,15 +180,20 @@ class DragAndDropLists extends StatefulWidget {
     this.listSizeAnimationDurationMilliseconds = 150,
     this.listDragOnLongPress = true,
     this.listDecoration,
+    this.listInnerDecoration,
     this.listDivider,
     this.listPadding,
     this.contentsWhenEmpty,
     this.listWidth = double.infinity,
+    this.lastItemTargetHeight = 20,
+    this.addLastItemTargetHeightToTop = false,
+    this.lastListTargetSize = 110,
     this.verticalAlignment = CrossAxisAlignment.start,
     this.horizontalAlignment = MainAxisAlignment.start,
     this.axis = Axis.vertical,
     this.sliverList = false,
     this.scrollController,
+    this.dragHandle,
     Key key,
   }) : super(key: key) {
     if (listGhost == null &&
@@ -227,17 +255,23 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       onItemDropOnLastTarget: _internalOnItemDropOnLastTarget,
       onListReordered: _internalOnListReorder,
       itemGhostOpacity: widget.itemGhostOpacity,
+      itemDivider: widget.itemDivider,
       verticalAlignment: widget.verticalAlignment,
       axis: widget.axis,
       itemGhost: widget.itemGhost,
       listDecoration: widget.listDecoration,
+      listInnerDecoration: widget.listInnerDecoration,
       listWidth: widget.listWidth,
+      lastItemTargetHeight: widget.lastItemTargetHeight,
+      addLastItemTargetHeightToTop: widget.addLastItemTargetHeightToTop,
+      dragHandle: widget.dragHandle,
     );
 
     DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(
       child: widget.listTarget,
       parameters: parameters,
       onDropOnLastTarget: _internalOnListDropOnLastTarget,
+      lastListTargetSize: widget.lastListTargetSize,
     );
 
     if (widget.children != null && widget.children.isNotEmpty) {

@@ -85,6 +85,12 @@ class DragAndDropList implements DragAndDropListInterface {
         child: intrinsicHeight,
       );
     }
+    if (params.listInnerDecoration != null) {
+      intrinsicHeight = Container(
+        decoration: params.listInnerDecoration,
+        child: intrinsicHeight,
+      );
+    }
     contents.add(intrinsicHeight);
 
     if (footer != null) {
@@ -112,27 +118,38 @@ class DragAndDropList implements DragAndDropListInterface {
     }
     if (children != null && children.isNotEmpty) {
       List<Widget> allChildren = List<Widget>();
-      children.forEach((element) => allChildren.add(DragAndDropItemWrapper(
-            child: element,
-            onPointerDown: params.onPointerDown,
-            onPointerUp: params.onPointerUp,
-            onPointerMove: params.onPointerMove,
-            onItemReordered: params.onItemReordered,
-            sizeAnimationDuration: params.itemSizeAnimationDuration,
-            ghostOpacity: params.itemGhostOpacity,
-            ghost: params.itemGhost,
-            dragOnLongPress: params.dragOnLongPress,
-            draggingWidth: params.draggingWidth,
-            axis: params.axis,
-            verticalAlignment: params.verticalAlignment,
-          )));
+      if (params.addLastItemTargetHeightToTop) {
+        allChildren.add(Padding(
+          padding: EdgeInsets.only(top: params.lastItemTargetHeight),
+        ));
+      }
+      for (int i = 0; i < children.length; i++) {
+        allChildren.add(DragAndDropItemWrapper(
+          child: children[i],
+          onPointerDown: params.onPointerDown,
+          onPointerUp: params.onPointerUp,
+          onPointerMove: params.onPointerMove,
+          onItemReordered: params.onItemReordered,
+          sizeAnimationDuration: params.itemSizeAnimationDuration,
+          ghostOpacity: params.itemGhostOpacity,
+          ghost: params.itemGhost,
+          dragOnLongPress: params.dragOnLongPress,
+          draggingWidth: params.draggingWidth,
+          axis: params.axis,
+          verticalAlignment: params.verticalAlignment,
+          dragHandle: params.dragHandle,
+        ));
+        if (params.itemDivider != null && i < children.length - 1) {
+          allChildren.add(params.itemDivider);
+        }
+      }
       allChildren.add(DragAndDropItemTarget(
         parent: this,
         parameters: params,
         onReorderOrAdd: params.onItemDropOnLastTarget,
         child: lastTarget ??
             Container(
-              height: 20,
+              height: params.lastItemTargetHeight,
             ),
       ));
       contents.add(
