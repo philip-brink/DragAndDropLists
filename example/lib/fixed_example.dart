@@ -29,7 +29,9 @@ class _FixedExample extends State<FixedExample> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text(index % 4 == 0 ? 'Header $index : Non-Draggable' : 'Header $index'),
+              child: Text(index % 4 == 0
+                  ? 'Header $index : Non-Draggable'
+                  : 'Header $index'),
             ),
             Expanded(
               flex: 1,
@@ -58,7 +60,7 @@ class _FixedExample extends State<FixedExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Basic'),
+        title: Text('Fixed Items'),
       ),
       drawer: NavigationDrawer(),
       body: DragAndDropLists(

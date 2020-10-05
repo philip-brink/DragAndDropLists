@@ -134,10 +134,12 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
             ghostOpacity: params.itemGhostOpacity,
             ghost: params.itemGhost,
             dragOnLongPress: params.dragOnLongPress,
-            draggingWidth: params.draggingWidth,
+            draggingWidth: params.itemDraggingWidth,
             axis: params.axis,
             verticalAlignment: params.verticalAlignment,
             dragHandle: params.dragHandle,
+            dragHandleOnLeft: params.dragHandleOnLeft,
+            decorationWhileDragging: params.itemDecorationWhileDragging,
           )));
       contents.add(DragAndDropItemTarget(
         parent: this,

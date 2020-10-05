@@ -98,6 +98,17 @@ class _DragHandleExample extends State<DragHandleExample> {
           height: 2,
           color: backgroundColor,
         ),
+        itemDecorationWhileDragging: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: Offset(0, 0), // changes position of shadow
+            ),
+          ],
+        ),
         listInnerDecoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),

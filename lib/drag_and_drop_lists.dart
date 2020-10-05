@@ -72,8 +72,8 @@ class DragAndDropLists extends StatefulWidget {
   /// If true, drag an item after doing a long press. If false, drag immediately.
   final bool itemDragOnLongPress;
 
-  /// The decoration surrounding an item.
-  final Decoration itemDecoration;
+  /// The decoration surrounding an item while it is in the process of being dragged.
+  final Decoration itemDecorationWhileDragging;
 
   /// A widget that will be displayed between each individual item.
   final Widget itemDivider;
@@ -104,6 +104,9 @@ class DragAndDropLists extends StatefulWidget {
 
   /// The decoration surrounding a list.
   final Decoration listDecoration;
+
+  /// The decoration surrounding a list while it is in the process of being dragged.
+  final Decoration listDecorationWhileDragging;
 
   /// The decoration surrounding the inner list of items.
   final Decoration listInnerDecoration;
@@ -160,6 +163,9 @@ class DragAndDropLists extends StatefulWidget {
   /// or short presses
   final Widget dragHandle;
 
+  /// Set the drag handle to be on the left side instead of the default right side
+  final bool dragHandleOnLeft;
+
   DragAndDropLists({
     this.children,
     this.onItemReorder,
@@ -171,7 +177,7 @@ class DragAndDropLists extends StatefulWidget {
     this.itemGhostOpacity = 0.3,
     this.itemSizeAnimationDurationMilliseconds = 150,
     this.itemDragOnLongPress = true,
-    this.itemDecoration,
+    this.itemDecorationWhileDragging,
     this.itemDivider,
     this.listDraggingWidth,
     this.listTarget,
@@ -180,6 +186,7 @@ class DragAndDropLists extends StatefulWidget {
     this.listSizeAnimationDurationMilliseconds = 150,
     this.listDragOnLongPress = true,
     this.listDecoration,
+    this.listDecorationWhileDragging,
     this.listInnerDecoration,
     this.listDivider,
     this.listPadding,
@@ -194,6 +201,7 @@ class DragAndDropLists extends StatefulWidget {
     this.sliverList = false,
     this.scrollController,
     this.dragHandle,
+    this.dragHandleOnLeft = false,
     Key key,
   }) : super(key: key) {
     if (listGhost == null &&
@@ -243,7 +251,8 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     var parameters = DragAndDropBuilderParameters(
       listGhost: widget.listGhost,
       listGhostOpacity: widget.listGhostOpacity,
-      draggingWidth: widget.listDraggingWidth,
+      listDraggingWidth: widget.listDraggingWidth,
+      itemDraggingWidth: widget.itemDraggingWidth,
       listSizeAnimationDuration: widget.listSizeAnimationDurationMilliseconds,
       dragOnLongPress: widget.listDragOnLongPress,
       listPadding: widget.listPadding,
@@ -256,15 +265,18 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       onListReordered: _internalOnListReorder,
       itemGhostOpacity: widget.itemGhostOpacity,
       itemDivider: widget.itemDivider,
+      itemDecorationWhileDragging: widget.itemDecorationWhileDragging,
       verticalAlignment: widget.verticalAlignment,
       axis: widget.axis,
       itemGhost: widget.itemGhost,
       listDecoration: widget.listDecoration,
+      listDecorationWhileDragging: widget.listDecorationWhileDragging,
       listInnerDecoration: widget.listInnerDecoration,
       listWidth: widget.listWidth,
       lastItemTargetHeight: widget.lastItemTargetHeight,
       addLastItemTargetHeightToTop: widget.addLastItemTargetHeightToTop,
       dragHandle: widget.dragHandle,
+      dragHandleOnLeft: widget.dragHandleOnLeft,
     );
 
     DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(

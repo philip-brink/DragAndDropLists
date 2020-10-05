@@ -1,5 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:drag_and_drop_lists/measure_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -17,10 +18,12 @@ class DragAndDropItemWrapper extends StatefulWidget {
   final bool dragOnLongPress;
   final CrossAxisAlignment verticalAlignment;
   final Axis axis;
+  final Decoration decorationWhileDragging;
 
   /// Set a custom drag handle to use iOS-like handles to drag rather than long
   /// or short presses
   final Widget dragHandle;
+  final bool dragHandleOnLeft;
 
   DragAndDropItemWrapper(
       {@required this.child,
@@ -36,6 +39,8 @@ class DragAndDropItemWrapper extends StatefulWidget {
       this.verticalAlignment = CrossAxisAlignment.start,
       this.axis = Axis.vertical,
       this.dragHandle,
+      this.dragHandleOnLeft = false,
+      this.decorationWhileDragging,
       Key key})
       : super(key: key);
 
@@ -47,33 +52,117 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
     with TickerProviderStateMixin {
   DragAndDropItem _hoveredDraggable;
 
+  bool _draggingWithHandle = false;
+  Size _draggingWithHandleContainerSize = Size.zero;
+  double _draggingWithHandleContainerLeftPosition = 0;
+  Size _draggingWithHandleDragHandleSize = Size.zero;
+  double _draggingWithHandleDragHandleLeftPosition = 0;
+
   @override
   Widget build(BuildContext context) {
     Widget draggable;
     if (widget.child.canDrag) {
       if (widget.dragHandle != null) {
-        Widget childWithHandle = Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IgnorePointer(
-              ignoring: true,
-              child: widget.child.child,
-            ),
-            widget.dragHandle,
-          ],
-        );
-        draggable = Draggable<DragAndDropItem>(
-          data: widget.child,
-          axis: widget.axis == Axis.vertical ? Axis.vertical : null,
-          child: childWithHandle,
-          feedback: Container(
-            width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
-            alignment: Alignment.centerLeft,
-            child: Material(
-              child: childWithHandle,
-            ),
+        double dragHandleCenter = _draggingWithHandleDragHandleLeftPosition +
+            (_draggingWithHandleDragHandleSize.width / 2.0);
+        double containerLeftToDragHandleCenter =
+            dragHandleCenter - _draggingWithHandleContainerLeftPosition;
+
+        Widget feedback = Container(
+          width: widget.draggingWidth ?? _draggingWithHandleContainerSize.width,
+          child: Stack(
+            children: [
+              widget.child.child,
+              Positioned(
+                right: widget.dragHandleOnLeft ? null : 0,
+                left: widget.dragHandleOnLeft ? 0 : null,
+                top: 0,
+                bottom: 0,
+                child: widget.dragHandle,
+              ),
+            ],
           ),
-          childWhenDragging: Container(),
+        );
+
+        var positionedDragHandle = Positioned(
+          right: widget.dragHandleOnLeft ? null : 0,
+          left: widget.dragHandleOnLeft ? 0 : null,
+          top: 0,
+          bottom: 0,
+          child: Draggable<DragAndDropItem>(
+            data: widget.child,
+            axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+            child: MeasureSize(
+              onSizeChange: (size) {
+                setState(() {
+                  _draggingWithHandleDragHandleSize = size;
+                });
+              },
+              onLeftPositionChange: (leftPosition) {
+                setState(() {
+                  _draggingWithHandleDragHandleLeftPosition = leftPosition;
+                });
+              },
+              child: widget.dragHandle,
+            ),
+            feedback: Transform.translate(
+              offset: Offset(
+                  -containerLeftToDragHandleCenter +
+                      _draggingWithHandleContainerLeftPosition,
+                  0),
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  decoration: widget.decorationWhileDragging,
+                  child: feedback,
+                ),
+              ),
+            ),
+            childWhenDragging: Container(),
+            onDragStarted: () {
+              setState(() {
+                _draggingWithHandle = true;
+              });
+            },
+            onDragCompleted: () {
+              setState(() {
+                _draggingWithHandle = false;
+              });
+            },
+            onDraggableCanceled: (_, __) {
+              setState(() {
+                _draggingWithHandle = false;
+              });
+            },
+            onDragEnd: (_) {
+              setState(() {
+                _draggingWithHandle = false;
+              });
+            },
+          ),
+        );
+
+        draggable = MeasureSize(
+          onSizeChange: (size) {
+            setState(() {
+              _draggingWithHandleContainerSize = size;
+            });
+          },
+          onLeftPositionChange: (leftPosition) {
+            setState(() {
+              _draggingWithHandleContainerLeftPosition = leftPosition;
+            });
+          },
+          child: Stack(
+            children: [
+              Visibility(
+                visible: !_draggingWithHandle,
+                child: widget.child.child,
+              ),
+              // dragAndDropListContents,
+              positionedDragHandle,
+            ],
+          ),
         );
       } else if (widget.dragOnLongPress) {
         draggable = LongPressDraggable<DragAndDropItem>(

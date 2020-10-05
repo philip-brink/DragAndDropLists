@@ -134,10 +134,12 @@ class DragAndDropList implements DragAndDropListInterface {
           ghostOpacity: params.itemGhostOpacity,
           ghost: params.itemGhost,
           dragOnLongPress: params.dragOnLongPress,
-          draggingWidth: params.draggingWidth,
+          draggingWidth: params.itemDraggingWidth,
           axis: params.axis,
           verticalAlignment: params.verticalAlignment,
           dragHandle: params.dragHandle,
+          dragHandleOnLeft: params.dragHandleOnLeft,
+          decorationWhileDragging: params.itemDecorationWhileDragging,
         ));
         if (params.itemDivider != null && i < children.length - 1) {
           allChildren.add(params.itemDivider);

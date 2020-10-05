@@ -46,7 +46,6 @@ class _HorizontalExample extends State<HorizontalExample> {
         onListReorder: _onListReorder,
         axis: Axis.horizontal,
         listWidth: 150,
-        // TODO: this shouldn't be required
         listDraggingWidth: 150,
         listDecoration: BoxDecoration(
           color: Colors.grey[200],

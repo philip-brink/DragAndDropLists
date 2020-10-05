@@ -1,11 +1,16 @@
 # Changelog
 
-## [0.1.1] - 28 September 2020
+## [0.2.0] - 5 October 2020
 
+* Added option for drag handles. See `dragHandle` and `dragHandleOnLeft` parameters in `DragAndDropLists`
+* Added new example for drag handles
 * Added option for item dividers. See the `itemDivider` parameter in `DragAndDropLists`
 * Added option for inner list box decoration. See the `listInnerDecoration` parameter in `DragAndDropLists`
-* Added option for drag handles
+* Added option for decoration while dragging lists and items. See the `itemDecorationWhileDragging` and `itemDecorationWhileDragging` parameters in `DragAndDropLists`
+* Removed unused `itemDecoration` parameter in `DragAndDropLists`
+* Fixed unused `itemDraggingWidth` parameter in `DragAndDropLists`
 * Configurable bottom padding for list and items. See the `lastItemTargetHeight`, `addLastItemTargetHeightToTop` and `lastListTargetSize` parameters in `DragAndDropLists`
+* Remove `pubspec.lock` (thanks @freitzzz)
 
 ## [0.1.0] - 21 September 2020
 
