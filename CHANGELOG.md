@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.1] - 6 October 2020
+
+* Fixed bug where auto scrolling could occur even when not dragging an item (thanks [@ElenaKova](https://github.com/ElenaKova))
+
 ## [0.2.0] - 5 October 2020
 
 * Added option for drag handles. See `dragHandle` and `dragHandleOnLeft` parameters in `DragAndDropLists`
@@ -10,7 +14,7 @@
 * Removed unused `itemDecoration` parameter in `DragAndDropLists`
 * Fixed unused `itemDraggingWidth` parameter in `DragAndDropLists`
 * Configurable bottom padding for list and items. See the `lastItemTargetHeight`, `addLastItemTargetHeightToTop` and `lastListTargetSize` parameters in `DragAndDropLists`
-* Remove `pubspec.lock` (thanks @freitzzz)
+* Remove `pubspec.lock` (thanks [@freitzzz](https://github.com/freitzzz))
 
 ## [0.1.0] - 21 September 2020
 
@@ -19,7 +23,7 @@
 
 ## [0.0.6] - 24 July 2020
 
-* Fixed wrong parameter order for onItemAdd (thanks @khauns)
+* Fixed wrong parameter order for onItemAdd (thanks [@khauns](https://github.com/khauns))
 * ProgrammaticExpansionTile: include option for isThreeLine of ListTile
 * ProgrammaticExpansionTile: Remove required annotation for leading
 

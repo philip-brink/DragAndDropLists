@@ -52,7 +52,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
     with TickerProviderStateMixin {
   DragAndDropItem _hoveredDraggable;
 
-  bool _draggingWithHandle = false;
+  bool _dragging = false;
   Size _draggingWithHandleContainerSize = Size.zero;
   double _draggingWithHandleContainerLeftPosition = 0;
   Size _draggingWithHandleDragHandleSize = Size.zero;
@@ -119,26 +119,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
               ),
             ),
             childWhenDragging: Container(),
-            onDragStarted: () {
-              setState(() {
-                _draggingWithHandle = true;
-              });
-            },
-            onDragCompleted: () {
-              setState(() {
-                _draggingWithHandle = false;
-              });
-            },
-            onDraggableCanceled: (_, __) {
-              setState(() {
-                _draggingWithHandle = false;
-              });
-            },
-            onDragEnd: (_) {
-              setState(() {
-                _draggingWithHandle = false;
-              });
-            },
+            onDragStarted: () => _setDragging(true),
+            onDragCompleted: () => _setDragging(false),
+            onDraggableCanceled: (_, __) => _setDragging(false),
+            onDragEnd: (_) => _setDragging(false),
           ),
         );
 
@@ -156,7 +140,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           child: Stack(
             children: [
               Visibility(
-                visible: !_draggingWithHandle,
+                visible: !_dragging,
                 child: widget.child.child,
               ),
               // dragAndDropListContents,
@@ -177,6 +161,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             ),
           ),
           childWhenDragging: Container(),
+          onDragStarted: () => _setDragging(true),
+          onDragCompleted: () => _setDragging(false),
+          onDraggableCanceled: (_, __) => _setDragging(false),
+          onDragEnd: (_) => _setDragging(false),
         );
       } else {
         draggable = Draggable<DragAndDropItem>(
@@ -191,6 +179,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             ),
           ),
           childWhenDragging: Container(),
+          onDragStarted: () => _setDragging(true),
+          onDragCompleted: () => _setDragging(false),
+          onDraggableCanceled: (_, __) => _setDragging(false),
+          onDragEnd: (_) => _setDragging(false),
         );
       }
     } else {
@@ -220,7 +212,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             ),
             Listener(
               child: draggable,
-              onPointerMove: widget.onPointerMove,
+              onPointerMove: _onPointerMove,
               onPointerDown: widget.onPointerDown,
               onPointerUp: widget.onPointerUp,
             ),
@@ -254,5 +246,17 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
         )
       ],
     );
+  }
+
+  void _setDragging(bool dragging) {
+    if (_dragging != dragging) {
+      setState(() {
+        _dragging = dragging;
+      });
+    }
+  }
+
+  void _onPointerMove(PointerMoveEvent event) {
+    if (_dragging) widget.onPointerMove(event);
   }
 }
