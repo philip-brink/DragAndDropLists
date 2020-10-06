@@ -6,17 +6,20 @@ Two-level drag and drop reorderable lists.
 - Reorder lists
 - Drag and drop new elements from outside of the lists
 - Vertical or horizontal layout
+- Use with drag handles, long presses, or short presses
 - Expandable lists
 - Can be used in slivers
+- Prevent individual lists/elements from being able to be dragged
 - Easy to extend with custom layouts
 
 <p>
 <img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/basic.gif" width="180" title="Basic">
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/list_tiles.gif" width="180" title="List Tiles">
 <img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/expansion_tiles.gif" width="180" title="Expansion Tiles">
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/slivers.gif" width="180" title="Slivers">
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/horizontal.gif" width="180" title="Horizontal">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/drag_handle.gif" width="180" title="Drag Handle">
 <img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/drag_into_list.gif" width="180" title="Drag Into Lists">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/horizontal.gif" width="180" title="Horizontal">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/list_tiles.gif" width="180" title="List Tiles">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/slivers.gif" width="180" title="Slivers">
 </p>
 
 ## Usage
@@ -25,7 +28,7 @@ For example:
 
 ```
 dependencies:
-  drag_and_drop_lists: ^0.2.0
+  drag_and_drop_lists: ^0.2.1
 ``` 
 
 Now in your Dart code, you can use: `import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';`
@@ -34,31 +37,59 @@ To add the lists, add a `DragAndDropLists` widget. Set its children to a list of
 For example:
 
 ```
-...
+  // Outer list
+  List<DragAndDropList> _contents;
 
-  DragAndDropLists(
-    children: List.generate(_lists.length, (index) => _buildList(index)),
-    onItemReorder: _onItemReorder,
-    onListReorder: _onListReorder,
-  ),
+  @override
+  void initState() {
+    super.initState();
 
-...
+    // Generate a list
+    _contents = List.generate(10, (index) {
+      return DragAndDropList(
+        header: Text('Header $index'),
+        children: <DragAndDropItem>[
+          DragAndDropItem(
+            child: Text('$index.1'),
+          ),
+          DragAndDropItem(
+            child: Text('$index.2'),
+          ),
+          DragAndDropItem(
+            child: Text('$index.3'),
+          ),
+        ],
+      );
+    });
+  }
 
-_buildList(int outerIndex) {
-  var innerList = _lists[outerIndex];
-  return DragAndDropList(
-    title: Text('List ${innerList.name}'),
-    children: List.generate(innerList.children.length, (index) => _buildItem(innerList.children[index])),
-  );
-}
+  @override
+  Widget build(BuildContext context) {
+    // Add a DragAndDropLists. The only required parameters are children,
+    // onItemReorder, and onListReorder. All other parameters are used for
+    // styling the lists and changing its behaviour. See the samples in the
+    // example app for many more ways to configure this.
+    return DragAndDropLists(
+      children: _contents,
+      onItemReorder: _onItemReorder,
+      onListReorder: _onListReorder,
+    );
+  }
 
-_buildItem(String item) {
-  return DragAndDropItem(
-    child: ListTile(
-      title: Text(item),
-    ),
-  );
-}
+  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+    setState(() {
+      var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
+      _contents[newListIndex].children.insert(newItemIndex, movedItem);
+    });
+  }
+
+  _onListReorder(int oldListIndex, int newListIndex) {
+    setState(() {
+      var movedList = _contents.removeAt(oldListIndex);
+      _contents.insert(newListIndex, movedList);
+    });
+  }
+
 ```
 
 For further examples, see the example app or [view the example code](https://github.com/philip-brink/DragAndDropLists/tree/master/example/lib) directly.
