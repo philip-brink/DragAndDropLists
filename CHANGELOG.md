@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.3] - 8 October 2020
+
+* Added `disableTopAndBottomBorders` parameter to `DragAndDropListExpansion` and `ProgrammaticExpansionTile` to allow for more styling options.
+
 ## [0.2.2] - 7 October 2020
 
 * Added function parameters for customizing the criteria for where an item or list can be dropped. See the parameters `listOnWillAccept`, `listTargetOnWillAccept`, `itemOnWillAccept` and `itemTargetOnWillAccept` in `DragAndDropLists`

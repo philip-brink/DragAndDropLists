@@ -35,24 +35,28 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   /// Set to false if it must remain fixed.
   final bool canDrag;
 
+  /// Disable to borders displayed at the top and bottom when expanded
+  final bool disableTopAndBottomBorders;
+
   ValueNotifier<bool> _expanded = ValueNotifier<bool>(true);
   GlobalKey<ProgrammaticExpansionTileState> _expansionKey =
       GlobalKey<ProgrammaticExpansionTileState>();
 
-  DragAndDropListExpansion(
-      {this.children,
-      this.title,
-      this.subtitle,
-      this.trailing,
-      this.leading,
-      this.initiallyExpanded = false,
-      this.backgroundColor,
-      this.onExpansionChanged,
-      this.contentsWhenEmpty,
-      this.lastTarget,
-      this.listKey,
-      this.canDrag = true})
-      : assert(listKey != null) {
+  DragAndDropListExpansion({
+    this.children,
+    this.title,
+    this.subtitle,
+    this.trailing,
+    this.leading,
+    this.initiallyExpanded = false,
+    this.backgroundColor,
+    this.onExpansionChanged,
+    this.contentsWhenEmpty,
+    this.lastTarget,
+    this.listKey,
+    this.canDrag = true,
+    this.disableTopAndBottomBorders = false,
+  }) : assert(listKey != null) {
     _expanded.value = initiallyExpanded;
   }
 
@@ -66,6 +70,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       subtitle: subtitle,
       trailing: trailing,
       leading: leading,
+      disableTopAndBottomBorders: disableTopAndBottomBorders,
       backgroundColor: backgroundColor,
       initiallyExpanded: initiallyExpanded,
       onExpansionChanged: _onSetExpansion,

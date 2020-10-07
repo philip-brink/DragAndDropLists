@@ -39,6 +39,7 @@ class ProgrammaticExpansionTile extends StatefulWidget {
     this.children = const <Widget>[],
     this.trailing,
     this.initiallyExpanded = false,
+    this.disableTopAndBottomBorders = false,
   })  : assert(initiallyExpanded != null),
         assert(listKey != null),
         assert(key != null),
@@ -86,6 +87,9 @@ class ProgrammaticExpansionTile extends StatefulWidget {
 
   /// Specifies if the list tile is initially expanded (true) or collapsed (false, the default).
   final bool initiallyExpanded;
+
+  /// Disable to borders displayed at the top and bottom when expanded
+  final bool disableTopAndBottomBorders;
 
   @override
   ProgrammaticExpansionTileState createState() =>
@@ -186,14 +190,17 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
 
   Widget _buildChildren(BuildContext context, Widget child) {
     final Color borderSideColor = _borderColor.value ?? Colors.transparent;
+    bool setBorder = !widget.disableTopAndBottomBorders;
 
     return Container(
       decoration: BoxDecoration(
         color: _backgroundColor.value ?? Colors.transparent,
-        border: Border(
-          top: BorderSide(color: borderSideColor),
-          bottom: BorderSide(color: borderSideColor),
-        ),
+        border: setBorder
+            ? Border(
+                top: BorderSide(color: borderSideColor),
+                bottom: BorderSide(color: borderSideColor),
+              )
+            : null,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
