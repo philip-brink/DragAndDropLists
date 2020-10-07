@@ -9,6 +9,8 @@ import 'package:drag_and_drop_lists/programmatic_expansion_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+typedef void OnExpansionChanged(bool expanded);
+
 /// This class mirrors flutter's [ExpansionTile], with similar options.
 class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   final Widget title;
@@ -22,7 +24,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   final Key listKey;
 
   /// This function will be called when the expansion of a tile is changed.
-  final Function(bool) onExpansionChanged;
+  final OnExpansionChanged onExpansionChanged;
   final Color backgroundColor;
   final List<DragAndDropItem> children;
   final Widget contentsWhenEmpty;
@@ -130,6 +132,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
             onPointerUp: params.onPointerUp,
             onPointerMove: params.onPointerMove,
             onItemReordered: params.onItemReordered,
+            itemOnWillAccept: params.itemOnWillAccept,
             sizeAnimationDuration: params.itemSizeAnimationDuration,
             ghostOpacity: params.itemGhostOpacity,
             ghost: params.itemGhost,

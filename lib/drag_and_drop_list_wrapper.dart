@@ -219,10 +219,17 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
               return Container();
             },
             onWillAccept: (incoming) {
-              setState(() {
-                _hoveredDraggable = incoming;
-              });
-              return true;
+              bool accept = true;
+              if (widget.parameters.listOnWillAccept != null) {
+                accept = widget.parameters
+                    .listOnWillAccept(incoming, widget.dragAndDropList);
+              }
+              if (accept) {
+                setState(() {
+                  _hoveredDraggable = incoming;
+                });
+              }
+              return accept;
             },
             onLeave: (incoming) {
               if (_hoveredDraggable != null) {

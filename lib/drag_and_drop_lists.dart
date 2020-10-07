@@ -32,6 +32,47 @@ export 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
 
+typedef void OnItemReorder(
+  int oldItemIndex,
+  int oldListIndex,
+  int newItemIndex,
+  int newListIndex,
+);
+typedef void OnItemAdd(
+  DragAndDropItem newItem,
+  int listIndex,
+  int newItemIndex,
+);
+typedef void OnListAdd(DragAndDropListInterface newList, int newListIndex);
+typedef void OnListReorder(int oldListIndex, int newListIndex);
+typedef bool ListOnWillAccept(
+  DragAndDropListInterface incoming,
+  DragAndDropListInterface target,
+);
+typedef void ListOnAccept(
+  DragAndDropListInterface incoming,
+  DragAndDropListInterface target,
+);
+typedef bool ListTargetOnWillAccept(
+    DragAndDropListInterface incoming, DragAndDropListTarget target);
+typedef void ListTargetOnAccept(
+    DragAndDropListInterface incoming, DragAndDropListTarget target);
+typedef bool ItemOnWillAccept(
+  DragAndDropItem incoming,
+  DragAndDropItem target,
+);
+typedef void ItemOnAccept(
+  DragAndDropItem incoming,
+  DragAndDropItem target,
+);
+typedef bool ItemTargetOnWillAccept(
+    DragAndDropItem incoming, DragAndDropItemTarget target);
+typedef void ItemTargetOnAccept(
+  DragAndDropItem incoming,
+  DragAndDropListInterface parentList,
+  DragAndDropItemTarget target,
+);
+
 class DragAndDropLists extends StatefulWidget {
   /// The child lists to be displayed.
   /// If any of these children are [DragAndDropListExpansion] or inherit from
@@ -41,20 +82,62 @@ class DragAndDropLists extends StatefulWidget {
   /// Calls this function when a list element is reordered.
   /// Takes into account the index change when removing an item, so the
   /// [newItemIndex] can be used directly when inserting.
-  final Function(int oldItemIndex, int oldListIndex, int newItemIndex,
-      int newListIndex) onItemReorder;
+  final OnItemReorder onItemReorder;
 
   /// Calls this function when a list is reordered.
   /// Takes into account the index change when removing a list, so the
   /// [newListIndex] can be used directly when inserting.
-  final Function(int oldListIndex, int newListIndex) onListReorder;
+  final OnListReorder onListReorder;
 
   /// Calls this function when a new item has been added.
-  final Function(DragAndDropItem newItem, int listIndex, int newItemIndex)
-      onItemAdd;
+  final OnItemAdd onItemAdd;
 
   /// Calls this function when a new list has been added.
-  final Function(DragAndDropListInterface newList, int newListIndex) onListAdd;
+  final OnListAdd onListAdd;
+
+  /// Set in order to provide custom acceptance criteria for when a list can be
+  /// dropped onto a specific other list
+  final ListOnWillAccept listOnWillAccept;
+
+  /// Set in order to get the lists involved in a drag and drop operation after
+  /// a list has been accepted. For general use cases where only reordering is
+  /// necessary, only [onListReorder] or [onListAdd] is needed, and this should
+  /// be left null. [onListReorder] or [onListAdd] will be called after this.
+  final ListOnAccept listOnAccept;
+
+  /// Set in order to provide custom acceptance criteria for when a list can be
+  /// dropped onto a specific target. This target always exists as the last
+  /// target the DragAndDropLists, and also can be used independently.
+  final ListTargetOnWillAccept listTargetOnWillAccept;
+
+  /// Set in order to get the list and target involved in a drag and drop
+  /// operation after a list has been accepted. For general use cases where only
+  /// reordering is necessary, only [onListReorder] or [onListAdd] is needed,
+  /// and this should be left null. [onListReorder] or [onListAdd] will be
+  /// called after this.
+  final ListTargetOnAccept listTargetOnAccept;
+
+  /// Set in order to provide custom acceptance criteria for when a item can be
+  /// dropped onto a specific other item
+  final ItemOnWillAccept itemOnWillAccept;
+
+  /// Set in order to get the items involved in a drag and drop operation after
+  /// an item has been accepted. For general use cases where only reordering is
+  /// necessary, only [onItemReorder] or [onItemAdd] is needed, and this should
+  /// be left null. [onItemReorder] or [onItemAdd] will be called after this.
+  final ItemOnAccept itemOnAccept;
+
+  /// Set in order to provide custom acceptance criteria for when a item can be
+  /// dropped onto a specific target. This target always exists as the last
+  /// target for list of items, and also can be used independently.
+  final ItemTargetOnWillAccept itemTargetOnWillAccept;
+
+  /// Set in order to get the item and target involved in a drag and drop
+  /// operation after a item has been accepted. For general use cases where only
+  /// reordering is necessary, only [onItemReorder] or [onItemAdd] is needed,
+  /// and this should be left null. [onItemReorder] or [onItemAdd] will be
+  /// called after this.
+  final ItemTargetOnAccept itemTargetOnAccept;
 
   /// Width of a list item when it is being dragged.
   final double itemDraggingWidth;
@@ -172,6 +255,14 @@ class DragAndDropLists extends StatefulWidget {
     this.onListReorder,
     this.onItemAdd,
     this.onListAdd,
+    this.listOnWillAccept,
+    this.listOnAccept,
+    this.listTargetOnWillAccept,
+    this.listTargetOnAccept,
+    this.itemOnWillAccept,
+    this.itemOnAccept,
+    this.itemTargetOnWillAccept,
+    this.itemTargetOnAccept,
     this.itemDraggingWidth,
     this.itemGhost,
     this.itemGhostOpacity = 0.3,
@@ -263,6 +354,10 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       onItemReordered: _internalOnItemReorder,
       onItemDropOnLastTarget: _internalOnItemDropOnLastTarget,
       onListReordered: _internalOnListReorder,
+      listOnWillAccept: widget.listOnWillAccept,
+      listTargetOnWillAccept: widget.listTargetOnWillAccept,
+      itemOnWillAccept: widget.itemOnWillAccept,
+      itemTargetOnWillAccept: widget.itemTargetOnWillAccept,
       itemGhostOpacity: widget.itemGhostOpacity,
       itemDivider: widget.itemDivider,
       itemDecorationWhileDragging: widget.itemDecorationWhileDragging,
@@ -373,6 +468,10 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   }
 
   _internalOnItemReorder(DragAndDropItem reordered, DragAndDropItem receiver) {
+    if (widget.itemOnAccept != null) {
+      widget.itemOnAccept(reordered, receiver);
+    }
+
     int reorderedListIndex = -1;
     int reorderedItemIndex = -1;
     int receiverListIndex = -1;
@@ -418,6 +517,8 @@ class DragAndDropListsState extends State<DragAndDropLists> {
 
     int newListIndex = receiverListIndex;
 
+    if (widget.listOnAccept != null) widget.listOnAccept(reordered, receiver);
+
     if (reorderedListIndex == -1) {
       // this is a new list
       if (widget.onListAdd != null) widget.onListAdd(reordered, newListIndex);
@@ -433,6 +534,10 @@ class DragAndDropListsState extends State<DragAndDropLists> {
 
   _internalOnItemDropOnLastTarget(DragAndDropItem newOrReordered,
       DragAndDropListInterface parentList, DragAndDropItemTarget receiver) {
+    if (widget.itemTargetOnAccept != null) {
+      widget.itemTargetOnAccept(newOrReordered, parentList, receiver);
+    }
+
     int reorderedListIndex = -1;
     int reorderedItemIndex = -1;
     int receiverListIndex = -1;
@@ -478,6 +583,10 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     // determine if newOrReordered is new or existing
     int reorderedListIndex =
         widget.children.indexWhere((e) => newOrReordered == e);
+
+    if (widget.listOnAccept != null)
+      widget.listTargetOnAccept(newOrReordered, receiver);
+
     if (reorderedListIndex >= 0) {
       if (widget.onListReorder != null)
         widget.onListReorder(reorderedListIndex, widget.children.length - 1);

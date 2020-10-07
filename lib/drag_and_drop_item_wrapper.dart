@@ -1,3 +1,4 @@
+import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:drag_and_drop_lists/measure_size.dart';
@@ -6,11 +7,11 @@ import 'package:flutter/widgets.dart';
 
 class DragAndDropItemWrapper extends StatefulWidget {
   final DragAndDropItem child;
-  final Function(PointerMoveEvent event) onPointerMove;
-  final Function(PointerUpEvent event) onPointerUp;
-  final Function(PointerDownEvent event) onPointerDown;
-  final Function(DragAndDropItem reorderedItem, DragAndDropItem receiverItem)
-      onItemReordered;
+  final OnPointerMove onPointerMove;
+  final OnPointerUp onPointerUp;
+  final OnPointerDown onPointerDown;
+  final OnItemReordered onItemReordered;
+  final ItemOnWillAccept itemOnWillAccept;
   final Widget ghost;
   final double draggingWidth;
   final double ghostOpacity;
@@ -31,6 +32,7 @@ class DragAndDropItemWrapper extends StatefulWidget {
       @required this.onPointerUp,
       @required this.onPointerDown,
       @required this.onItemReordered,
+      this.itemOnWillAccept,
       this.ghost,
       this.draggingWidth,
       this.ghostOpacity = 0.3,
@@ -225,10 +227,15 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
               return Container();
             },
             onWillAccept: (incoming) {
-              setState(() {
-                _hoveredDraggable = incoming;
-              });
-              return true;
+              bool accept = true;
+              if (widget.itemOnWillAccept != null)
+                accept = widget.itemOnWillAccept(incoming, widget.child);
+              if (accept) {
+                setState(() {
+                  _hoveredDraggable = incoming;
+                });
+              }
+              return accept;
             },
             onLeave: (incoming) {
               setState(() {

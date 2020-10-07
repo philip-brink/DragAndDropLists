@@ -130,6 +130,7 @@ class DragAndDropList implements DragAndDropListInterface {
           onPointerUp: params.onPointerUp,
           onPointerMove: params.onPointerMove,
           onItemReordered: params.onItemReordered,
+          itemOnWillAccept: params.itemOnWillAccept,
           sizeAnimationDuration: params.itemSizeAnimationDuration,
           ghostOpacity: params.itemGhostOpacity,
           ghost: params.itemGhost,

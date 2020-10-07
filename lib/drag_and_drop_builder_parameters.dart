@@ -4,18 +4,34 @@ import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/widgets.dart';
 
+typedef void OnPointerMove(PointerMoveEvent event);
+typedef void OnPointerUp(PointerUpEvent event);
+typedef void OnPointerDown(PointerDownEvent event);
+typedef void OnItemReordered(
+  DragAndDropItem reorderedItem,
+  DragAndDropItem receiverItem,
+);
+typedef void OnItemDropOnLastTarget(
+  DragAndDropItem newOrReorderedItem,
+  DragAndDropListInterface parentList,
+  DragAndDropItemTarget receiver,
+);
+typedef void OnListReordered(
+  DragAndDropListInterface reorderedList,
+  DragAndDropListInterface receiverList,
+);
+
 class DragAndDropBuilderParameters {
-  final Function(PointerMoveEvent event) onPointerMove;
-  final Function(PointerUpEvent event) onPointerUp;
-  final Function(PointerDownEvent event) onPointerDown;
-  final Function(DragAndDropItem reorderedItem, DragAndDropItem receiverItem)
-      onItemReordered;
-  final Function(
-      DragAndDropItem newOrReorderedItem,
-      DragAndDropListInterface parentList,
-      DragAndDropItemTarget receiver) onItemDropOnLastTarget;
-  final Function(DragAndDropListInterface reorderedList,
-      DragAndDropListInterface receiverList) onListReordered;
+  final OnPointerMove onPointerMove;
+  final OnPointerUp onPointerUp;
+  final OnPointerDown onPointerDown;
+  final OnItemReordered onItemReordered;
+  final OnItemDropOnLastTarget onItemDropOnLastTarget;
+  final OnListReordered onListReordered;
+  final ListOnWillAccept listOnWillAccept;
+  final ListTargetOnWillAccept listTargetOnWillAccept;
+  final ItemOnWillAccept itemOnWillAccept;
+  final ItemTargetOnWillAccept itemTargetOnWillAccept;
   final Axis axis;
   final CrossAxisAlignment verticalAlignment;
   final double listDraggingWidth;
@@ -40,13 +56,17 @@ class DragAndDropBuilderParameters {
   final bool dragHandleOnLeft;
 
   DragAndDropBuilderParameters({
-    @required this.onPointerMove,
-    @required this.onPointerUp,
-    @required this.onPointerDown,
-    @required this.onItemReordered,
-    @required this.onItemDropOnLastTarget,
-    @required this.onListReordered,
-    @required this.listDraggingWidth,
+    this.onPointerMove,
+    this.onPointerUp,
+    this.onPointerDown,
+    this.onItemReordered,
+    this.onItemDropOnLastTarget,
+    this.onListReordered,
+    this.listDraggingWidth,
+    this.listOnWillAccept,
+    this.listTargetOnWillAccept,
+    this.itemOnWillAccept,
+    this.itemTargetOnWillAccept,
     this.dragOnLongPress = true,
     this.axis = Axis.vertical,
     this.verticalAlignment = CrossAxisAlignment.start,

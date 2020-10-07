@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.2] - 7 October 2020
+
+* Added function parameters for customizing the criteria for where an item or list can be dropped. See the parameters `listOnWillAccept`, `listTargetOnWillAccept`, `itemOnWillAccept` and `itemTargetOnWillAccept` in `DragAndDropLists`
+* Added function parameters for directly accessing items or lists that have been dropped. See the parameters `listOnAccept`, `listTargetOnAccept`, `itemOnAccept` and `itemTargetOnAccept` in `DragAndDropLists`
+
 ## [0.2.1] - 6 October 2020
 
 * Fixed bug where auto scrolling could occur even when not dragging an item (thanks [@ElenaKova](https://github.com/ElenaKova))

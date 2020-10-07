@@ -8,8 +8,7 @@ class DragAndDropItemTarget extends StatefulWidget {
   final Widget child;
   final DragAndDropListInterface parent;
   final DragAndDropBuilderParameters parameters;
-  final Function(DragAndDropItem reordered, DragAndDropListInterface parentList,
-      DragAndDropItemTarget receiver) onReorderOrAdd;
+  final OnItemDropOnLastTarget onReorderOrAdd;
 
   DragAndDropItemTarget(
       {@required this.child,
@@ -60,10 +59,16 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
               return Container();
             },
             onWillAccept: (incoming) {
-              setState(() {
-                _hoveredDraggable = incoming;
-              });
-              return true;
+              bool accept = true;
+              if (widget.parameters.itemTargetOnWillAccept != null)
+                accept =
+                    widget.parameters.itemTargetOnWillAccept(incoming, widget);
+              if (accept) {
+                setState(() {
+                  _hoveredDraggable = incoming;
+                });
+              }
+              return accept;
             },
             onLeave: (incoming) {
               setState(() {

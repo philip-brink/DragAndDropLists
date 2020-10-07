@@ -3,11 +3,15 @@ import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+typedef void OnDropOnLastTarget(
+  DragAndDropListInterface newOrReordered,
+  DragAndDropListTarget receiver,
+);
+
 class DragAndDropListTarget extends StatefulWidget {
   final Widget child;
   final DragAndDropBuilderParameters parameters;
-  final Function(DragAndDropListInterface newOrReordered,
-      DragAndDropListTarget receiver) onDropOnLastTarget;
+  final OnDropOnLastTarget onDropOnLastTarget;
   final double lastListTargetSize;
 
   DragAndDropListTarget(
@@ -78,10 +82,17 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
               return Container();
             },
             onWillAccept: (incoming) {
-              setState(() {
-                _hoveredDraggable = incoming;
-              });
-              return true;
+              bool accept = true;
+              if (widget.parameters.listTargetOnWillAccept != null) {
+                accept =
+                    widget.parameters.listTargetOnWillAccept(incoming, widget);
+              }
+              if (accept) {
+                setState(() {
+                  _hoveredDraggable = incoming;
+                });
+              }
+              return accept;
             },
             onLeave: (incoming) {
               setState(() {
