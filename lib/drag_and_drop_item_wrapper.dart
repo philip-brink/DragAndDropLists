@@ -55,8 +55,8 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
   DragAndDropItem _hoveredDraggable;
 
   bool _dragging = false;
-  Size _draggingWithHandleContainerSize = Size.zero;
-  double _draggingWithHandleContainerLeftPosition = 0;
+  Size _containerSize = Size.zero;
+  double _containerLeftPosition = 0;
   Size _draggingWithHandleDragHandleSize = Size.zero;
   double _draggingWithHandleDragHandleLeftPosition = 0;
 
@@ -68,10 +68,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
         double dragHandleCenter = _draggingWithHandleDragHandleLeftPosition +
             (_draggingWithHandleDragHandleSize.width / 2.0);
         double containerLeftToDragHandleCenter =
-            dragHandleCenter - _draggingWithHandleContainerLeftPosition;
+            dragHandleCenter - _containerLeftPosition;
 
         Widget feedback = Container(
-          width: widget.draggingWidth ?? _draggingWithHandleContainerSize.width,
+          width: widget.draggingWidth ?? _containerSize.width,
           child: Stack(
             children: [
               widget.child.child,
@@ -109,9 +109,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             ),
             feedback: Transform.translate(
               offset: Offset(
-                  -containerLeftToDragHandleCenter +
-                      _draggingWithHandleContainerLeftPosition,
-                  0),
+                  -containerLeftToDragHandleCenter + _containerLeftPosition, 0),
               child: Material(
                 color: Colors.transparent,
                 child: Container(
@@ -129,16 +127,8 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
         );
 
         draggable = MeasureSize(
-          onSizeChange: (size) {
-            setState(() {
-              _draggingWithHandleContainerSize = size;
-            });
-          },
-          onLeftPositionChange: (leftPosition) {
-            setState(() {
-              _draggingWithHandleContainerLeftPosition = leftPosition;
-            });
-          },
+          onSizeChange: _setContainerSize,
+          onLeftPositionChange: _setLeftPosition,
           child: Stack(
             children: [
               Visibility(
@@ -151,40 +141,54 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           ),
         );
       } else if (widget.dragOnLongPress) {
-        draggable = LongPressDraggable<DragAndDropItem>(
-          data: widget.child,
-          axis: widget.axis == Axis.vertical ? Axis.vertical : null,
-          child: widget.child.child,
-          feedback: Container(
-            width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
-            child: Material(
-              child: widget.child.child,
-              color: Colors.transparent,
+        draggable = MeasureSize(
+          onSizeChange: _setContainerSize,
+          onLeftPositionChange: _setLeftPosition,
+          child: LongPressDraggable<DragAndDropItem>(
+            data: widget.child,
+            axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+            child: widget.child.child,
+            feedback: Container(
+              width: widget.draggingWidth ?? _containerSize.width,
+              child: Material(
+                child: Container(
+                  child: widget.child.child,
+                  decoration: widget.decorationWhileDragging,
+                ),
+                color: Colors.transparent,
+              ),
             ),
+            childWhenDragging: Container(),
+            onDragStarted: () => _setDragging(true),
+            onDragCompleted: () => _setDragging(false),
+            onDraggableCanceled: (_, __) => _setDragging(false),
+            onDragEnd: (_) => _setDragging(false),
           ),
-          childWhenDragging: Container(),
-          onDragStarted: () => _setDragging(true),
-          onDragCompleted: () => _setDragging(false),
-          onDraggableCanceled: (_, __) => _setDragging(false),
-          onDragEnd: (_) => _setDragging(false),
         );
       } else {
-        draggable = Draggable<DragAndDropItem>(
-          data: widget.child,
-          axis: widget.axis == Axis.vertical ? Axis.vertical : null,
-          child: widget.child.child,
-          feedback: Container(
-            width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
-            child: Material(
-              child: widget.child.child,
-              color: Colors.transparent,
+        draggable = MeasureSize(
+          onSizeChange: _setContainerSize,
+          onLeftPositionChange: _setLeftPosition,
+          child: Draggable<DragAndDropItem>(
+            data: widget.child,
+            axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+            child: widget.child.child,
+            feedback: Container(
+              width: widget.draggingWidth ?? _containerSize.width,
+              child: Material(
+                child: Container(
+                  child: widget.child.child,
+                  decoration: widget.decorationWhileDragging,
+                ),
+                color: Colors.transparent,
+              ),
             ),
+            childWhenDragging: Container(),
+            onDragStarted: () => _setDragging(true),
+            onDragCompleted: () => _setDragging(false),
+            onDraggableCanceled: (_, __) => _setDragging(false),
+            onDragEnd: (_) => _setDragging(false),
           ),
-          childWhenDragging: Container(),
-          onDragStarted: () => _setDragging(true),
-          onDragCompleted: () => _setDragging(false),
-          onDraggableCanceled: (_, __) => _setDragging(false),
-          onDragEnd: (_) => _setDragging(false),
         );
       }
     } else {
@@ -253,6 +257,18 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
         )
       ],
     );
+  }
+
+  void _setContainerSize(Size size) {
+    setState(() {
+      _containerSize = size;
+    });
+  }
+
+  void _setLeftPosition(double leftPosition) {
+    setState(() {
+      _containerLeftPosition = leftPosition;
+    });
   }
 
   void _setDragging(bool dragging) {
