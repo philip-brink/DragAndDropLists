@@ -158,7 +158,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           feedback: Container(
             width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
             child: Material(
-              child: widget.child.child,
+              child: Container(
+                child: widget.child.child,
+                decoration: widget.decorationWhileDragging,
+              ),
               color: Colors.transparent,
             ),
           ),
@@ -176,7 +179,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           feedback: Container(
             width: widget.draggingWidth ?? MediaQuery.of(context).size.width,
             child: Material(
-              child: widget.child.child,
+              child: Container(
+                child: widget.child.child,
+                decoration: widget.decorationWhileDragging,
+              ),
               color: Colors.transparent,
             ),
           ),
