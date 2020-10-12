@@ -160,7 +160,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
         onReorderOrAdd: params.onItemDropOnLastTarget,
         child: lastTarget ??
             Container(
-              height: 20,
+              height: params.lastItemTargetHeight,
             ),
       ));
     } else {
@@ -180,7 +180,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
           onReorderOrAdd: params.onItemDropOnLastTarget,
           child: lastTarget ??
               Container(
-                height: 20,
+                height: params.lastItemTargetHeight,
               ),
         ),
       );
