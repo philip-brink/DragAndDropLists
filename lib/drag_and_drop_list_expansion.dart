@@ -131,31 +131,36 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       DragAndDropBuilderParameters params) {
     var contents = List<Widget>();
     if (children != null && children.isNotEmpty) {
-      children.forEach((element) => contents.add(DragAndDropItemWrapper(
-            child: element,
-            onPointerDown: params.onPointerDown,
-            onPointerUp: params.onPointerUp,
-            onPointerMove: params.onPointerMove,
-            onItemReordered: params.onItemReordered,
-            itemOnWillAccept: params.itemOnWillAccept,
-            sizeAnimationDuration: params.itemSizeAnimationDuration,
-            ghostOpacity: params.itemGhostOpacity,
-            ghost: params.itemGhost,
-            dragOnLongPress: params.dragOnLongPress,
-            draggingWidth: params.itemDraggingWidth,
-            axis: params.axis,
-            verticalAlignment: params.verticalAlignment,
-            dragHandle: params.dragHandle,
-            dragHandleOnLeft: params.dragHandleOnLeft,
-            decorationWhileDragging: params.itemDecorationWhileDragging,
-          )));
+      for (int i = 0; i < children.length; i++) {
+        contents.add(DragAndDropItemWrapper(
+          child: children[i],
+          onPointerDown: params.onPointerDown,
+          onPointerUp: params.onPointerUp,
+          onPointerMove: params.onPointerMove,
+          onItemReordered: params.onItemReordered,
+          itemOnWillAccept: params.itemOnWillAccept,
+          sizeAnimationDuration: params.itemSizeAnimationDuration,
+          ghostOpacity: params.itemGhostOpacity,
+          ghost: params.itemGhost,
+          dragOnLongPress: params.dragOnLongPress,
+          draggingWidth: params.itemDraggingWidth,
+          axis: params.axis,
+          verticalAlignment: params.verticalAlignment,
+          dragHandle: params.dragHandle,
+          dragHandleOnLeft: params.dragHandleOnLeft,
+          decorationWhileDragging: params.itemDecorationWhileDragging,
+        ));
+        if (params.itemDivider != null && i < children.length - 1) {
+          contents.add(params.itemDivider);
+        }
+      }
       contents.add(DragAndDropItemTarget(
         parent: this,
         parameters: params,
         onReorderOrAdd: params.onItemDropOnLastTarget,
         child: lastTarget ??
             Container(
-              height: 20,
+              height: params.lastItemTargetHeight,
             ),
       ));
     } else {
@@ -175,7 +180,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
           onReorderOrAdd: params.onItemDropOnLastTarget,
           child: lastTarget ??
               Container(
-                height: 20,
+                height: params.lastItemTargetHeight,
               ),
         ),
       );
