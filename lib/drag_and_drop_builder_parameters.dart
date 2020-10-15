@@ -62,6 +62,7 @@ class DragAndDropBuilderParameters {
   final bool dragHandleOnLeft;
   final DragHandleVerticalAlignment listDragHandleVerticalAlignment;
   final DragHandleVerticalAlignment itemDragHandleVerticalAlignment;
+  final bool constrainDraggingAxis;
 
   DragAndDropBuilderParameters({
     this.onPointerMove,
@@ -98,5 +99,6 @@ class DragAndDropBuilderParameters {
     this.dragHandleOnLeft = false,
     this.itemDragHandleVerticalAlignment = DragHandleVerticalAlignment.center,
     this.listDragHandleVerticalAlignment = DragHandleVerticalAlignment.top,
+    this.constrainDraggingAxis = true,
   });
 }

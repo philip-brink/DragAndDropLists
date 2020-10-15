@@ -1,9 +1,13 @@
 # Changelog
 
+## [0.2.5] - 15 October 2020
+
+* Added `constrainDraggingAxis` parameter in `DragAndDropLists`. This is useful when setting custom drag targets outside of the DragAndDropLists.
+
 ## [0.2.4] - 15 October 2020
 
-* Add drag handle vertical alignment customization. See `listDragHandleVerticalAlignment` and `itemDragHandleVerticalAlignment` parameters in `DragAndDropLists`
-* Add mouse cursor change on web when hovering on drag handle
+* Added drag handle vertical alignment customization. See `listDragHandleVerticalAlignment` and `itemDragHandleVerticalAlignment` parameters in `DragAndDropLists`
+* Added mouse cursor change on web when hovering on drag handle
 * Fixed [itemDecorationWhileDragging only applied when dragHandle is provided?](https://github.com/philip-brink/DragAndDropLists/issues/11) (thanks [kjmj](https://github.com/kjmj))
 * Fixed bug where setState() was called after dispose when dragging items in a long list (See issue [Error in debug console when dragging item in long list](https://github.com/philip-brink/DragAndDropLists/issues/9), thanks [mivoligo](https://github.com/mivoligo))
 * Apply the itemDivider property to items in the DragAndDropListExpansion widget and use the lastItemTargetHeight instead of the constant value of 20 (thanks [kjmj](https://github.com/kjmj))

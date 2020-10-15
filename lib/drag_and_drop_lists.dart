@@ -256,6 +256,11 @@ class DragAndDropLists extends StatefulWidget {
   /// Align the item drag handle to the top, center, or bottom
   final DragHandleVerticalAlignment itemDragHandleVerticalAlignment;
 
+  /// Constrain the dragging axis in a vertical list to only allow dragging on
+  /// the vertical axis. By default this is set to true. This may be useful to
+  /// disable when setting customDragTargets
+  final bool constrainDraggingAxis;
+
   DragAndDropLists({
     this.children,
     this.onItemReorder,
@@ -302,6 +307,7 @@ class DragAndDropLists extends StatefulWidget {
     this.dragHandleOnLeft = false,
     this.listDragHandleVerticalAlignment = DragHandleVerticalAlignment.top,
     this.itemDragHandleVerticalAlignment = DragHandleVerticalAlignment.center,
+    this.constrainDraggingAxis = true,
     Key key,
   }) : super(key: key) {
     if (listGhost == null &&
@@ -383,6 +389,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       dragHandleOnLeft: widget.dragHandleOnLeft,
       itemDragHandleVerticalAlignment: widget.itemDragHandleVerticalAlignment,
       listDragHandleVerticalAlignment: widget.listDragHandleVerticalAlignment,
+      constrainDraggingAxis: widget.constrainDraggingAxis,
     );
 
     DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(

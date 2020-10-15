@@ -22,6 +22,7 @@ class DragAndDropItemWrapper extends StatefulWidget {
   final Axis axis;
   final Decoration decorationWhileDragging;
   final DragHandleVerticalAlignment dragHandleVerticalAlignment;
+  final bool constrainDraggingAxis;
 
   /// Set a custom drag handle to use iOS-like handles to drag rather than long
   /// or short presses
@@ -46,6 +47,7 @@ class DragAndDropItemWrapper extends StatefulWidget {
       this.dragHandleOnLeft = false,
       this.decorationWhileDragging,
       this.dragHandleVerticalAlignment,
+      this.constrainDraggingAxis = true,
       Key key})
       : super(key: key);
 
@@ -103,7 +105,9 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             cursor: SystemMouseCursors.grab,
             child: Draggable<DragAndDropItem>(
               data: widget.child,
-              axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+              axis: widget.axis == Axis.vertical && widget.constrainDraggingAxis
+                  ? Axis.vertical
+                  : null,
               child: MeasureSize(
                 onSizeChange: (size) {
                   setState(() {
@@ -149,7 +153,9 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           onSizeChange: _setContainerSize,
           child: LongPressDraggable<DragAndDropItem>(
             data: widget.child,
-            axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+            axis: widget.axis == Axis.vertical && widget.constrainDraggingAxis
+                ? Axis.vertical
+                : null,
             child: widget.child.child,
             feedback: Container(
               width: widget.draggingWidth ?? _containerSize.width,
@@ -173,7 +179,9 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           onSizeChange: _setContainerSize,
           child: Draggable<DragAndDropItem>(
             data: widget.child,
-            axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+            axis: widget.axis == Axis.vertical && widget.constrainDraggingAxis
+                ? Axis.vertical
+                : null,
             child: widget.child.child,
             feedback: Container(
               width: widget.draggingWidth ?? _containerSize.width,

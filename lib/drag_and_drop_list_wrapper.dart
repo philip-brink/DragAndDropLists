@@ -83,7 +83,8 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
                 top: _dragHandleDistanceFromTop(),
                 child: Draggable<DragAndDropListInterface>(
                   data: widget.dragAndDropList,
-                  axis: widget.parameters.axis == Axis.vertical
+                  axis: widget.parameters.axis == Axis.vertical &&
+                          widget.parameters.constrainDraggingAxis
                       ? Axis.vertical
                       : null,
                   child: MeasureSize(
@@ -118,7 +119,10 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
       } else if (widget.parameters.dragOnLongPress) {
         draggable = LongPressDraggable<DragAndDropListInterface>(
           data: widget.dragAndDropList,
-          axis: widget.parameters.axis,
+          axis: widget.parameters.axis == Axis.vertical &&
+                  widget.parameters.constrainDraggingAxis
+              ? Axis.vertical
+              : null,
           child: dragAndDropListContents,
           feedback: Container(
             width: widget.parameters.listDraggingWidth ??
@@ -137,7 +141,10 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
       } else {
         draggable = Draggable<DragAndDropListInterface>(
           data: widget.dragAndDropList,
-          axis: widget.parameters.axis,
+          axis: widget.parameters.axis == Axis.vertical &&
+                  widget.parameters.constrainDraggingAxis
+              ? Axis.vertical
+              : null,
           child: dragAndDropListContents,
           feedback: Container(
             width: widget.parameters.axis == Axis.vertical
