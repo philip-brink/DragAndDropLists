@@ -141,6 +141,7 @@ class DragAndDropList implements DragAndDropListInterface {
           dragHandle: params.dragHandle,
           dragHandleOnLeft: params.dragHandleOnLeft,
           decorationWhileDragging: params.itemDecorationWhileDragging,
+          dragHandleVerticalAlignment: params.itemDragHandleVerticalAlignment,
         ));
         if (params.itemDivider != null && i < children.length - 1) {
           allChildren.add(params.itemDivider);

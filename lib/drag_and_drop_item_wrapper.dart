@@ -3,6 +3,7 @@ import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:drag_and_drop_lists/measure_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class DragAndDropItemWrapper extends StatefulWidget {
@@ -20,6 +21,7 @@ class DragAndDropItemWrapper extends StatefulWidget {
   final CrossAxisAlignment verticalAlignment;
   final Axis axis;
   final Decoration decorationWhileDragging;
+  final DragHandleVerticalAlignment dragHandleVerticalAlignment;
 
   /// Set a custom drag handle to use iOS-like handles to drag rather than long
   /// or short presses
@@ -43,6 +45,7 @@ class DragAndDropItemWrapper extends StatefulWidget {
       this.dragHandle,
       this.dragHandleOnLeft = false,
       this.decorationWhileDragging,
+      this.dragHandleVerticalAlignment,
       Key key})
       : super(key: key);
 
@@ -56,20 +59,13 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
 
   bool _dragging = false;
   Size _containerSize = Size.zero;
-  double _containerLeftPosition = 0;
-  Size _draggingWithHandleDragHandleSize = Size.zero;
-  double _draggingWithHandleDragHandleLeftPosition = 0;
+  Size _dragHandleSize = Size.zero;
 
   @override
   Widget build(BuildContext context) {
     Widget draggable;
     if (widget.child.canDrag) {
       if (widget.dragHandle != null) {
-        double dragHandleCenter = _draggingWithHandleDragHandleLeftPosition +
-            (_draggingWithHandleDragHandleSize.width / 2.0);
-        double containerLeftToDragHandleCenter =
-            dragHandleCenter - _containerLeftPosition;
-
         Widget feedback = Container(
           width: widget.draggingWidth ?? _containerSize.width,
           child: Stack(
@@ -78,8 +74,14 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
               Positioned(
                 right: widget.dragHandleOnLeft ? null : 0,
                 left: widget.dragHandleOnLeft ? 0 : null,
-                top: 0,
-                bottom: 0,
+                top: widget.dragHandleVerticalAlignment ==
+                        DragHandleVerticalAlignment.bottom
+                    ? null
+                    : 0,
+                bottom: widget.dragHandleVerticalAlignment ==
+                        DragHandleVerticalAlignment.top
+                    ? null
+                    : 0,
                 child: widget.dragHandle,
               ),
             ],
@@ -89,46 +91,48 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
         var positionedDragHandle = Positioned(
           right: widget.dragHandleOnLeft ? null : 0,
           left: widget.dragHandleOnLeft ? 0 : null,
-          top: 0,
-          bottom: 0,
-          child: Draggable<DragAndDropItem>(
-            data: widget.child,
-            axis: widget.axis == Axis.vertical ? Axis.vertical : null,
-            child: MeasureSize(
-              onSizeChange: (size) {
-                setState(() {
-                  _draggingWithHandleDragHandleSize = size;
-                });
-              },
-              onLeftPositionChange: (leftPosition) {
-                setState(() {
-                  _draggingWithHandleDragHandleLeftPosition = leftPosition;
-                });
-              },
-              child: widget.dragHandle,
-            ),
-            feedback: Transform.translate(
-              offset: Offset(
-                  -containerLeftToDragHandleCenter + _containerLeftPosition, 0),
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  decoration: widget.decorationWhileDragging,
-                  child: feedback,
+          top: widget.dragHandleVerticalAlignment ==
+                  DragHandleVerticalAlignment.bottom
+              ? null
+              : 0,
+          bottom: widget.dragHandleVerticalAlignment ==
+                  DragHandleVerticalAlignment.top
+              ? null
+              : 0,
+          child: MouseRegion(
+            cursor: SystemMouseCursors.grab,
+            child: Draggable<DragAndDropItem>(
+              data: widget.child,
+              axis: widget.axis == Axis.vertical ? Axis.vertical : null,
+              child: MeasureSize(
+                onSizeChange: (size) {
+                  setState(() {
+                    _dragHandleSize = size;
+                  });
+                },
+                child: widget.dragHandle,
+              ),
+              feedback: Transform.translate(
+                offset: _feedbackContainerOffset(),
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    decoration: widget.decorationWhileDragging,
+                    child: feedback,
+                  ),
                 ),
               ),
+              childWhenDragging: Container(),
+              onDragStarted: () => _setDragging(true),
+              onDragCompleted: () => _setDragging(false),
+              onDraggableCanceled: (_, __) => _setDragging(false),
+              onDragEnd: (_) => _setDragging(false),
             ),
-            childWhenDragging: Container(),
-            onDragStarted: () => _setDragging(true),
-            onDragCompleted: () => _setDragging(false),
-            onDraggableCanceled: (_, __) => _setDragging(false),
-            onDragEnd: (_) => _setDragging(false),
           ),
         );
 
         draggable = MeasureSize(
           onSizeChange: _setContainerSize,
-          onLeftPositionChange: _setLeftPosition,
           child: Stack(
             children: [
               Visibility(
@@ -143,7 +147,6 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
       } else if (widget.dragOnLongPress) {
         draggable = MeasureSize(
           onSizeChange: _setContainerSize,
-          onLeftPositionChange: _setLeftPosition,
           child: LongPressDraggable<DragAndDropItem>(
             data: widget.child,
             axis: widget.axis == Axis.vertical ? Axis.vertical : null,
@@ -168,7 +171,6 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
       } else {
         draggable = MeasureSize(
           onSizeChange: _setContainerSize,
-          onLeftPositionChange: _setLeftPosition,
           child: Draggable<DragAndDropItem>(
             data: widget.child,
             axis: widget.axis == Axis.vertical ? Axis.vertical : null,
@@ -259,20 +261,34 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
     );
   }
 
-  void _setContainerSize(Size size) {
-    setState(() {
-      _containerSize = size;
-    });
+  Offset _feedbackContainerOffset() {
+    double xOffset;
+    double yOffset;
+    if (widget.dragHandleOnLeft) {
+      xOffset = 0;
+    } else {
+      xOffset = -_containerSize.width + _dragHandleSize.width;
+    }
+    if (widget.dragHandleVerticalAlignment ==
+        DragHandleVerticalAlignment.bottom) {
+      yOffset = -_containerSize.height + _dragHandleSize.width;
+    } else {
+      yOffset = 0;
+    }
+
+    return Offset(xOffset, yOffset);
   }
 
-  void _setLeftPosition(double leftPosition) {
-    setState(() {
-      _containerLeftPosition = leftPosition;
-    });
+  void _setContainerSize(Size size) {
+    if (mounted) {
+      setState(() {
+        _containerSize = size;
+      });
+    }
   }
 
   void _setDragging(bool dragging) {
-    if (_dragging != dragging) {
+    if (_dragging != dragging && mounted) {
       setState(() {
         _dragging = dragging;
       });

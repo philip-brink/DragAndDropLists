@@ -149,6 +149,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
           dragHandle: params.dragHandle,
           dragHandleOnLeft: params.dragHandleOnLeft,
           decorationWhileDragging: params.itemDecorationWhileDragging,
+          dragHandleVerticalAlignment: params.itemDragHandleVerticalAlignment,
         ));
         if (params.itemDivider != null && i < children.length - 1) {
           contents.add(params.itemDivider);

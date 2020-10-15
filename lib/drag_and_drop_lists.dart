@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
+export 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_item_wrapper.dart';
@@ -249,6 +250,12 @@ class DragAndDropLists extends StatefulWidget {
   /// Set the drag handle to be on the left side instead of the default right side
   final bool dragHandleOnLeft;
 
+  /// Align the list drag handle to the top, center, or bottom
+  final DragHandleVerticalAlignment listDragHandleVerticalAlignment;
+
+  /// Align the item drag handle to the top, center, or bottom
+  final DragHandleVerticalAlignment itemDragHandleVerticalAlignment;
+
   DragAndDropLists({
     this.children,
     this.onItemReorder,
@@ -293,6 +300,8 @@ class DragAndDropLists extends StatefulWidget {
     this.scrollController,
     this.dragHandle,
     this.dragHandleOnLeft = false,
+    this.listDragHandleVerticalAlignment = DragHandleVerticalAlignment.top,
+    this.itemDragHandleVerticalAlignment = DragHandleVerticalAlignment.center,
     Key key,
   }) : super(key: key) {
     if (listGhost == null &&
@@ -372,6 +381,8 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       addLastItemTargetHeightToTop: widget.addLastItemTargetHeightToTop,
       dragHandle: widget.dragHandle,
       dragHandleOnLeft: widget.dragHandleOnLeft,
+      itemDragHandleVerticalAlignment: widget.itemDragHandleVerticalAlignment,
+      listDragHandleVerticalAlignment: widget.listDragHandleVerticalAlignment,
     );
 
     DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(
