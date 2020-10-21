@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.6] - 20 October 2020
+
+* Always check mounted status when setting state
+
 ## [0.2.5] - 15 October 2020
 
 * Added `constrainDraggingAxis` parameter in `DragAndDropLists`. This is useful when setting custom drag targets outside of the DragAndDropLists.
