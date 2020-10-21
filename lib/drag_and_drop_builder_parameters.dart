@@ -36,8 +36,10 @@ class DragAndDropBuilderParameters {
   final OnListReordered onListReordered;
   final ListOnWillAccept listOnWillAccept;
   final ListTargetOnWillAccept listTargetOnWillAccept;
+  final OnListDraggingChanged onListDraggingChanged;
   final ItemOnWillAccept itemOnWillAccept;
   final ItemTargetOnWillAccept itemTargetOnWillAccept;
+  final OnItemDraggingChanged onItemDraggingChanged;
   final Axis axis;
   final CrossAxisAlignment verticalAlignment;
   final double listDraggingWidth;
@@ -74,8 +76,10 @@ class DragAndDropBuilderParameters {
     this.listDraggingWidth,
     this.listOnWillAccept,
     this.listTargetOnWillAccept,
+    this.onListDraggingChanged,
     this.itemOnWillAccept,
     this.itemTargetOnWillAccept,
+    this.onItemDraggingChanged,
     this.dragOnLongPress = true,
     this.axis = Axis.vertical,
     this.verticalAlignment = CrossAxisAlignment.start,

@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.7] - 21 October 2020
+
+* Added `onItemDraggingChanged` and `onListDraggingChanged` parameters to `DragAndDropLists`. This allows certain use cases where it is useful to be notified when dragging starts and ends
+* Refactored `DragAndDropItemWrapper` to accept a `DragAndDropBuilderParameters` instead of all the other parameters independently to allow for simpler and more consistent changes
+
 ## [0.2.6] - 20 October 2020
 
 * Always check mounted status when setting state

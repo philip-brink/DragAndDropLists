@@ -46,6 +46,10 @@ typedef void OnItemAdd(
 );
 typedef void OnListAdd(DragAndDropListInterface newList, int newListIndex);
 typedef void OnListReorder(int oldListIndex, int newListIndex);
+typedef void OnListDraggingChanged(
+  DragAndDropListInterface list,
+  bool dragging,
+);
 typedef bool ListOnWillAccept(
   DragAndDropListInterface incoming,
   DragAndDropListInterface target,
@@ -58,6 +62,10 @@ typedef bool ListTargetOnWillAccept(
     DragAndDropListInterface incoming, DragAndDropListTarget target);
 typedef void ListTargetOnAccept(
     DragAndDropListInterface incoming, DragAndDropListTarget target);
+typedef void OnItemDraggingChanged(
+  DragAndDropItem item,
+  bool dragging,
+);
 typedef bool ItemOnWillAccept(
   DragAndDropItem incoming,
   DragAndDropItem target,
@@ -118,6 +126,9 @@ class DragAndDropLists extends StatefulWidget {
   /// called after this.
   final ListTargetOnAccept listTargetOnAccept;
 
+  /// Called when a list dragging is starting or ending
+  final OnListDraggingChanged onListDraggingChanged;
+
   /// Set in order to provide custom acceptance criteria for when a item can be
   /// dropped onto a specific other item
   final ItemOnWillAccept itemOnWillAccept;
@@ -139,6 +150,9 @@ class DragAndDropLists extends StatefulWidget {
   /// and this should be left null. [onItemReorder] or [onItemAdd] will be
   /// called after this.
   final ItemTargetOnAccept itemTargetOnAccept;
+
+  /// Called when an item dragging is starting or ending
+  final OnItemDraggingChanged onItemDraggingChanged;
 
   /// Width of a list item when it is being dragged.
   final double itemDraggingWidth;
@@ -267,10 +281,12 @@ class DragAndDropLists extends StatefulWidget {
     this.onListReorder,
     this.onItemAdd,
     this.onListAdd,
+    this.onListDraggingChanged,
     this.listOnWillAccept,
     this.listOnAccept,
     this.listTargetOnWillAccept,
     this.listTargetOnAccept,
+    this.onItemDraggingChanged,
     this.itemOnWillAccept,
     this.itemOnAccept,
     this.itemTargetOnWillAccept,
@@ -369,6 +385,8 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       onItemReordered: _internalOnItemReorder,
       onItemDropOnLastTarget: _internalOnItemDropOnLastTarget,
       onListReordered: _internalOnListReorder,
+      onItemDraggingChanged: widget.onItemDraggingChanged,
+      onListDraggingChanged: widget.onListDraggingChanged,
       listOnWillAccept: widget.listOnWillAccept,
       listTargetOnWillAccept: widget.listTargetOnWillAccept,
       itemOnWillAccept: widget.itemOnWillAccept,

@@ -306,6 +306,10 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
       setState(() {
         _dragging = dragging;
       });
+      if (widget.parameters.onListDraggingChanged != null) {
+        widget.parameters
+            .onListDraggingChanged(widget.dragAndDropList, dragging);
+      }
     }
   }
 

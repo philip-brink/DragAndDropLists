@@ -126,23 +126,7 @@ class DragAndDropList implements DragAndDropListInterface {
       for (int i = 0; i < children.length; i++) {
         allChildren.add(DragAndDropItemWrapper(
           child: children[i],
-          onPointerDown: params.onPointerDown,
-          onPointerUp: params.onPointerUp,
-          onPointerMove: params.onPointerMove,
-          onItemReordered: params.onItemReordered,
-          itemOnWillAccept: params.itemOnWillAccept,
-          sizeAnimationDuration: params.itemSizeAnimationDuration,
-          ghostOpacity: params.itemGhostOpacity,
-          ghost: params.itemGhost,
-          dragOnLongPress: params.dragOnLongPress,
-          draggingWidth: params.itemDraggingWidth,
-          axis: params.axis,
-          verticalAlignment: params.verticalAlignment,
-          dragHandle: params.dragHandle,
-          dragHandleOnLeft: params.dragHandleOnLeft,
-          decorationWhileDragging: params.itemDecorationWhileDragging,
-          dragHandleVerticalAlignment: params.itemDragHandleVerticalAlignment,
-          constrainDraggingAxis: params.constrainDraggingAxis,
+          parameters: params,
         ));
         if (params.itemDivider != null && i < children.length - 1) {
           allChildren.add(params.itemDivider);
