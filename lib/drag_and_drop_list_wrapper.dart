@@ -222,7 +222,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
                 accept = widget.parameters
                     .listOnWillAccept(incoming, widget.dragAndDropList);
               }
-              if (accept) {
+              if (accept && mounted) {
                 setState(() {
                   _hoveredDraggable = incoming;
                 });
@@ -231,17 +231,21 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
             },
             onLeave: (incoming) {
               if (_hoveredDraggable != null) {
-                setState(() {
-                  _hoveredDraggable = null;
-                });
+                if (mounted) {
+                  setState(() {
+                    _hoveredDraggable = null;
+                  });
+                }
               }
             },
             onAccept: (incoming) {
-              setState(() {
-                widget.parameters
-                    .onListReordered(incoming, widget.dragAndDropList);
-                _hoveredDraggable = null;
-              });
+              if (mounted) {
+                setState(() {
+                  widget.parameters
+                      .onListReordered(incoming, widget.dragAndDropList);
+                  _hoveredDraggable = null;
+                });
+              }
             },
           ),
         ),

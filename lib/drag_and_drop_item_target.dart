@@ -63,7 +63,7 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
               if (widget.parameters.itemTargetOnWillAccept != null)
                 accept =
                     widget.parameters.itemTargetOnWillAccept(incoming, widget);
-              if (accept) {
+              if (accept && mounted) {
                 setState(() {
                   _hoveredDraggable = incoming;
                 });
@@ -71,16 +71,20 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
               return accept;
             },
             onLeave: (incoming) {
-              setState(() {
-                _hoveredDraggable = null;
-              });
+              if (mounted) {
+                setState(() {
+                  _hoveredDraggable = null;
+                });
+              }
             },
             onAccept: (incoming) {
-              setState(() {
-                if (widget.onReorderOrAdd != null)
-                  widget.onReorderOrAdd(incoming, widget.parent, widget);
-                _hoveredDraggable = null;
-              });
+              if (mounted) {
+                setState(() {
+                  if (widget.onReorderOrAdd != null)
+                    widget.onReorderOrAdd(incoming, widget.parent, widget);
+                  _hoveredDraggable = null;
+                });
+              }
             },
           ),
         ),
