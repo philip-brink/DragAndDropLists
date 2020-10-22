@@ -22,6 +22,16 @@ Two-level drag and drop reorderable lists.
 <img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/slivers.gif" width="180" title="Slivers">
 </p>
 
+## Known Issues
+There is currently (as of flutter v. 1.24.0-1.0.pre) an issue only on web where dragging an item with some descendant that includes an InkWell widget with an onTap method will throw an exception. This includes having a ListTile with an onTap method defined.
+
+This seems to be resolved by using a GestureDetector and its onTap method instead of the InkWell.
+
+See the following issues:
+* [#14](https://github.com/philip-brink/DragAndDropLists/issues/14)
+* [Flutter #67044](https://github.com/flutter/flutter/issues/67044)
+* [Flutter #66887](https://github.com/flutter/flutter/issues/66887)
+
 ## Usage
 To use this plugin, add `drag_and_drop_lists` as a [dependency in your pubspec.yaml file.](https://flutter.dev/docs/development/packages-and-plugins/using-packages)
 For example:
