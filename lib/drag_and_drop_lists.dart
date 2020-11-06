@@ -212,6 +212,9 @@ class DragAndDropLists extends StatefulWidget {
   /// A widget that will be displayed between each individual list.
   final Widget listDivider;
 
+  /// Whether it should put a divider on the last list or not.
+  final bool listDividerOnLastChild;
+
   /// The padding between each individual list.
   final EdgeInsets listPadding;
 
@@ -308,6 +311,7 @@ class DragAndDropLists extends StatefulWidget {
     this.listDecorationWhileDragging,
     this.listInnerDecoration,
     this.listDivider,
+    this.listDividerOnLastChild = true,
     this.listPadding,
     this.contentsWhenEmpty,
     this.listWidth = double.infinity,
@@ -449,7 +453,11 @@ class DragAndDropListsState extends State<DragAndDropLists> {
           listView = ListView.separated(
             scrollDirection: widget.axis,
             controller: _scrollController,
-            separatorBuilder: (_, index) => widget.listDivider,
+            separatorBuilder: (_, index) => widget.listDividerOnLastChild
+                ? widget.listDivider
+                : index + 1 >= (widget.children?.length ?? 0)
+                    ? Container()
+                    : widget.listDivider,
             itemCount: (widget.children?.length ?? 0) + 1,
             itemBuilder: (context, index) {
               if (index < (widget.children?.length ?? 0)) {
