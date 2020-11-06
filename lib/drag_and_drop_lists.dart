@@ -428,7 +428,9 @@ class DragAndDropListsState extends State<DragAndDropLists> {
         int childrenCount;
         bool includeSeparators = widget.listDivider != null;
         if (includeSeparators)
-          childrenCount = (widget.children?.length ?? 0) * 2;
+          childrenCount = ((widget.children?.length ?? 0) * 2) -
+              (widget.listDividerOnLastChild ? 0 : 1) +
+              1;
         else
           childrenCount = (widget.children?.length ?? 0) + 1;
         listView = SliverList(
@@ -440,7 +442,8 @@ class DragAndDropListsState extends State<DragAndDropLists> {
                 return widget.listDivider;
               } else {
                 return DragAndDropListWrapper(
-                  dragAndDropList: widget.children[index],
+                  dragAndDropList: widget.children[
+                      (includeSeparators ? index / 2 : index).toInt()],
                   parameters: parameters,
                 );
               }

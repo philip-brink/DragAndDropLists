@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.8] - 6 November 2020
+
+* Added `listDividerOnLastChild` parameter to `DragAndDropLists`. This allows not showing a list divider after the last list (thanks [@Zexuz](https://github.com/Zexuz)).
+
 ## [0.2.7] - 21 October 2020
 
 * Added `onItemDraggingChanged` and `onListDraggingChanged` parameters to `DragAndDropLists`. This allows certain use cases where it is useful to be notified when dragging starts and ends
