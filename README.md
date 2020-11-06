@@ -29,6 +29,7 @@ This seems to be resolved by using a GestureDetector and its onTap method instea
 
 See the following issues:
 * [#14](https://github.com/philip-brink/DragAndDropLists/issues/14)
+* [Flutter #69774](https://github.com/flutter/flutter/issues/69774)
 * [Flutter #67044](https://github.com/flutter/flutter/issues/67044)
 * [Flutter #66887](https://github.com/flutter/flutter/issues/66887)
 
