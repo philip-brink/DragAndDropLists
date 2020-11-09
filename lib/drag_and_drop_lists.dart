@@ -260,6 +260,12 @@ class DragAndDropLists extends StatefulWidget {
   /// This must be set if [sliverList] is set to true.
   final ScrollController scrollController;
 
+  /// Set to true in order to disable all scrolling of the lists.
+  /// This applies only when [sliverList] is false (default).
+  /// Note: to disable scrolling for sliver lists, in your parent
+  /// CustomScrollView, set physics to NeverScrollableScrollPhysics()
+  final bool disableScrolling;
+
   /// Set a custom drag handle to use iOS-like handles to drag rather than long
   /// or short presses
   final Widget dragHandle;
@@ -323,6 +329,7 @@ class DragAndDropLists extends StatefulWidget {
     this.axis = Axis.vertical,
     this.sliverList = false,
     this.scrollController,
+    this.disableScrolling = false,
     this.dragHandle,
     this.dragHandleOnLeft = false,
     this.listDragHandleVerticalAlignment = DragHandleVerticalAlignment.top,
@@ -456,6 +463,9 @@ class DragAndDropListsState extends State<DragAndDropLists> {
           listView = ListView.separated(
             scrollDirection: widget.axis,
             controller: _scrollController,
+            physics: widget.disableScrolling
+                ? const NeverScrollableScrollPhysics()
+                : null,
             separatorBuilder: (_, index) => widget.listDividerOnLastChild
                 ? widget.listDivider
                 : index + 1 >= (widget.children?.length ?? 0)
@@ -476,6 +486,9 @@ class DragAndDropListsState extends State<DragAndDropLists> {
         } else {
           listView = ListView.builder(
             scrollDirection: widget.axis,
+            physics: widget.disableScrolling
+                ? const NeverScrollableScrollPhysics()
+                : null,
             controller: _scrollController,
             itemCount: (widget.children?.length ?? 0) + 1,
             itemBuilder: (context, index) {

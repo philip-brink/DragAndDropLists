@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.9] - 9 November 2020
+
+* Added `disableScrolling` parameter to `DragAndDropLists`.
+
 ## [0.2.8] - 6 November 2020
 
 * Added `listDividerOnLastChild` parameter to `DragAndDropLists`. This allows not showing a list divider after the last list (thanks [@Zexuz](https://github.com/Zexuz)).
