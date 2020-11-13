@@ -261,9 +261,8 @@ class DragAndDropLists extends StatefulWidget {
   final ScrollController scrollController;
 
   /// Set to true in order to disable all scrolling of the lists.
-  /// This applies only when [sliverList] is false (default).
-  /// Note: to disable scrolling for sliver lists, in your parent
-  /// CustomScrollView, set physics to NeverScrollableScrollPhysics()
+  /// Note: to disable scrolling for sliver lists, it is also necessary in your
+  /// parent CustomScrollView to set physics to NeverScrollableScrollPhysics()
   final bool disableScrolling;
 
   /// Set a custom drag handle to use iOS-like handles to drag rather than long
@@ -676,7 +675,8 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   }
 
   _scrollList() async {
-    if (!_scrolling &&
+    if (!widget.disableScrolling &&
+        !_scrolling &&
         _pointerDown &&
         _pointerYPosition != null &&
         _pointerXPosition != null) {

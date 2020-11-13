@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.9+1] - 13 November 2020
+
+* Bug fix to also not allow scrolling when `disableScrolling` is set to true when dragging and dropping items.
+
 ## [0.2.9] - 9 November 2020
 
 * Added `disableScrolling` parameter to `DragAndDropLists`.
