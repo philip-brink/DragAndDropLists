@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.9+2] - 17 November 2020
+
+* Prevent individual lists inside of a horizontal DragAndDropLists from scrolling when `disableScrolling` is set to true.
+
 ## [0.2.9+1] - 13 November 2020
 
 * Bug fix to also not allow scrolling when `disableScrolling` is set to true when dragging and dropping items.

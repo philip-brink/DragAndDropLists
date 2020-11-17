@@ -418,6 +418,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       itemDragHandleVerticalAlignment: widget.itemDragHandleVerticalAlignment,
       listDragHandleVerticalAlignment: widget.listDragHandleVerticalAlignment,
       constrainDraggingAxis: widget.constrainDraggingAxis,
+      disableScrolling: widget.disableScrolling,
     );
 
     DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(

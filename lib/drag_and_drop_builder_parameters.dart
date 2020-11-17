@@ -65,6 +65,7 @@ class DragAndDropBuilderParameters {
   final DragHandleVerticalAlignment listDragHandleVerticalAlignment;
   final DragHandleVerticalAlignment itemDragHandleVerticalAlignment;
   final bool constrainDraggingAxis;
+  final bool disableScrolling;
 
   DragAndDropBuilderParameters({
     this.onPointerMove,
@@ -104,5 +105,6 @@ class DragAndDropBuilderParameters {
     this.itemDragHandleVerticalAlignment = DragHandleVerticalAlignment.center,
     this.listDragHandleVerticalAlignment = DragHandleVerticalAlignment.top,
     this.constrainDraggingAxis = true,
+    this.disableScrolling = false,
   });
 }
