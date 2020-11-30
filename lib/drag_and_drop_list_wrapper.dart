@@ -42,27 +42,8 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
           child: widget.parameters.dragHandle,
         );
 
-        Widget feedback = Container(
-          width: widget.parameters.listDraggingWidth ?? _containerSize.width,
-          child: Stack(
-            children: [
-              dragAndDropListContents,
-              Positioned(
-                right: widget.parameters.dragHandleOnLeft ? null : 0,
-                left: widget.parameters.dragHandleOnLeft ? 0 : null,
-                top: widget.parameters.listDragHandleVerticalAlignment ==
-                        DragHandleVerticalAlignment.bottom
-                    ? null
-                    : 0,
-                bottom: widget.parameters.listDragHandleVerticalAlignment ==
-                        DragHandleVerticalAlignment.top
-                    ? null
-                    : 0,
-                child: dragHandle,
-              ),
-            ],
-          ),
-        );
+        Widget feedback =
+            buildFeedbackWithHandle(dragAndDropListContents, dragHandle);
 
         draggable = MeasureSize(
           onSizeChange: (size) {
@@ -83,10 +64,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
                 top: _dragHandleDistanceFromTop(),
                 child: Draggable<DragAndDropListInterface>(
                   data: widget.dragAndDropList,
-                  axis: widget.parameters.axis == Axis.vertical &&
-                          widget.parameters.constrainDraggingAxis
-                      ? Axis.vertical
-                      : null,
+                  axis: draggableAxis(),
                   child: MeasureSize(
                     onSizeChange: (size) {
                       setState(() {
@@ -97,14 +75,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
                   ),
                   feedback: Transform.translate(
                     offset: _feedbackContainerOffset(),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Container(
-                        decoration:
-                            widget.parameters.listDecorationWhileDragging,
-                        child: feedback,
-                      ),
-                    ),
+                    child: feedback,
                   ),
                   childWhenDragging: Container(),
                   onDragStarted: () => _setDragging(true),
@@ -119,19 +90,10 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
       } else if (widget.parameters.dragOnLongPress) {
         draggable = LongPressDraggable<DragAndDropListInterface>(
           data: widget.dragAndDropList,
-          axis: widget.parameters.axis == Axis.vertical &&
-                  widget.parameters.constrainDraggingAxis
-              ? Axis.vertical
-              : null,
+          axis: draggableAxis(),
           child: dragAndDropListContents,
-          feedback: Container(
-            width: widget.parameters.listDraggingWidth ??
-                MediaQuery.of(context).size.width,
-            child: Material(
-              child: dragAndDropListContents,
-              color: Colors.transparent,
-            ),
-          ),
+          feedback:
+              buildFeedbackWithoutHandle(context, dragAndDropListContents),
           childWhenDragging: Container(),
           onDragStarted: () => _setDragging(true),
           onDragCompleted: () => _setDragging(false),
@@ -141,22 +103,10 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
       } else {
         draggable = Draggable<DragAndDropListInterface>(
           data: widget.dragAndDropList,
-          axis: widget.parameters.axis == Axis.vertical &&
-                  widget.parameters.constrainDraggingAxis
-              ? Axis.vertical
-              : null,
+          axis: draggableAxis(),
           child: dragAndDropListContents,
-          feedback: Container(
-            width: widget.parameters.axis == Axis.vertical
-                ? (widget.parameters.listDraggingWidth ??
-                    MediaQuery.of(context).size.width)
-                : (widget.parameters.listDraggingWidth ??
-                    widget.parameters.listWidth),
-            child: Material(
-              child: dragAndDropListContents,
-              color: Colors.transparent,
-            ),
-          ),
+          feedback:
+              buildFeedbackWithoutHandle(context, dragAndDropListContents),
           childWhenDragging: Container(),
           onDragStarted: () => _setDragging(true),
           onDragCompleted: () => _setDragging(false),
@@ -269,6 +219,62 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
     }
 
     return toReturn;
+  }
+
+  Material buildFeedbackWithHandle(
+      Widget dragAndDropListContents, Widget dragHandle) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        decoration: widget.parameters.listDecorationWhileDragging,
+        child: Container(
+          width: widget.parameters.listDraggingWidth ?? _containerSize.width,
+          child: Stack(
+            children: [
+              dragAndDropListContents,
+              Positioned(
+                right: widget.parameters.dragHandleOnLeft ? null : 0,
+                left: widget.parameters.dragHandleOnLeft ? 0 : null,
+                top: widget.parameters.listDragHandleVerticalAlignment ==
+                        DragHandleVerticalAlignment.bottom
+                    ? null
+                    : 0,
+                bottom: widget.parameters.listDragHandleVerticalAlignment ==
+                        DragHandleVerticalAlignment.top
+                    ? null
+                    : 0,
+                child: dragHandle,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container buildFeedbackWithoutHandle(
+      BuildContext context, Widget dragAndDropListContents) {
+    return Container(
+      width: widget.parameters.axis == Axis.vertical
+          ? (widget.parameters.listDraggingWidth ??
+              MediaQuery.of(context).size.width)
+          : (widget.parameters.listDraggingWidth ??
+              widget.parameters.listWidth),
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          decoration: widget.parameters.listDecorationWhileDragging,
+          child: dragAndDropListContents,
+        ),
+      ),
+    );
+  }
+
+  Axis draggableAxis() {
+    return widget.parameters.axis == Axis.vertical &&
+            widget.parameters.constrainDraggingAxis
+        ? Axis.vertical
+        : null;
   }
 
   double _dragHandleDistanceFromTop() {
