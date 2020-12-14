@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.10] - 14 December 2020
+
+* Bug fix where `listDecorationWhileDragging` wasn't always being applied
+* Allow DragAndDropLists to be contained in an external ListView when `disableScrolling` is set to `true`
+
 ## [0.2.9+2] - 17 November 2020
 
 * Prevent individual lists inside of a horizontal DragAndDropLists from scrolling when `disableScrolling` is set to true.
