@@ -23,6 +23,7 @@ import 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 export 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_item.dart';
@@ -283,6 +284,18 @@ class DragAndDropLists extends StatefulWidget {
   /// disable when setting customDragTargets
   final bool constrainDraggingAxis;
 
+  final RefreshController refreshController;
+
+  final Function onRefresh;
+
+  final Function onLoading;
+
+  final bool enablePullDown;
+
+  final bool enablePullUp;
+
+  final Widget footer;
+
   DragAndDropLists({
     this.children,
     this.onItemReorder,
@@ -334,6 +347,12 @@ class DragAndDropLists extends StatefulWidget {
     this.listDragHandleVerticalAlignment = DragHandleVerticalAlignment.top,
     this.itemDragHandleVerticalAlignment = DragHandleVerticalAlignment.center,
     this.constrainDraggingAxis = true,
+    this.refreshController,
+    this.onLoading,
+    this.onRefresh,
+    this.enablePullDown = true,
+    this.enablePullUp = false,
+    this.footer,
     Key key,
   }) : super(key: key) {
     if (listGhost == null &&
@@ -437,7 +456,14 @@ class DragAndDropListsState extends State<DragAndDropLists> {
         outerListHolder =
             _buildUnscrollableList(dragAndDropListTarget, parameters);
       } else {
-        outerListHolder = _buildListView(parameters, dragAndDropListTarget);
+        outerListHolder = SmartRefresher(
+            controller: widget.refreshController ?? RefreshController(),
+            onRefresh: widget.onRefresh,
+            onLoading: widget.onLoading,
+            enablePullDown: widget.enablePullDown,
+            enablePullUp: widget.enablePullUp,
+            footer: widget.footer,
+            child: _buildListView(parameters, dragAndDropListTarget));
       }
 
       if (widget.children

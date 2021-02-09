@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  pull_to_refresh: 1.6.2
 
 dev_dependencies:
   flutter_test:
