@@ -1,9 +1,9 @@
 # Changelog
 
-## [1.0.0]
+## [0.3.0]
 
-* DragHandle moved to own widget
-* Null safe
+* DragHandle moved to own widget. To create any drag handle, use the new properties `listDragHandle` and `itemDragHandle` in `DragAndDropLists`.
+* Support null safety, see [details on migration](https://dart.dev/null-safety/migration-guide)
 
 ## [0.2.10] - 14 December 2020
 
