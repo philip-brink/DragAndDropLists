@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BasicExample extends StatefulWidget {
-  BasicExample({Key key, this.title}) : super(key: key);
-  final String title;
+  BasicExample({Key? key}) : super(key: key);
 
   @override
   _BasicExample createState() => _BasicExample();
 }
 
 class _BasicExample extends State<BasicExample> {
-  List<DragAndDropList> _contents;
+  late List<DragAndDropList> _contents;
 
   @override
   void initState() {
