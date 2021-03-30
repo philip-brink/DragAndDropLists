@@ -17,8 +17,8 @@ class DragHandle extends StatelessWidget {
   final Widget child;
 
   const DragHandle({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.onLeft = false,
     this.verticalAlignment = DragHandleVerticalAlignment.center,
   }) : super(key: key);

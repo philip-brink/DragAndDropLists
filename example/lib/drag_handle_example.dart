@@ -5,15 +5,14 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class DragHandleExample extends StatefulWidget {
-  DragHandleExample({Key key, this.title}) : super(key: key);
-  final String title;
+  DragHandleExample({Key? key}) : super(key: key);
 
   @override
   _DragHandleExample createState() => _DragHandleExample();
 }
 
 class _DragHandleExample extends State<DragHandleExample> {
-  List<DragAndDropList> _contents;
+  late List<DragAndDropList> _contents;
 
   @override
   void initState() {

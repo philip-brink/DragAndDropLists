@@ -9,17 +9,17 @@ typedef void OnDropOnLastTarget(
 );
 
 class DragAndDropListTarget extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
   final DragAndDropBuilderParameters parameters;
   final OnDropOnLastTarget onDropOnLastTarget;
   final double lastListTargetSize;
 
   DragAndDropListTarget(
       {this.child,
-      @required this.parameters,
-      @required this.onDropOnLastTarget,
+      required this.parameters,
+      required this.onDropOnLastTarget,
       this.lastListTargetSize = 110,
-      Key key})
+      Key? key})
       : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class DragAndDropListTarget extends StatefulWidget {
 
 class _DragAndDropListTarget extends State<DragAndDropListTarget>
     with TickerProviderStateMixin {
-  DragAndDropListInterface _hoveredDraggable;
+  DragAndDropListInterface? _hoveredDraggable;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
               ? Opacity(
                   opacity: widget.parameters.listGhostOpacity,
                   child: widget.parameters.listGhost ??
-                      _hoveredDraggable.generateWidget(widget.parameters),
+                      _hoveredDraggable!.generateWidget(widget.parameters),
                 )
               : Container(),
         ),
@@ -63,7 +63,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
 
     if (widget.parameters.listPadding != null) {
       visibleContents = Padding(
-        padding: widget.parameters.listPadding,
+        padding: widget.parameters.listPadding!,
         child: visibleContents,
       );
     }
@@ -85,7 +85,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
               bool accept = true;
               if (widget.parameters.listTargetOnWillAccept != null) {
                 accept =
-                    widget.parameters.listTargetOnWillAccept(incoming, widget);
+                    widget.parameters.listTargetOnWillAccept!(incoming, widget);
               }
               if (accept && mounted) {
                 setState(() {

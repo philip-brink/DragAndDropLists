@@ -3,6 +3,7 @@
 ## [1.0.0]
 
 * DragHandle moved to own widget
+* Null safe
 
 ## [0.2.10] - 14 December 2020
 
