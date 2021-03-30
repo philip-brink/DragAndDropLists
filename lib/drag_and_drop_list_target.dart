@@ -78,7 +78,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
         Positioned.fill(
           child: DragTarget<DragAndDropListInterface>(
             builder: (context, candidateData, rejectedData) {
-              if (candidateData != null && candidateData.isNotEmpty) {}
+              if (candidateData.isNotEmpty) {}
               return Container();
             },
             onWillAccept: (incoming) {
@@ -104,8 +104,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
             onAccept: (incoming) {
               if (mounted) {
                 setState(() {
-                  if (widget.onDropOnLastTarget != null)
-                    widget.onDropOnLastTarget(incoming, widget);
+                  widget.onDropOnLastTarget(incoming, widget);
                   _hoveredDraggable = null;
                 });
               }

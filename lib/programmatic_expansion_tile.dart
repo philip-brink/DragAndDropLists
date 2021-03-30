@@ -40,10 +40,7 @@ class ProgrammaticExpansionTile extends StatefulWidget {
     this.trailing,
     this.initiallyExpanded = false,
     this.disableTopAndBottomBorders = false,
-  })  : assert(initiallyExpanded != null),
-        assert(listKey != null),
-        assert(key != null),
-        super(key: key);
+  }) : super(key: key);
 
   final Key listKey;
 
