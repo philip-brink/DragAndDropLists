@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.0]
+
+* DragHandle moved to own widget
+
 ## [0.2.10] - 14 December 2020
 
 * Bug fix where `listDecorationWhileDragging` wasn't always being applied

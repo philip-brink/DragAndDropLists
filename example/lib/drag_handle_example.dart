@@ -116,11 +116,23 @@ class _DragHandleExample extends State<DragHandleExample> {
         lastItemTargetHeight: 8,
         addLastItemTargetHeightToTop: true,
         lastListTargetSize: 40,
-        dragHandle: Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: Icon(
-            Icons.menu,
-            color: Colors.black26,
+        listDragHandle: DragHandle(
+          verticalAlignment: DragHandleVerticalAlignment.top,
+          child: Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.menu,
+              color: Colors.black26,
+            ),
+          ),
+        ),
+        itemDragHandle: DragHandle(
+          child: Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.menu,
+              color: Colors.black26,
+            ),
           ),
         ),
       ),

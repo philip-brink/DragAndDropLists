@@ -20,6 +20,7 @@ import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
+import 'package:drag_and_drop_lists/drag_handle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -32,6 +33,7 @@ export 'package:drag_and_drop_lists/drag_and_drop_list.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
+export 'package:drag_and_drop_lists/drag_handle.dart';
 
 typedef void OnItemReorder(
   int oldItemIndex,
@@ -267,16 +269,11 @@ class DragAndDropLists extends StatefulWidget {
 
   /// Set a custom drag handle to use iOS-like handles to drag rather than long
   /// or short presses
-  final Widget dragHandle;
+  final DragHandle listDragHandle;
 
-  /// Set the drag handle to be on the left side instead of the default right side
-  final bool dragHandleOnLeft;
-
-  /// Align the list drag handle to the top, center, or bottom
-  final DragHandleVerticalAlignment listDragHandleVerticalAlignment;
-
-  /// Align the item drag handle to the top, center, or bottom
-  final DragHandleVerticalAlignment itemDragHandleVerticalAlignment;
+  /// Set a custom drag handle to use iOS-like handles to drag rather than long
+  /// or short presses
+  final DragHandle itemDragHandle;
 
   /// Constrain the dragging axis in a vertical list to only allow dragging on
   /// the vertical axis. By default this is set to true. This may be useful to
@@ -329,10 +326,8 @@ class DragAndDropLists extends StatefulWidget {
     this.sliverList = false,
     this.scrollController,
     this.disableScrolling = false,
-    this.dragHandle,
-    this.dragHandleOnLeft = false,
-    this.listDragHandleVerticalAlignment = DragHandleVerticalAlignment.top,
-    this.itemDragHandleVerticalAlignment = DragHandleVerticalAlignment.center,
+    this.listDragHandle,
+    this.itemDragHandle,
     this.constrainDraggingAxis = true,
     Key key,
   }) : super(key: key) {
@@ -413,10 +408,8 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       listWidth: widget.listWidth,
       lastItemTargetHeight: widget.lastItemTargetHeight,
       addLastItemTargetHeightToTop: widget.addLastItemTargetHeightToTop,
-      dragHandle: widget.dragHandle,
-      dragHandleOnLeft: widget.dragHandleOnLeft,
-      itemDragHandleVerticalAlignment: widget.itemDragHandleVerticalAlignment,
-      listDragHandleVerticalAlignment: widget.listDragHandleVerticalAlignment,
+      listDragHandle: widget.listDragHandle,
+      itemDragHandle: widget.itemDragHandle,
       constrainDraggingAxis: widget.constrainDraggingAxis,
       disableScrolling: widget.disableScrolling,
     );

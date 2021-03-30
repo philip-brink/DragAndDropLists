@@ -2,13 +2,8 @@ import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:drag_and_drop_lists/drag_handle.dart';
 import 'package:flutter/widgets.dart';
-
-enum DragHandleVerticalAlignment {
-  top,
-  center,
-  bottom,
-}
 
 typedef void OnPointerMove(PointerMoveEvent event);
 typedef void OnPointerUp(PointerUpEvent event);
@@ -60,10 +55,8 @@ class DragAndDropBuilderParameters {
   final double listWidth;
   final double lastItemTargetHeight;
   final bool addLastItemTargetHeightToTop;
-  final Widget dragHandle;
-  final bool dragHandleOnLeft;
-  final DragHandleVerticalAlignment listDragHandleVerticalAlignment;
-  final DragHandleVerticalAlignment itemDragHandleVerticalAlignment;
+  final DragHandle listDragHandle;
+  final DragHandle itemDragHandle;
   final bool constrainDraggingAxis;
   final bool disableScrolling;
 
@@ -100,10 +93,8 @@ class DragAndDropBuilderParameters {
     this.listWidth = double.infinity,
     this.lastItemTargetHeight = 20,
     this.addLastItemTargetHeightToTop = false,
-    this.dragHandle,
-    this.dragHandleOnLeft = false,
-    this.itemDragHandleVerticalAlignment = DragHandleVerticalAlignment.center,
-    this.listDragHandleVerticalAlignment = DragHandleVerticalAlignment.top,
+    this.listDragHandle,
+    this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.disableScrolling = false,
   });

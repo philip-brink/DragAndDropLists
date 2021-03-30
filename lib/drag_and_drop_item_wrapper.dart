@@ -30,37 +30,37 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
   Widget build(BuildContext context) {
     Widget draggable;
     if (widget.child.canDrag) {
-      if (widget.parameters.dragHandle != null) {
+      if (widget.parameters.listDragHandle != null) {
         Widget feedback = Container(
           width: widget.parameters.itemDraggingWidth ?? _containerSize.width,
           child: Stack(
             children: [
               widget.child.child,
               Positioned(
-                right: widget.parameters.dragHandleOnLeft ? null : 0,
-                left: widget.parameters.dragHandleOnLeft ? 0 : null,
-                top: widget.parameters.itemDragHandleVerticalAlignment ==
+                right: widget.parameters.itemDragHandle.onLeft ? null : 0,
+                left: widget.parameters.itemDragHandle.onLeft ? 0 : null,
+                top: widget.parameters.itemDragHandle.verticalAlignment ==
                         DragHandleVerticalAlignment.bottom
                     ? null
                     : 0,
-                bottom: widget.parameters.itemDragHandleVerticalAlignment ==
+                bottom: widget.parameters.itemDragHandle.verticalAlignment ==
                         DragHandleVerticalAlignment.top
                     ? null
                     : 0,
-                child: widget.parameters.dragHandle,
+                child: widget.parameters.listDragHandle,
               ),
             ],
           ),
         );
 
         var positionedDragHandle = Positioned(
-          right: widget.parameters.dragHandleOnLeft ? null : 0,
-          left: widget.parameters.dragHandleOnLeft ? 0 : null,
-          top: widget.parameters.itemDragHandleVerticalAlignment ==
+          right: widget.parameters.itemDragHandle.onLeft ? null : 0,
+          left: widget.parameters.itemDragHandle.onLeft ? 0 : null,
+          top: widget.parameters.itemDragHandle.verticalAlignment ==
                   DragHandleVerticalAlignment.bottom
               ? null
               : 0,
-          bottom: widget.parameters.itemDragHandleVerticalAlignment ==
+          bottom: widget.parameters.itemDragHandle.verticalAlignment ==
                   DragHandleVerticalAlignment.top
               ? null
               : 0,
@@ -78,7 +78,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
                     _dragHandleSize = size;
                   });
                 },
-                child: widget.parameters.dragHandle,
+                child: widget.parameters.listDragHandle,
               ),
               feedback: Transform.translate(
                 offset: _feedbackContainerOffset(),
@@ -248,12 +248,12 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
   Offset _feedbackContainerOffset() {
     double xOffset;
     double yOffset;
-    if (widget.parameters.dragHandleOnLeft) {
+    if (widget.parameters.itemDragHandle.onLeft) {
       xOffset = 0;
     } else {
       xOffset = -_containerSize.width + _dragHandleSize.width;
     }
-    if (widget.parameters.itemDragHandleVerticalAlignment ==
+    if (widget.parameters.itemDragHandle.verticalAlignment ==
         DragHandleVerticalAlignment.bottom) {
       yOffset = -_containerSize.height + _dragHandleSize.width;
     } else {
