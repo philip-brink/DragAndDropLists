@@ -30,7 +30,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
   Widget build(BuildContext context) {
     Widget draggable;
     if (widget.child.canDrag) {
-      if (widget.parameters!.listDragHandle != null) {
+      if (widget.parameters!.itemDragHandle != null) {
         Widget feedback = Container(
           width: widget.parameters!.itemDraggingWidth ?? _containerSize.width,
           child: Stack(
@@ -47,7 +47,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
                         DragHandleVerticalAlignment.top
                     ? null
                     : 0,
-                child: widget.parameters!.listDragHandle!,
+                child: widget.parameters!.itemDragHandle!,
               ),
             ],
           ),
@@ -78,7 +78,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
                     _dragHandleSize = size!;
                   });
                 },
-                child: widget.parameters!.listDragHandle,
+                child: widget.parameters!.itemDragHandle,
               ),
               feedback: Transform.translate(
                 offset: _feedbackContainerOffset(),
