@@ -7,14 +7,22 @@ import 'package:flutter/widgets.dart';
 class DragAndDropItemTarget extends StatefulWidget {
   final Widget child;
   final DragAndDropListInterface? parent;
-  final DragAndDropBuilderParameters parameters;
   final OnItemDropOnLastTarget onReorderOrAdd;
+  final CrossAxisAlignment verticalAlignment;
+  final int itemSizeAnimationDuration;
+  final Widget? itemGhost;
+  final double itemGhostOpacity;
+  final ItemTargetOnWillAccept? itemTargetOnWillAccept;
 
   DragAndDropItemTarget(
       {required this.child,
       required this.onReorderOrAdd,
-      required this.parameters,
+      this.itemTargetOnWillAccept,
       this.parent,
+      this.verticalAlignment = CrossAxisAlignment.start,
+      this.itemSizeAnimationDuration = 150,
+      this.itemGhost,
+      this.itemGhostOpacity = 0.3,
       Key? key})
       : super(key: key);
 
@@ -31,18 +39,17 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
     return Stack(
       children: <Widget>[
         Column(
-          crossAxisAlignment: widget.parameters.verticalAlignment,
+          crossAxisAlignment: widget.verticalAlignment,
           children: <Widget>[
             AnimatedSize(
-              duration: Duration(
-                  milliseconds: widget.parameters.itemSizeAnimationDuration),
+              duration:
+                  Duration(milliseconds: widget.itemSizeAnimationDuration),
               vsync: this,
               alignment: Alignment.bottomCenter,
               child: _hoveredDraggable != null
                   ? Opacity(
-                      opacity: widget.parameters.itemGhostOpacity,
-                      child: widget.parameters.itemGhost ??
-                          _hoveredDraggable!.child,
+                      opacity: widget.itemGhostOpacity,
+                      child: widget.itemGhost ?? _hoveredDraggable!.child,
                     )
                   : Container(),
             ),
@@ -57,9 +64,8 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
             },
             onWillAccept: (incoming) {
               bool accept = true;
-              if (widget.parameters.itemTargetOnWillAccept != null)
-                accept =
-                    widget.parameters.itemTargetOnWillAccept!(incoming, widget);
+              if (widget.itemTargetOnWillAccept != null)
+                accept = widget.itemTargetOnWillAccept!(incoming, widget);
               if (accept && mounted) {
                 setState(() {
                   _hoveredDraggable = incoming;

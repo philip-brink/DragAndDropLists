@@ -140,7 +140,11 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       }
       contents.add(DragAndDropItemTarget(
         parent: this,
-        parameters: parameters,
+        verticalAlignment: parameters.verticalAlignment,
+        itemGhost: parameters.itemGhost,
+        itemGhostOpacity: parameters.itemGhostOpacity,
+        itemSizeAnimationDuration: parameters.itemSizeAnimationDuration,
+        itemTargetOnWillAccept: parameters.itemTargetOnWillAccept,
         onReorderOrAdd: parameters.onItemDropOnLastTarget!,
         child: lastTarget ??
             Container(
@@ -160,7 +164,11 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
       contents.add(
         DragAndDropItemTarget(
           parent: this,
-          parameters: parameters,
+          verticalAlignment: parameters.verticalAlignment,
+          itemGhost: parameters.itemGhost,
+          itemGhostOpacity: parameters.itemGhostOpacity,
+          itemSizeAnimationDuration: parameters.itemSizeAnimationDuration,
+          itemTargetOnWillAccept: parameters.itemTargetOnWillAccept,
           onReorderOrAdd: parameters.onItemDropOnLastTarget!,
           child: lastTarget ??
               Container(

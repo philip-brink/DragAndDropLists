@@ -34,6 +34,8 @@ export 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
 export 'package:drag_and_drop_lists/drag_handle.dart';
+export 'package:drag_and_drop_lists/reworked_drag_and_drop_lists.dart';
+export 'package:drag_and_drop_lists/reworked_drag_and_drop_lists_view.dart';
 
 typedef void OnItemReorder(
   int oldItemIndex,
@@ -85,6 +87,77 @@ typedef void ItemTargetOnAccept(
 );
 
 class DragAndDropLists extends StatefulWidget {
+  DragAndDropLists({
+    required this.children,
+    required this.onItemReorder,
+    required this.onListReorder,
+    this.onItemAdd,
+    this.onListAdd,
+    this.onListDraggingChanged,
+    this.listOnWillAccept,
+    this.listOnAccept,
+    this.listTargetOnWillAccept,
+    this.listTargetOnAccept,
+    this.onItemDraggingChanged,
+    this.itemOnWillAccept,
+    this.itemOnAccept,
+    this.itemTargetOnWillAccept,
+    this.itemTargetOnAccept,
+    this.itemDraggingWidth,
+    this.itemGhost,
+    this.itemGhostOpacity = 0.3,
+    this.itemSizeAnimationDurationMilliseconds = 150,
+    this.itemDragOnLongPress = true,
+    this.itemDecorationWhileDragging,
+    this.itemDivider,
+    this.listDraggingWidth,
+    this.listTarget,
+    this.listGhost,
+    this.listGhostOpacity = 0.3,
+    this.listSizeAnimationDurationMilliseconds = 150,
+    this.listDragOnLongPress = true,
+    this.listDecoration,
+    this.listDecorationWhileDragging,
+    this.listInnerDecoration,
+    this.listDivider,
+    this.listDividerOnLastChild = true,
+    this.listPadding,
+    this.contentsWhenEmpty,
+    this.listWidth = double.infinity,
+    this.lastItemTargetHeight = 20,
+    this.addLastItemTargetHeightToTop = false,
+    this.lastListTargetSize = 110,
+    this.verticalAlignment = CrossAxisAlignment.start,
+    this.horizontalAlignment = MainAxisAlignment.start,
+    this.axis = Axis.vertical,
+    this.sliverList = false,
+    this.scrollController,
+    this.disableScrolling = false,
+    this.listDragHandle,
+    this.itemDragHandle,
+    this.constrainDraggingAxis = true,
+    Key? key,
+  }) : super(key: key) {
+    if (listGhost == null &&
+        children
+            .where((element) => element is DragAndDropListExpansionInterface)
+            .isNotEmpty)
+      throw Exception(
+          'If using DragAndDropListExpansion, you must provide a non-null listGhost');
+    if (sliverList && scrollController == null) {
+      throw Exception(
+          'A scroll controller must be provided when using sliver lists');
+    }
+    if (axis == Axis.horizontal && listWidth == double.infinity) {
+      throw Exception(
+          'A finite width must be provided when setting the axis to horizontal');
+    }
+    if (axis == Axis.horizontal && sliverList) {
+      throw Exception(
+          'Combining a sliver list with a horizontal list is currently unsupported');
+    }
+  }
+
   /// The child lists to be displayed.
   /// If any of these children are [DragAndDropListExpansion] or inherit from
   /// [DragAndDropListExpansionInterface], [listGhost] must not be null.
@@ -280,75 +353,56 @@ class DragAndDropLists extends StatefulWidget {
   /// disable when setting customDragTargets
   final bool constrainDraggingAxis;
 
-  DragAndDropLists({
-    required this.children,
-    required this.onItemReorder,
-    required this.onListReorder,
-    this.onItemAdd,
-    this.onListAdd,
-    this.onListDraggingChanged,
-    this.listOnWillAccept,
-    this.listOnAccept,
-    this.listTargetOnWillAccept,
-    this.listTargetOnAccept,
-    this.onItemDraggingChanged,
-    this.itemOnWillAccept,
-    this.itemOnAccept,
-    this.itemTargetOnWillAccept,
-    this.itemTargetOnAccept,
-    this.itemDraggingWidth,
-    this.itemGhost,
-    this.itemGhostOpacity = 0.3,
-    this.itemSizeAnimationDurationMilliseconds = 150,
-    this.itemDragOnLongPress = true,
-    this.itemDecorationWhileDragging,
-    this.itemDivider,
-    this.listDraggingWidth,
-    this.listTarget,
-    this.listGhost,
-    this.listGhostOpacity = 0.3,
-    this.listSizeAnimationDurationMilliseconds = 150,
-    this.listDragOnLongPress = true,
-    this.listDecoration,
-    this.listDecorationWhileDragging,
-    this.listInnerDecoration,
-    this.listDivider,
-    this.listDividerOnLastChild = true,
-    this.listPadding,
-    this.contentsWhenEmpty,
-    this.listWidth = double.infinity,
-    this.lastItemTargetHeight = 20,
-    this.addLastItemTargetHeightToTop = false,
-    this.lastListTargetSize = 110,
-    this.verticalAlignment = CrossAxisAlignment.start,
-    this.horizontalAlignment = MainAxisAlignment.start,
-    this.axis = Axis.vertical,
-    this.sliverList = false,
-    this.scrollController,
-    this.disableScrolling = false,
-    this.listDragHandle,
-    this.itemDragHandle,
-    this.constrainDraggingAxis = true,
-    Key? key,
-  }) : super(key: key) {
-    if (listGhost == null &&
-        children
-            .where((element) => element is DragAndDropListExpansionInterface)
-            .isNotEmpty)
-      throw Exception(
-          'If using DragAndDropListExpansion, you must provide a non-null listGhost');
-    if (sliverList && scrollController == null) {
-      throw Exception(
-          'A scroll controller must be provided when using sliver lists');
-    }
-    if (axis == Axis.horizontal && listWidth == double.infinity) {
-      throw Exception(
-          'A finite width must be provided when setting the axis to horizontal');
-    }
-    if (axis == Axis.horizontal && sliverList) {
-      throw Exception(
-          'Combining a sliver list with a horizontal list is currently unsupported');
-    }
+  /// The state from the closest instance of this class that encloses the given
+  /// context.
+  ///
+  /// This method is typically used by [DragAndDropLists] item widgets that
+  /// insert or remove items in response to user input.
+  ///
+  /// If no [DragAndDropLists] surrounds the given context, then this function
+  /// will assert in debug mode and throw an exception in release mode.
+  ///
+  /// See also:
+  ///
+  ///  * [maybeOf], a similar function that will return null if no
+  ///    [DragAndDropLists] ancestor is found.
+  static DragAndDropListsState of(BuildContext context) {
+    final DragAndDropListsState? result =
+        context.findAncestorStateOfType<DragAndDropListsState>();
+    assert(() {
+      if (result == null) {
+        throw FlutterError.fromParts(<DiagnosticsNode>[
+          ErrorSummary(
+              'DragAndDropLists.of() called with a context that does not contain a DragAndDropLists.'),
+          ErrorDescription(
+              'No DragAndDropLists ancestor could be found starting from the context that was passed to DragAndDropLists.of().'),
+          ErrorHint(
+              'This can happen when the context provided is from the same StatefulWidget that '
+              'built the DragAndDropLists. Please see the DragAndDropLists documentation for examples '
+              'of how to refer to an DragAndDropLists object:'),
+          context.describeElement('The context used was')
+        ]);
+      }
+      return true;
+    }());
+    return result!;
+  }
+
+  /// The state from the closest instance of this class that encloses the given
+  /// context.
+  ///
+  /// This method is typically used by [DragAndDropLists] item widgets that insert
+  /// or remove items in response to user input.
+  ///
+  /// If no [DragAndDropLists] surrounds the context given, then this function will
+  /// return null.
+  ///
+  /// See also:
+  ///
+  ///  * [of], a similar function that will throw if no [DragAndDropLists] ancestor
+  ///    is found.
+  static DragAndDropListsState? maybeOf(BuildContext context) {
+    return context.findAncestorStateOfType<DragAndDropListsState>();
   }
 
   @override
