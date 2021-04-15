@@ -86,7 +86,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
                   color: Colors.transparent,
                   child: Container(
                     decoration: widget.parameters!.itemDecorationWhileDragging,
-                    child: feedback,
+                    child: Directionality(
+                      textDirection: Directionality.of(context),
+                      child: feedback,
+                    ),
                   ),
                 ),
               ),
@@ -127,7 +130,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
                   widget.parameters!.itemDraggingWidth ?? _containerSize.width,
               child: Material(
                 child: Container(
-                  child: widget.child.child,
+                  child: Directionality(
+                    textDirection: Directionality.of(context),
+                    child: widget.child.child,
+                  ),
                   decoration: widget.parameters!.itemDecorationWhileDragging,
                 ),
                 color: Colors.transparent,
@@ -155,7 +161,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
                   widget.parameters!.itemDraggingWidth ?? _containerSize.width,
               child: Material(
                 child: Container(
-                  child: widget.child.child,
+                  child: Directionality(
+                    textDirection: Directionality.of(context),
+                    child: widget.child.child,
+                  ),
                   decoration: widget.parameters!.itemDecorationWhileDragging,
                 ),
                 color: Colors.transparent,

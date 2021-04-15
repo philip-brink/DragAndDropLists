@@ -233,7 +233,10 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
           width: widget.parameters.listDraggingWidth ?? _containerSize.width,
           child: Stack(
             children: [
-              dragAndDropListContents,
+              Directionality(
+                textDirection: Directionality.of(context),
+                child: dragAndDropListContents,
+              ),
               Positioned(
                 right: widget.parameters.listDragHandle!.onLeft ? null : 0,
                 left: widget.parameters.listDragHandle!.onLeft ? 0 : null,
@@ -266,7 +269,10 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
         color: Colors.transparent,
         child: Container(
           decoration: widget.parameters.listDecorationWhileDragging,
-          child: dragAndDropListContents,
+          child: Directionality(
+            textDirection: Directionality.of(context),
+            child: dragAndDropListContents,
+          ),
         ),
       ),
     );

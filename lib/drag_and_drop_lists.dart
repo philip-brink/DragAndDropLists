@@ -677,17 +677,18 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     _pointerDown = false;
   }
 
+  final int _duration = 30; // in ms
+  final int _scrollAreaSize = 20;
+  final double _overDragMin = 5.0;
+  final double _overDragMax = 20.0;
+  final double _overDragCoefficient = 3.3;
+
   _scrollList() async {
     if (!widget.disableScrolling &&
         !_scrolling &&
         _pointerDown &&
         _pointerYPosition != null &&
         _pointerXPosition != null) {
-      int duration = 30; // in ms
-      int scrollAreaSize = 20;
-      double step = 1.5;
-      double overDragMax = 20.0;
-      double overDragCoefficient = 5.0;
       double? newOffset;
 
       var rb = context.findRenderObject()!;
@@ -695,65 +696,125 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       if (rb is RenderBox)
         size = rb.size;
       else if (rb is RenderSliver) size = rb.paintBounds.size;
+
       var topLeftOffset = localToGlobal(rb, Offset.zero);
       var bottomRightOffset = localToGlobal(rb, size.bottomRight(Offset.zero));
 
       if (widget.axis == Axis.vertical) {
-        double top = topLeftOffset.dy;
-        double bottom = bottomRightOffset.dy;
-
-        if (_pointerYPosition! < (top + scrollAreaSize) &&
-            _scrollController!.position.pixels >
-                _scrollController!.position.minScrollExtent) {
-          final overDrag =
-              max((top + scrollAreaSize) - _pointerYPosition!, overDragMax);
-          newOffset = max(
-              _scrollController!.position.minScrollExtent,
-              _scrollController!.position.pixels -
-                  step * overDrag / overDragCoefficient);
-        } else if (_pointerYPosition! > (bottom - scrollAreaSize) &&
-            _scrollController!.position.pixels <
-                _scrollController!.position.maxScrollExtent) {
-          final overDrag = max<double>(
-              _pointerYPosition! - (bottom - scrollAreaSize), overDragMax);
-          newOffset = min(
-              _scrollController!.position.maxScrollExtent,
-              _scrollController!.position.pixels +
-                  step * overDrag / overDragCoefficient);
-        }
+        newOffset = _scrollListVertical(topLeftOffset, bottomRightOffset);
       } else {
-        double left = topLeftOffset.dx;
-        double right = bottomRightOffset.dx;
-
-        if (_pointerXPosition! < (left + scrollAreaSize) &&
-            _scrollController!.position.pixels >
-                _scrollController!.position.minScrollExtent) {
-          final overDrag =
-              max((left + scrollAreaSize) - _pointerXPosition!, overDragMax);
-          newOffset = max(
-              _scrollController!.position.minScrollExtent,
-              _scrollController!.position.pixels -
-                  step * overDrag / overDragCoefficient);
-        } else if (_pointerXPosition! > (right - scrollAreaSize) &&
-            _scrollController!.position.pixels <
-                _scrollController!.position.maxScrollExtent) {
-          final overDrag = max<double>(
-              _pointerYPosition! - (right - scrollAreaSize), overDragMax);
-          newOffset = min(
-              _scrollController!.position.maxScrollExtent,
-              _scrollController!.position.pixels +
-                  step * overDrag / overDragCoefficient);
+        var directionality = Directionality.of(context);
+        if (directionality == TextDirection.ltr) {
+          newOffset =
+              _scrollListHorizontalLtr(topLeftOffset, bottomRightOffset);
+        } else {
+          newOffset =
+              _scrollListHorizontalRtl(topLeftOffset, bottomRightOffset);
         }
       }
 
       if (newOffset != null) {
         _scrolling = true;
         await _scrollController!.animateTo(newOffset,
-            duration: Duration(milliseconds: duration), curve: Curves.linear);
+            duration: Duration(milliseconds: _duration), curve: Curves.linear);
         _scrolling = false;
         if (_pointerDown) _scrollList();
       }
     }
+  }
+
+  double? _scrollListVertical(Offset topLeftOffset, Offset bottomRightOffset) {
+    double top = topLeftOffset.dy;
+    double bottom = bottomRightOffset.dy;
+    double? newOffset;
+
+    var pointerYPosition = _pointerYPosition;
+    var scrollController = _scrollController;
+    if (scrollController != null && pointerYPosition != null) {
+      if (pointerYPosition < (top + _scrollAreaSize) &&
+          scrollController.position.pixels >
+              scrollController.position.minScrollExtent) {
+        final overDrag =
+            max((top + _scrollAreaSize) - pointerYPosition, _overDragMax);
+        newOffset = max(scrollController.position.minScrollExtent,
+            scrollController.position.pixels - overDrag / _overDragCoefficient);
+      } else if (pointerYPosition > (bottom - _scrollAreaSize) &&
+          scrollController.position.pixels <
+              scrollController.position.maxScrollExtent) {
+        final overDrag = max<double>(
+            pointerYPosition - (bottom - _scrollAreaSize), _overDragMax);
+        newOffset = min(scrollController.position.maxScrollExtent,
+            scrollController.position.pixels + overDrag / _overDragCoefficient);
+      }
+    }
+
+    return newOffset;
+  }
+
+  double? _scrollListHorizontalLtr(
+      Offset topLeftOffset, Offset bottomRightOffset) {
+    double left = topLeftOffset.dx;
+    double right = bottomRightOffset.dx;
+    double? newOffset;
+
+    var pointerXPosition = _pointerXPosition;
+    var scrollController = _scrollController;
+    if (scrollController != null && pointerXPosition != null) {
+      if (pointerXPosition < (left + _scrollAreaSize) &&
+          scrollController.position.pixels >
+              scrollController.position.minScrollExtent) {
+        // scrolling toward minScrollExtent
+        final overDrag = min(
+            (left + _scrollAreaSize) - pointerXPosition + _overDragMin,
+            _overDragMax);
+        newOffset = max(scrollController.position.minScrollExtent,
+            scrollController.position.pixels - overDrag / _overDragCoefficient);
+      } else if (pointerXPosition > (right - _scrollAreaSize) &&
+          scrollController.position.pixels <
+              scrollController.position.maxScrollExtent) {
+        // scrolling toward maxScrollExtent
+        final overDrag = min(
+            pointerXPosition - (right - _scrollAreaSize) + _overDragMin,
+            _overDragMax);
+        newOffset = min(scrollController.position.maxScrollExtent,
+            scrollController.position.pixels + overDrag / _overDragCoefficient);
+      }
+    }
+
+    return newOffset;
+  }
+
+  double? _scrollListHorizontalRtl(
+      Offset topLeftOffset, Offset bottomRightOffset) {
+    double left = topLeftOffset.dx;
+    double right = bottomRightOffset.dx;
+    double? newOffset;
+
+    var pointerXPosition = _pointerXPosition;
+    var scrollController = _scrollController;
+    if (scrollController != null && pointerXPosition != null) {
+      if (pointerXPosition < (left + _scrollAreaSize) &&
+          scrollController.position.pixels <
+              scrollController.position.maxScrollExtent) {
+        // scrolling toward maxScrollExtent
+        final overDrag = min(
+            (left + _scrollAreaSize) - pointerXPosition + _overDragMin,
+            _overDragMax);
+        newOffset = min(scrollController.position.maxScrollExtent,
+            scrollController.position.pixels + overDrag / _overDragCoefficient);
+      } else if (pointerXPosition > (right - _scrollAreaSize) &&
+          scrollController.position.pixels >
+              scrollController.position.minScrollExtent) {
+        // scrolling toward minScrollExtent
+        final overDrag = min(
+            pointerXPosition - (right - _scrollAreaSize) + _overDragMin,
+            _overDragMax);
+        newOffset = max(scrollController.position.minScrollExtent,
+            scrollController.position.pixels - overDrag / _overDragCoefficient);
+      }
+    }
+
+    return newOffset;
   }
 
   static Offset localToGlobal(RenderObject object, Offset point,
