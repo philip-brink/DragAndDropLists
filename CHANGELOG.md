@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.1] - 15 April 2021
+
+* Fix scrolling in wrong direction when text direction is right-to-left.
+* Fix drag-and-drop feedback widget alignment when text direction is right-to-left.
+
 ## [0.3.0+1] - 2 April 2021
 
 * Fix null crash and wrong drag handle used (thanks [@vbuberen](https://github.com/vbuberen)).
