@@ -131,9 +131,9 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
               child: Material(
                 child: Container(
                   child: Directionality(
-                    textDirection: Directionality.of(context),
-                    child: widget.child.child,
-                  ),
+                      textDirection: Directionality.of(context),
+                      child: widget.child.feedbackWidget //widget.child.child,
+                      ),
                   decoration: widget.parameters!.itemDecorationWhileDragging,
                 ),
                 color: Colors.transparent,
