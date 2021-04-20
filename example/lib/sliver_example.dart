@@ -39,8 +39,16 @@ class _SliverExample extends State<SliverExample> {
         ),
         children: <DragAndDropItem>[
           DragAndDropItem(
-            child: Text('$index.1'),
-          ),
+              child: Container(
+                color: Colors.blue,
+                width: 50,
+                height: 30,
+              ),
+              feedbackWidget: Container(
+                color: Colors.red,
+                width: 50,
+                height: 30,
+              )),
           DragAndDropItem(
             child: Text('$index.2'),
           ),
