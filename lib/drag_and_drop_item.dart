@@ -6,7 +6,7 @@ class DragAndDropItem implements DragAndDropInterface {
   final Widget child;
 
   /// Widget when draggble
-  final Widget feedbackWidget;
+  final Widget? feedbackWidget;
 
   /// Whether or not this item can be dragged.
   /// Set to true if it can be reordered.
@@ -15,7 +15,7 @@ class DragAndDropItem implements DragAndDropInterface {
 
   DragAndDropItem({
     required this.child,
-    required this.feedbackWidget,
+    this.feedbackWidget,
     this.canDrag = true,
   });
 }
