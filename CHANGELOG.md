@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.2] - 20 April 2021
+
+* Add optional feedback widget to items (thanks [@svoza10](https://github.com/svoza10)).
+
 ## [0.3.1] - 15 April 2021
 
 * Fix scrolling in wrong direction when text direction is right-to-left.
