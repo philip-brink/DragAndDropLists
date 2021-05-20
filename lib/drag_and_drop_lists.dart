@@ -281,17 +281,17 @@ class DragAndDropLists extends StatefulWidget {
   /// disable when setting customDragTargets
   final bool constrainDraggingAxis;
 
-  final RefreshController refreshController;
+  final RefreshController? refreshController;
 
-  final Function onRefresh;
+  final VoidCallback? onRefresh;
 
-  final Function onLoading;
+  final VoidCallback? onLoading;
 
   final bool enablePullDown;
 
   final bool enablePullUp;
 
-  final Widget footer;
+  final Widget? footer;
 
   DragAndDropLists({
     required this.children,
