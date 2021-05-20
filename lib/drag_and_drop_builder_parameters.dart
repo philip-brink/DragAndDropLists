@@ -2,13 +2,8 @@ import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:drag_and_drop_lists/drag_handle.dart';
 import 'package:flutter/widgets.dart';
-
-enum DragHandleVerticalAlignment {
-  top,
-  center,
-  bottom,
-}
 
 typedef void OnPointerMove(PointerMoveEvent event);
 typedef void OnPointerUp(PointerUpEvent event);
@@ -28,42 +23,40 @@ typedef void OnListReordered(
 );
 
 class DragAndDropBuilderParameters {
-  final OnPointerMove onPointerMove;
-  final OnPointerUp onPointerUp;
-  final OnPointerDown onPointerDown;
-  final OnItemReordered onItemReordered;
-  final OnItemDropOnLastTarget onItemDropOnLastTarget;
-  final OnListReordered onListReordered;
-  final ListOnWillAccept listOnWillAccept;
-  final ListTargetOnWillAccept listTargetOnWillAccept;
-  final OnListDraggingChanged onListDraggingChanged;
-  final ItemOnWillAccept itemOnWillAccept;
-  final ItemTargetOnWillAccept itemTargetOnWillAccept;
-  final OnItemDraggingChanged onItemDraggingChanged;
+  final OnPointerMove? onPointerMove;
+  final OnPointerUp? onPointerUp;
+  final OnPointerDown? onPointerDown;
+  final OnItemReordered? onItemReordered;
+  final OnItemDropOnLastTarget? onItemDropOnLastTarget;
+  final OnListReordered? onListReordered;
+  final ListOnWillAccept? listOnWillAccept;
+  final ListTargetOnWillAccept? listTargetOnWillAccept;
+  final OnListDraggingChanged? onListDraggingChanged;
+  final ItemOnWillAccept? itemOnWillAccept;
+  final ItemTargetOnWillAccept? itemTargetOnWillAccept;
+  final OnItemDraggingChanged? onItemDraggingChanged;
   final Axis axis;
   final CrossAxisAlignment verticalAlignment;
-  final double listDraggingWidth;
+  final double? listDraggingWidth;
   final bool dragOnLongPress;
   final int itemSizeAnimationDuration;
-  final Widget itemGhost;
+  final Widget? itemGhost;
   final double itemGhostOpacity;
-  final Widget itemDivider;
-  final double itemDraggingWidth;
-  final Decoration itemDecorationWhileDragging;
+  final Widget? itemDivider;
+  final double? itemDraggingWidth;
+  final Decoration? itemDecorationWhileDragging;
   final int listSizeAnimationDuration;
-  final Widget listGhost;
+  final Widget? listGhost;
   final double listGhostOpacity;
-  final EdgeInsets listPadding;
-  final Decoration listDecoration;
-  final Decoration listDecorationWhileDragging;
-  final Decoration listInnerDecoration;
+  final EdgeInsets? listPadding;
+  final Decoration? listDecoration;
+  final Decoration? listDecorationWhileDragging;
+  final Decoration? listInnerDecoration;
   final double listWidth;
   final double lastItemTargetHeight;
   final bool addLastItemTargetHeightToTop;
-  final Widget dragHandle;
-  final bool dragHandleOnLeft;
-  final DragHandleVerticalAlignment listDragHandleVerticalAlignment;
-  final DragHandleVerticalAlignment itemDragHandleVerticalAlignment;
+  final DragHandle? listDragHandle;
+  final DragHandle? itemDragHandle;
   final bool constrainDraggingAxis;
   final bool disableScrolling;
 
@@ -100,10 +93,8 @@ class DragAndDropBuilderParameters {
     this.listWidth = double.infinity,
     this.lastItemTargetHeight = 20,
     this.addLastItemTargetHeightToTop = false,
-    this.dragHandle,
-    this.dragHandleOnLeft = false,
-    this.itemDragHandleVerticalAlignment = DragHandleVerticalAlignment.center,
-    this.listDragHandleVerticalAlignment = DragHandleVerticalAlignment.top,
+    this.listDragHandle,
+    this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.disableScrolling = false,
   });

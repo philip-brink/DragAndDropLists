@@ -8,10 +8,10 @@ import 'package:flutter/widgets.dart';
 
 class DragAndDropItemWrapper extends StatefulWidget {
   final DragAndDropItem child;
-  final DragAndDropBuilderParameters parameters;
+  final DragAndDropBuilderParameters? parameters;
 
   DragAndDropItemWrapper(
-      {@required this.child, @required this.parameters, Key key})
+      {required this.child, required this.parameters, Key? key})
       : super(key: key);
 
   @override
@@ -20,7 +20,7 @@ class DragAndDropItemWrapper extends StatefulWidget {
 
 class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
     with TickerProviderStateMixin {
-  DragAndDropItem _hoveredDraggable;
+  DragAndDropItem? _hoveredDraggable;
 
   bool _dragging = false;
   Size _containerSize = Size.zero;
@@ -30,37 +30,37 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
   Widget build(BuildContext context) {
     Widget draggable;
     if (widget.child.canDrag) {
-      if (widget.parameters.dragHandle != null) {
+      if (widget.parameters!.itemDragHandle != null) {
         Widget feedback = Container(
-          width: widget.parameters.itemDraggingWidth ?? _containerSize.width,
+          width: widget.parameters!.itemDraggingWidth ?? _containerSize.width,
           child: Stack(
             children: [
               widget.child.child,
               Positioned(
-                right: widget.parameters.dragHandleOnLeft ? null : 0,
-                left: widget.parameters.dragHandleOnLeft ? 0 : null,
-                top: widget.parameters.itemDragHandleVerticalAlignment ==
+                right: widget.parameters!.itemDragHandle!.onLeft ? null : 0,
+                left: widget.parameters!.itemDragHandle!.onLeft ? 0 : null,
+                top: widget.parameters!.itemDragHandle!.verticalAlignment ==
                         DragHandleVerticalAlignment.bottom
                     ? null
                     : 0,
-                bottom: widget.parameters.itemDragHandleVerticalAlignment ==
+                bottom: widget.parameters!.itemDragHandle!.verticalAlignment ==
                         DragHandleVerticalAlignment.top
                     ? null
                     : 0,
-                child: widget.parameters.dragHandle,
+                child: widget.parameters!.itemDragHandle!,
               ),
             ],
           ),
         );
 
         var positionedDragHandle = Positioned(
-          right: widget.parameters.dragHandleOnLeft ? null : 0,
-          left: widget.parameters.dragHandleOnLeft ? 0 : null,
-          top: widget.parameters.itemDragHandleVerticalAlignment ==
+          right: widget.parameters!.itemDragHandle!.onLeft ? null : 0,
+          left: widget.parameters!.itemDragHandle!.onLeft ? 0 : null,
+          top: widget.parameters!.itemDragHandle!.verticalAlignment ==
                   DragHandleVerticalAlignment.bottom
               ? null
               : 0,
-          bottom: widget.parameters.itemDragHandleVerticalAlignment ==
+          bottom: widget.parameters!.itemDragHandle!.verticalAlignment ==
                   DragHandleVerticalAlignment.top
               ? null
               : 0,
@@ -68,25 +68,28 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             cursor: SystemMouseCursors.grab,
             child: Draggable<DragAndDropItem>(
               data: widget.child,
-              axis: widget.parameters.axis == Axis.vertical &&
-                      widget.parameters.constrainDraggingAxis
+              axis: widget.parameters!.axis == Axis.vertical &&
+                      widget.parameters!.constrainDraggingAxis
                   ? Axis.vertical
                   : null,
               child: MeasureSize(
                 onSizeChange: (size) {
                   setState(() {
-                    _dragHandleSize = size;
+                    _dragHandleSize = size!;
                   });
                 },
-                child: widget.parameters.dragHandle,
+                child: widget.parameters!.itemDragHandle,
               ),
               feedback: Transform.translate(
                 offset: _feedbackContainerOffset(),
                 child: Material(
                   color: Colors.transparent,
                   child: Container(
-                    decoration: widget.parameters.itemDecorationWhileDragging,
-                    child: feedback,
+                    decoration: widget.parameters!.itemDecorationWhileDragging,
+                    child: Directionality(
+                      textDirection: Directionality.of(context),
+                      child: feedback,
+                    ),
                   ),
                 ),
               ),
@@ -112,23 +115,25 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             ],
           ),
         );
-      } else if (widget.parameters.dragOnLongPress) {
+      } else if (widget.parameters!.dragOnLongPress) {
         draggable = MeasureSize(
           onSizeChange: _setContainerSize,
           child: LongPressDraggable<DragAndDropItem>(
             data: widget.child,
-            axis: widget.parameters.axis == Axis.vertical &&
-                    widget.parameters.constrainDraggingAxis
+            axis: widget.parameters!.axis == Axis.vertical &&
+                    widget.parameters!.constrainDraggingAxis
                 ? Axis.vertical
                 : null,
             child: widget.child.child,
             feedback: Container(
               width:
-                  widget.parameters.itemDraggingWidth ?? _containerSize.width,
+                  widget.parameters!.itemDraggingWidth ?? _containerSize.width,
               child: Material(
                 child: Container(
-                  child: widget.child.child,
-                  decoration: widget.parameters.itemDecorationWhileDragging,
+                  child: Directionality(
+                      textDirection: Directionality.of(context),
+                      child: widget.child.feedbackWidget ?? widget.child.child),
+                  decoration: widget.parameters!.itemDecorationWhileDragging,
                 ),
                 color: Colors.transparent,
               ),
@@ -145,18 +150,21 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           onSizeChange: _setContainerSize,
           child: Draggable<DragAndDropItem>(
             data: widget.child,
-            axis: widget.parameters.axis == Axis.vertical &&
-                    widget.parameters.constrainDraggingAxis
+            axis: widget.parameters!.axis == Axis.vertical &&
+                    widget.parameters!.constrainDraggingAxis
                 ? Axis.vertical
                 : null,
             child: widget.child.child,
             feedback: Container(
               width:
-                  widget.parameters.itemDraggingWidth ?? _containerSize.width,
+                  widget.parameters!.itemDraggingWidth ?? _containerSize.width,
               child: Material(
                 child: Container(
-                  child: widget.child.child,
-                  decoration: widget.parameters.itemDecorationWhileDragging,
+                  child: Directionality(
+                    textDirection: Directionality.of(context),
+                    child: widget.child.feedbackWidget ?? widget.child.child,
+                  ),
+                  decoration: widget.parameters!.itemDecorationWhileDragging,
                 ),
                 color: Colors.transparent,
               ),
@@ -171,8 +179,8 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
       }
     } else {
       draggable = AnimatedSize(
-        duration:
-            Duration(milliseconds: widget.parameters.itemSizeAnimationDuration),
+        duration: Duration(
+            milliseconds: widget.parameters!.itemSizeAnimationDuration),
         vsync: this,
         alignment: Alignment.bottomCenter,
         child: _hoveredDraggable != null ? Container() : widget.child.child,
@@ -182,40 +190,40 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
       children: <Widget>[
         Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: widget.parameters.verticalAlignment,
+          crossAxisAlignment: widget.parameters!.verticalAlignment,
           children: <Widget>[
             AnimatedSize(
               duration: Duration(
-                  milliseconds: widget.parameters.itemSizeAnimationDuration),
+                  milliseconds: widget.parameters!.itemSizeAnimationDuration),
               vsync: this,
               alignment: Alignment.topLeft,
               child: _hoveredDraggable != null
                   ? Opacity(
-                      opacity: widget.parameters.itemGhostOpacity,
-                      child: widget.parameters.itemGhost ??
-                          _hoveredDraggable.child,
+                      opacity: widget.parameters!.itemGhostOpacity,
+                      child: widget.parameters!.itemGhost ??
+                          _hoveredDraggable!.child,
                     )
                   : Container(),
             ),
             Listener(
               child: draggable,
               onPointerMove: _onPointerMove,
-              onPointerDown: widget.parameters.onPointerDown,
-              onPointerUp: widget.parameters.onPointerUp,
+              onPointerDown: widget.parameters!.onPointerDown,
+              onPointerUp: widget.parameters!.onPointerUp,
             ),
           ],
         ),
         Positioned.fill(
           child: DragTarget<DragAndDropItem>(
             builder: (context, candidateData, rejectedData) {
-              if (candidateData != null && candidateData.isNotEmpty) {}
+              if (candidateData.isNotEmpty) {}
               return Container();
             },
             onWillAccept: (incoming) {
               bool accept = true;
-              if (widget.parameters.itemOnWillAccept != null)
-                accept =
-                    widget.parameters.itemOnWillAccept(incoming, widget.child);
+              if (widget.parameters!.itemOnWillAccept != null)
+                accept = widget.parameters!.itemOnWillAccept!(
+                    incoming, widget.child);
               if (accept && mounted) {
                 setState(() {
                   _hoveredDraggable = incoming;
@@ -233,8 +241,8 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             onAccept: (incoming) {
               if (mounted) {
                 setState(() {
-                  if (widget.parameters.onItemReordered != null)
-                    widget.parameters.onItemReordered(incoming, widget.child);
+                  if (widget.parameters!.onItemReordered != null)
+                    widget.parameters!.onItemReordered!(incoming, widget.child);
                   _hoveredDraggable = null;
                 });
               }
@@ -248,12 +256,12 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
   Offset _feedbackContainerOffset() {
     double xOffset;
     double yOffset;
-    if (widget.parameters.dragHandleOnLeft) {
+    if (widget.parameters!.itemDragHandle!.onLeft) {
       xOffset = 0;
     } else {
       xOffset = -_containerSize.width + _dragHandleSize.width;
     }
-    if (widget.parameters.itemDragHandleVerticalAlignment ==
+    if (widget.parameters!.itemDragHandle!.verticalAlignment ==
         DragHandleVerticalAlignment.bottom) {
       yOffset = -_containerSize.height + _dragHandleSize.width;
     } else {
@@ -263,10 +271,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
     return Offset(xOffset, yOffset);
   }
 
-  void _setContainerSize(Size size) {
+  void _setContainerSize(Size? size) {
     if (mounted) {
       setState(() {
-        _containerSize = size;
+        _containerSize = size!;
       });
     }
   }
@@ -276,13 +284,13 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
       setState(() {
         _dragging = dragging;
       });
-      if (widget.parameters.onItemDraggingChanged != null) {
-        widget.parameters.onItemDraggingChanged(widget.child, dragging);
+      if (widget.parameters!.onItemDraggingChanged != null) {
+        widget.parameters!.onItemDraggingChanged!(widget.child, dragging);
       }
     }
   }
 
   void _onPointerMove(PointerMoveEvent event) {
-    if (_dragging) widget.parameters.onPointerMove(event);
+    if (_dragging) widget.parameters!.onPointerMove!(event);
   }
 }

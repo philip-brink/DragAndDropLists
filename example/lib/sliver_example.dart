@@ -1,20 +1,18 @@
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class SliverExample extends StatefulWidget {
-  SliverExample({Key key, this.title}) : super(key: key);
-  final String title;
+  SliverExample({Key? key}) : super(key: key);
 
   @override
   _SliverExample createState() => _SliverExample();
 }
 
 class _SliverExample extends State<SliverExample> {
-  List<DragAndDropList> _contents;
+  late List<DragAndDropList> _contents;
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -41,8 +39,16 @@ class _SliverExample extends State<SliverExample> {
         ),
         children: <DragAndDropItem>[
           DragAndDropItem(
-            child: Text('$index.1'),
-          ),
+              child: Container(
+                color: Colors.blue,
+                width: 50,
+                height: 30,
+              ),
+              feedbackWidget: Container(
+                color: Colors.red,
+                width: 50,
+                height: 30,
+              )),
           DragAndDropItem(
             child: Text('$index.2'),
           ),
