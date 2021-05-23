@@ -638,7 +638,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
         receiverItemIndex--;
       }
       widget.onItemReorder(reorderedItemIndex, reorderedListIndex,
-          receiverItemIndex, receiverListIndex);
+          receiverItemIndex, receiverListIndex,newOrReordered);
     }
   }
 
