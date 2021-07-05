@@ -1,20 +1,18 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class ListTileExample extends StatefulWidget {
-  ListTileExample({Key key, this.title}) : super(key: key);
-  final String title;
+  ListTileExample({Key? key}) : super(key: key);
 
   @override
   _ListTileExample createState() => _ListTileExample();
 }
 
 class _ListTileExample extends State<ListTileExample> {
-  List<DragAndDropList> _contents;
+  late List<DragAndDropList> _contents;
 
   @override
   void initState() {
@@ -110,7 +108,7 @@ class _ListTileExample extends State<ListTileExample> {
             Text(
               'Empty List',
               style: TextStyle(
-                  color: Theme.of(context).textTheme.caption.color,
+                  color: Theme.of(context).textTheme.caption!.color,
                   fontStyle: FontStyle.italic),
             ),
             Expanded(
