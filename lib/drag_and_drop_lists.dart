@@ -279,6 +279,12 @@ class DragAndDropLists extends StatefulWidget {
   /// the vertical axis. By default this is set to true. This may be useful to
   /// disable when setting customDragTargets
   final bool constrainDraggingAxis;
+  
+  /// If you put a widget before DragAndDropLists there's an unexpected padding
+  /// before the list renders. This is the default behaviour for ListView which
+  /// is used internally. To remove the padding, set this field to true
+  /// https://github.com/flutter/flutter/issues/14842#issuecomment-371344881
+  final bool removeTopPadding;
 
   DragAndDropLists({
     required this.children,
@@ -329,6 +335,7 @@ class DragAndDropLists extends StatefulWidget {
     this.listDragHandle,
     this.itemDragHandle,
     this.constrainDraggingAxis = true,
+    this.removeTopPadding = false,
     Key? key,
   }) : super(key: key) {
     if (listGhost == null &&
@@ -484,13 +491,21 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     }
   }
 
-  ListView _buildListView(DragAndDropBuilderParameters parameters,
+  Widget _buildListView(DragAndDropBuilderParameters parameters,
       DragAndDropListTarget dragAndDropListTarget) {
-    return ListView(
+    Widget _listView = ListView(
       scrollDirection: widget.axis,
       controller: _scrollController,
       children: _buildOuterList(dragAndDropListTarget, parameters),
     );
+
+    return widget.removeTopPadding
+        ? MediaQuery.removePadding(
+            removeTop: true,
+            context: context,
+            child: _listView,
+          )
+        : _listView;
   }
 
   List<Widget> _buildOuterList(DragAndDropListTarget dragAndDropListTarget,
