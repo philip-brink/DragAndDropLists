@@ -1,5 +1,9 @@
 # Changelog
 
+[0.3.2+2] - 21 October 2021
+
+* Replace flutter deprecated elements
+
 [0.3.2+1] - 21 October 2021
 
 * Fix last list target for horizontal lists (thanks [@nvloc120](https://github.com/nvloc120)).

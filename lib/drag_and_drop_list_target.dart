@@ -37,7 +37,6 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
         AnimatedSize(
           duration: Duration(
               milliseconds: widget.parameters.listSizeAnimationDuration),
-          vsync: this,
           alignment: widget.parameters.axis == Axis.vertical
               ? Alignment.bottomCenter
               : Alignment.centerLeft,

@@ -124,7 +124,6 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
       AnimatedSize(
         duration:
             Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
-        vsync: this,
         alignment: widget.parameters.axis == Axis.vertical
             ? Alignment.bottomCenter
             : Alignment.centerLeft,

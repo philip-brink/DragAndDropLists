@@ -36,7 +36,6 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
             AnimatedSize(
               duration: Duration(
                   milliseconds: widget.parameters.itemSizeAnimationDuration),
-              vsync: this,
               alignment: Alignment.bottomCenter,
               child: _hoveredDraggable != null
                   ? Opacity(

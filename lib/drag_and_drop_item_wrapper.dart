@@ -181,7 +181,6 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
       draggable = AnimatedSize(
         duration: Duration(
             milliseconds: widget.parameters!.itemSizeAnimationDuration),
-        vsync: this,
         alignment: Alignment.bottomCenter,
         child: _hoveredDraggable != null ? Container() : widget.child.child,
       );
@@ -195,7 +194,6 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             AnimatedSize(
               duration: Duration(
                   milliseconds: widget.parameters!.itemSizeAnimationDuration),
-              vsync: this,
               alignment: Alignment.topLeft,
               child: _hoveredDraggable != null
                   ? Opacity(
