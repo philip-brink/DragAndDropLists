@@ -1,5 +1,9 @@
 # Changelog
 
+[0.3.2+1] - 21 October 2021
+
+* Fix last list target for horizontal lists (thanks [@nvloc120](https://github.com/nvloc120)).
+
 ## [0.3.2] - 20 April 2021
 
 * Add optional feedback widget to items (thanks [@svoza10](https://github.com/svoza10)).

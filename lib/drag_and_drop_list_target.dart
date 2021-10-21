@@ -54,7 +54,9 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
               height: widget.parameters.axis == Axis.vertical
                   ? widget.lastListTargetSize
                   : null,
-              width: widget.lastListTargetSize,
+              width: widget.parameters.axis == Axis.horizontal
+                  ? widget.lastListTargetSize
+                  : null,
             ),
       ],
     );
