@@ -3,6 +3,7 @@
 [0.3.2+1] - 21 October 2021
 
 * Fix last list target for horizontal lists (thanks [@nvloc120](https://github.com/nvloc120)).
+* Add ability to remove top padding when there is a widget before the DragAndDropLists (See [flutter/flutter#14842](https://github.com/flutter/flutter/issues/14842), thanks [@aliasgarlabs](https://github.com/aliasgarlabs))
 
 ## [0.3.2] - 20 April 2021
 
