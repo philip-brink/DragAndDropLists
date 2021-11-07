@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 typedef void OnPointerMove(PointerMoveEvent event);
 typedef void OnPointerUp(PointerUpEvent event);
 typedef void OnPointerDown(PointerDownEvent event);
+typedef void OnPointerCancel(PointerCancelEvent event);
 typedef void OnItemReordered(
   DragAndDropItem reorderedItem,
   DragAndDropItem receiverItem,
@@ -26,6 +27,7 @@ class DragAndDropBuilderParameters {
   final OnPointerMove? onPointerMove;
   final OnPointerUp? onPointerUp;
   final OnPointerDown? onPointerDown;
+  final OnPointerCancel? onPointerCancel;
   final OnItemReordered? onItemReordered;
   final OnItemDropOnLastTarget? onItemDropOnLastTarget;
   final OnListReordered? onListReordered;
@@ -64,6 +66,7 @@ class DragAndDropBuilderParameters {
     this.onPointerMove,
     this.onPointerUp,
     this.onPointerDown,
+    this.onPointerCancel,
     this.onItemReordered,
     this.onItemDropOnLastTarget,
     this.onListReordered,

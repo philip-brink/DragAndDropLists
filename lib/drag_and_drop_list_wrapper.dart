@@ -148,6 +148,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
         onPointerMove: _onPointerMove,
         onPointerDown: widget.parameters.onPointerDown,
         onPointerUp: widget.parameters.onPointerUp,
+        onPointerCancel: widget.parameters.onPointerCancel,
       ),
     ];
 
