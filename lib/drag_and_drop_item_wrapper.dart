@@ -193,7 +193,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           children: <Widget>[
             AnimatedSize(
               duration: Duration(
-                  milliseconds: widget.parameters!.itemSizeAnimationDuration),
+                  milliseconds: (_hoveredDraggable != null ||
+                          widget.parameters!.animateItemsOnDrop)
+                      ? widget.parameters!.itemSizeAnimationDuration
+                      : 1),
               alignment: Alignment.topLeft,
               child: _hoveredDraggable != null
                   ? Opacity(

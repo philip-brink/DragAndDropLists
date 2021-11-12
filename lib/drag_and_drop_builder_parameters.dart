@@ -59,6 +59,7 @@ class DragAndDropBuilderParameters {
   final DragHandle? itemDragHandle;
   final bool constrainDraggingAxis;
   final bool disableScrolling;
+  final bool animateItemsOnDrop;
 
   DragAndDropBuilderParameters({
     this.onPointerMove,
@@ -97,5 +98,6 @@ class DragAndDropBuilderParameters {
     this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.disableScrolling = false,
+    this.animateItemsOnDrop = true,
   });
 }
