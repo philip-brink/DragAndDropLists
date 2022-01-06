@@ -34,6 +34,7 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
           crossAxisAlignment: widget.parameters.verticalAlignment,
           children: <Widget>[
             AnimatedSize(
+              vsync: this,
               duration: Duration(
                   milliseconds: widget.parameters.itemSizeAnimationDuration),
               alignment: Alignment.bottomCenter,
