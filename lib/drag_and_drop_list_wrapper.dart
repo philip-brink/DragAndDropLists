@@ -122,6 +122,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
 
     var rowOrColumnChildren = <Widget>[
       AnimatedSize(
+        vsync: this,
         duration:
             Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
         alignment: widget.parameters.axis == Axis.vertical
