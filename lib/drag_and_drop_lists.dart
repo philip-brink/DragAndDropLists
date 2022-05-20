@@ -289,6 +289,9 @@ class DragAndDropLists extends StatefulWidget {
   /// Speed at which the list will scroll when dragging an item.
   final double overDragCoefficient;
 
+  /// the minimum distance from the edge of the screen that the cursor/finger needs to reach for scrolling to occur
+  final int scrollAreaSize;
+
   DragAndDropLists({
     required this.children,
     required this.onItemReorder,
@@ -340,7 +343,8 @@ class DragAndDropLists extends StatefulWidget {
     this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.removeTopPadding = false,
-    Key? key,
+    this.scrollAreaSize = 30,
+    Key? key, 
   }) : super(key: key) {
     if (listGhost == null &&
         children
@@ -373,9 +377,11 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   double? _pointerXPosition;
   bool _scrolling = false;
   PageStorageBucket _pageStorageBucket = PageStorageBucket();
+  late int _scrollAreaSize;
 
   @override
   void initState() {
+    _scrollAreaSize = widget.scrollAreaSize;
     if (widget.scrollController != null)
       _scrollController = widget.scrollController;
     else
@@ -697,7 +703,6 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   }
 
   final int _duration = 30; // in ms
-  final int _scrollAreaSize = 20;
   final double _overDragMin = 5.0;
   final double _overDragMax = 20.0;
 
