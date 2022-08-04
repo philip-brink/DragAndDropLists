@@ -7,7 +7,6 @@ import 'package:drag_and_drop_lists/drag_and_drop_item_wrapper.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/programmatic_expansion_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 typedef void OnExpansionChanged(bool expanded);
 

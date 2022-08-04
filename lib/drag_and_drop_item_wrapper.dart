@@ -1,10 +1,6 @@
-import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:drag_and_drop_lists/measure_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class DragAndDropItemWrapper extends StatefulWidget {
   final DragAndDropItem child;

@@ -1,14 +1,12 @@
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class FixedExample extends StatefulWidget {
-  FixedExample({Key? key}) : super(key: key);
+  const FixedExample({Key? key}) : super(key: key);
 
   @override
-  _FixedExample createState() => _FixedExample();
+  State createState() => _FixedExample();
 }
 
 class _FixedExample extends State<FixedExample> {
@@ -22,7 +20,7 @@ class _FixedExample extends State<FixedExample> {
       return DragAndDropList(
         header: Row(
           children: <Widget>[
-            Expanded(
+            const Expanded(
               flex: 1,
               child: Divider(),
             ),
@@ -32,7 +30,7 @@ class _FixedExample extends State<FixedExample> {
                   ? 'Header $index : Non-Draggable'
                   : 'Header $index'),
             ),
-            Expanded(
+            const Expanded(
               flex: 1,
               child: Divider(),
             ),
@@ -59,9 +57,9 @@ class _FixedExample extends State<FixedExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Fixed Items'),
+        title: const Text('Fixed Items'),
       ),
-      drawer: NavigationDrawer(),
+      drawer: const NavigationDrawer(),
       body: DragAndDropLists(
         children: _contents,
         onItemReorder: _onItemReorder,

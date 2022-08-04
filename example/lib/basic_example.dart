@@ -1,14 +1,12 @@
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class BasicExample extends StatefulWidget {
-  BasicExample({Key? key}) : super(key: key);
+  const BasicExample({Key? key}) : super(key: key);
 
   @override
-  _BasicExample createState() => _BasicExample();
+  State createState() => _BasicExample();
 }
 
 class _BasicExample extends State<BasicExample> {
@@ -22,7 +20,7 @@ class _BasicExample extends State<BasicExample> {
       return DragAndDropList(
         header: Row(
           children: <Widget>[
-            Expanded(
+            const Expanded(
               flex: 1,
               child: Divider(),
             ),
@@ -30,7 +28,7 @@ class _BasicExample extends State<BasicExample> {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text('Header $index'),
             ),
-            Expanded(
+            const Expanded(
               flex: 1,
               child: Divider(),
             ),
@@ -55,9 +53,9 @@ class _BasicExample extends State<BasicExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Basic'),
+        title: const Text('Basic'),
       ),
-      drawer: NavigationDrawer(),
+      drawer: const NavigationDrawer(),
       body: DragAndDropLists(
         children: _contents,
         onItemReorder: _onItemReorder,

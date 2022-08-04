@@ -1,27 +1,25 @@
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class DragIntoListExample extends StatefulWidget {
-  DragIntoListExample({Key? key}) : super(key: key);
+  const DragIntoListExample({Key? key}) : super(key: key);
 
   @override
-  _DragIntoListExample createState() => _DragIntoListExample();
+  State createState() => _DragIntoListExample();
 }
 
 class _DragIntoListExample extends State<DragIntoListExample> {
-  List<DragAndDropList> _contents = <DragAndDropList>[];
+  final List<DragAndDropList> _contents = <DragAndDropList>[];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Drag Into List'),
+        title: const Text('Drag Into List'),
       ),
-      drawer: NavigationDrawer(),
+      drawer: const NavigationDrawer(),
       body: Column(
         children: <Widget>[
           Flexible(
@@ -32,7 +30,7 @@ class _DragIntoListExample extends State<DragIntoListExample> {
               onListReorder: _onListReorder,
               onItemAdd: _onItemAdd,
               onListAdd: _onListAdd,
-              listGhost: Container(
+              listGhost: const SizedBox(
                 height: 50,
                 width: 100,
                 child: Center(
@@ -51,14 +49,14 @@ class _DragIntoListExample extends State<DragIntoListExample> {
                     color: Colors.pink,
                     child: Center(
                       child: Draggable<DragAndDropListInterface>(
-                        feedback: Icon(Icons.assignment),
-                        child: Icon(Icons.assignment),
+                        feedback: const Icon(Icons.assignment),
                         data: DragAndDropList(
-                          header: Text(
+                          header: const Text(
                             'New default list',
                           ),
                           children: <DragAndDropItem>[],
                         ),
+                        child: const Icon(Icons.assignment),
                       ),
                     ),
                   ),
@@ -68,9 +66,9 @@ class _DragIntoListExample extends State<DragIntoListExample> {
                     color: Colors.orange,
                     child: Center(
                       child: Draggable<DragAndDropItem>(
-                        feedback: Icon(Icons.photo),
-                        child: Icon(Icons.photo),
-                        data: DragAndDropItem(child: Text('New default item')),
+                        feedback: const Icon(Icons.photo),
+                        data: DragAndDropItem(child: const Text('New default item')),
+                        child: const Icon(Icons.photo),
                       ),
                     ),
                   ),
@@ -99,22 +97,22 @@ class _DragIntoListExample extends State<DragIntoListExample> {
   }
 
   _onItemAdd(DragAndDropItem newItem, int listIndex, int itemIndex) {
-    print('adding new item');
     setState(() {
-      if (itemIndex == -1)
+      if (itemIndex == -1) {
         _contents[listIndex].children.add(newItem);
-      else
+      } else {
         _contents[listIndex].children.insert(itemIndex, newItem);
+      }
     });
   }
 
   _onListAdd(DragAndDropListInterface newList, int listIndex) {
-    print('adding new list');
     setState(() {
-      if (listIndex == -1)
+      if (listIndex == -1) {
         _contents.add(newList as DragAndDropList);
-      else
+      } else {
         _contents.insert(listIndex, newList as DragAndDropList);
+      }
     });
   }
 }

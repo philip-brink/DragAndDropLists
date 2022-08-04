@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class NavigationDrawer extends StatelessWidget {
+  const NavigationDrawer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
           ListTile(
-            title: Text('Basic'),
-            leading: Icon(Icons.list),
+            title: const Text('Basic'),
+            leading: const Icon(Icons.list),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed('/');
             },
           ),
           ListTile(
-            title: Text('List Tiles'),
-            leading: Icon(Icons.view_list),
+            title: const Text('List Tiles'),
+            leading: const Icon(Icons.view_list),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed('/list_tile_example');
             },
           ),
           ListTile(
-            title: Text('Expansion Tiles'),
-            leading: Icon(Icons.keyboard_arrow_down),
+            title: const Text('Expansion Tiles'),
+            leading: const Icon(Icons.keyboard_arrow_down),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context)
@@ -33,16 +34,16 @@ class NavigationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Slivers'),
-            leading: Icon(Icons.assignment),
+            title: const Text('Slivers'),
+            leading: const Icon(Icons.assignment),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed('/sliver_example');
             },
           ),
           ListTile(
-            title: Text('Drag Into List'),
-            leading: Icon(Icons.add),
+            title: const Text('Drag Into List'),
+            leading: const Icon(Icons.add),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context)
@@ -50,24 +51,24 @@ class NavigationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Horizontal'),
-            leading: Icon(Icons.swap_horiz),
+            title: const Text('Horizontal'),
+            leading: const Icon(Icons.swap_horiz),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed('/horizontal_example');
             },
           ),
           ListTile(
-            title: Text('Fixed Items'),
-            leading: Icon(Icons.block),
+            title: const Text('Fixed Items'),
+            leading: const Icon(Icons.block),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed('/fixed_example');
             },
           ),
           ListTile(
-            title: Text('Drag Handle'),
-            leading: Icon(Icons.drag_handle),
+            title: const Text('Drag Handle'),
+            leading: const Icon(Icons.drag_handle),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context)

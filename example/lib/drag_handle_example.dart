@@ -1,14 +1,12 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class DragHandleExample extends StatefulWidget {
-  DragHandleExample({Key? key}) : super(key: key);
+  const DragHandleExample({Key? key}) : super(key: key);
 
   @override
-  _DragHandleExample createState() => _DragHandleExample();
+  State createState() => _DragHandleExample();
 }
 
 class _DragHandleExample extends State<DragHandleExample> {
@@ -25,10 +23,10 @@ class _DragHandleExample extends State<DragHandleExample> {
             Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: 8, bottom: 4),
+                  padding: const EdgeInsets.only(left: 8, bottom: 4),
                   child: Text(
                     'Header $index',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
               ],
@@ -40,7 +38,7 @@ class _DragHandleExample extends State<DragHandleExample> {
             child: Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Text(
                     'Sub $index.1',
                   ),
@@ -52,7 +50,7 @@ class _DragHandleExample extends State<DragHandleExample> {
             child: Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Text(
                     'Sub $index.2',
                   ),
@@ -64,7 +62,7 @@ class _DragHandleExample extends State<DragHandleExample> {
             child: Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Text(
                     'Sub $index.3',
                   ),
@@ -79,19 +77,19 @@ class _DragHandleExample extends State<DragHandleExample> {
 
   @override
   Widget build(BuildContext context) {
-    var backgroundColor = Color.fromARGB(255, 243, 242, 248);
+    var backgroundColor = const Color.fromARGB(255, 243, 242, 248);
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text('Drag Handle'),
+        title: const Text('Drag Handle'),
       ),
-      drawer: NavigationDrawer(),
+      drawer: const NavigationDrawer(),
       body: DragAndDropLists(
         children: _contents,
         onItemReorder: _onItemReorder,
         onListReorder: _onListReorder,
-        listPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        listPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         itemDivider: Divider(
           thickness: 2,
           height: 2,
@@ -104,18 +102,18 @@ class _DragHandleExample extends State<DragHandleExample> {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 2,
               blurRadius: 3,
-              offset: Offset(0, 0), // changes position of shadow
+              offset: const Offset(0, 0), // changes position of shadow
             ),
           ],
         ),
         listInnerDecoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
         ),
         lastItemTargetHeight: 8,
         addLastItemTargetHeightToTop: true,
         lastListTargetSize: 40,
-        listDragHandle: DragHandle(
+        listDragHandle: const DragHandle(
           verticalAlignment: DragHandleVerticalAlignment.top,
           child: Padding(
             padding: EdgeInsets.only(right: 10),
@@ -125,7 +123,7 @@ class _DragHandleExample extends State<DragHandleExample> {
             ),
           ),
         ),
-        itemDragHandle: DragHandle(
+        itemDragHandle: const DragHandle(
           child: Padding(
             padding: EdgeInsets.only(right: 10),
             child: Icon(

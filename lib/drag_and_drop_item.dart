@@ -5,7 +5,7 @@ class DragAndDropItem implements DragAndDropInterface {
   /// The child widget of this item.
   final Widget child;
 
-  /// Widget when draggble
+  /// Widget when draggable
   final Widget? feedbackWidget;
 
   /// Whether or not this item can be dragged.

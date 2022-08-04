@@ -1,19 +1,17 @@
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class SliverExample extends StatefulWidget {
-  SliverExample({Key? key}) : super(key: key);
+  const SliverExample({Key? key}) : super(key: key);
 
   @override
-  _SliverExample createState() => _SliverExample();
+  State createState() => _SliverExample();
 }
 
 class _SliverExample extends State<SliverExample> {
   late List<DragAndDropList> _contents;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -23,7 +21,7 @@ class _SliverExample extends State<SliverExample> {
       return DragAndDropList(
         header: Row(
           children: <Widget>[
-            Expanded(
+            const Expanded(
               flex: 1,
               child: Divider(),
             ),
@@ -31,7 +29,7 @@ class _SliverExample extends State<SliverExample> {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text('Header $index'),
             ),
-            Expanded(
+            const Expanded(
               flex: 1,
               child: Divider(),
             ),
@@ -63,7 +61,7 @@ class _SliverExample extends State<SliverExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawer(),
+      drawer: const NavigationDrawer(),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
@@ -81,7 +79,7 @@ class _SliverExample extends State<SliverExample> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 20),
             sliver: DragAndDropLists(
               children: _contents,
               onItemReorder: _onItemReorder,

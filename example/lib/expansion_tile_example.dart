@@ -1,15 +1,12 @@
-import 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class ExpansionTileExample extends StatefulWidget {
-  ExpansionTileExample({Key? key}) : super(key: key);
+  const ExpansionTileExample({Key? key}) : super(key: key);
 
   @override
-  _ListTileExample createState() => _ListTileExample();
+  State createState() => _ListTileExample();
 }
 
 class InnerList {
@@ -37,9 +34,9 @@ class _ListTileExample extends State<ExpansionTileExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Expansion Tiles'),
+        title: const Text('Expansion Tiles'),
       ),
-      drawer: NavigationDrawer(),
+      drawer: const NavigationDrawer(),
       body: DragAndDropLists(
         children: List.generate(_lists.length, (index) => _buildList(index)),
         onItemReorder: _onItemReorder,
@@ -49,12 +46,12 @@ class _ListTileExample extends State<ExpansionTileExample> {
           padding: const EdgeInsets.symmetric(vertical: 30.0),
           child: Center(
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
+              padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
               decoration: BoxDecoration(
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(7.0),
               ),
-              child: Icon(Icons.add_box),
+              child: const Icon(Icons.add_box),
             ),
           ),
         ),
@@ -67,7 +64,7 @@ class _ListTileExample extends State<ExpansionTileExample> {
     return DragAndDropListExpansion(
       title: Text('List ${innerList.name}'),
       subtitle: Text('Subtitle ${innerList.name}'),
-      leading: Icon(Icons.ac_unit),
+      leading: const Icon(Icons.ac_unit),
       children: List.generate(innerList.children.length,
           (index) => _buildItem(innerList.children[index])),
       listKey: ObjectKey(innerList),

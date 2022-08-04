@@ -9,10 +9,12 @@ import 'package:example/sliver_example.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -24,14 +26,14 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => BasicExample(),
-        '/list_tile_example': (context) => ListTileExample(),
-        '/expansion_tile_example': (context) => ExpansionTileExample(),
-        '/sliver_example': (context) => SliverExample(),
-        '/horizontal_example': (context) => HorizontalExample(),
-        '/drag_into_list_example': (context) => DragIntoListExample(),
-        '/fixed_example': (context) => FixedExample(),
-        '/drag_handle_example': (context) => DragHandleExample(),
+        '/': (context) => const BasicExample(),
+        '/list_tile_example': (context) => const ListTileExample(),
+        '/expansion_tile_example': (context) => const ExpansionTileExample(),
+        '/sliver_example': (context) => const SliverExample(),
+        '/horizontal_example': (context) => const HorizontalExample(),
+        '/drag_into_list_example': (context) => const DragIntoListExample(),
+        '/fixed_example': (context) => const FixedExample(),
+        '/drag_handle_example': (context) => const DragHandleExample(),
       },
     );
   }

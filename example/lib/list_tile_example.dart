@@ -1,14 +1,12 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class ListTileExample extends StatefulWidget {
-  ListTileExample({Key? key}) : super(key: key);
+  const ListTileExample({Key? key}) : super(key: key);
 
   @override
-  _ListTileExample createState() => _ListTileExample();
+  State createState() => _ListTileExample();
 }
 
 class _ListTileExample extends State<ListTileExample> {
@@ -28,12 +26,12 @@ class _ListTileExample extends State<ListTileExample> {
               ),
               subtitle: Text('Header $index subtitle'),
             ),
-            Divider(),
+            const Divider(),
           ],
         ),
         footer: Column(
           children: <Widget>[
-            Divider(),
+            const Divider(),
             ListTile(
               title: Text(
                 'Footer $index',
@@ -48,7 +46,7 @@ class _ListTileExample extends State<ListTileExample> {
               title: Text(
                 'Sub $index.1',
               ),
-              trailing: Icon(Icons.access_alarm),
+              trailing: const Icon(Icons.access_alarm),
             ),
           ),
           DragAndDropItem(
@@ -56,7 +54,7 @@ class _ListTileExample extends State<ListTileExample> {
               title: Text(
                 'Sub $index.2',
               ),
-              trailing: Icon(Icons.alarm_off),
+              trailing: const Icon(Icons.alarm_off),
             ),
           ),
           DragAndDropItem(
@@ -64,7 +62,7 @@ class _ListTileExample extends State<ListTileExample> {
               title: Text(
                 'Sub $index.3',
               ),
-              trailing: Icon(Icons.alarm_on),
+              trailing: const Icon(Icons.alarm_on),
             ),
           ),
         ],
@@ -76,9 +74,9 @@ class _ListTileExample extends State<ListTileExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('List Tiles'),
+        title: const Text('List Tiles'),
       ),
-      drawer: NavigationDrawer(),
+      drawer: const NavigationDrawer(),
       body: DragAndDropLists(
         children: _contents,
         onItemReorder: _onItemReorder,
@@ -87,19 +85,19 @@ class _ListTileExample extends State<ListTileExample> {
           padding: const EdgeInsets.symmetric(vertical: 30.0),
           child: Center(
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 100.0),
+              padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 100.0),
               decoration: BoxDecoration(
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(7.0),
               ),
-              child: Icon(Icons.add_box),
+              child: const Icon(Icons.add_box),
             ),
           ),
         ),
-        listPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        listPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         contentsWhenEmpty: Row(
           children: <Widget>[
-            Expanded(
+            const Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 40, right: 10),
                 child: Divider(),
@@ -111,7 +109,7 @@ class _ListTileExample extends State<ListTileExample> {
                   color: Theme.of(context).textTheme.caption!.color,
                   fontStyle: FontStyle.italic),
             ),
-            Expanded(
+            const Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 20, right: 40),
                 child: Divider(),
@@ -121,13 +119,13 @@ class _ListTileExample extends State<ListTileExample> {
         ),
         listDecoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.all(Radius.circular(6.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(6.0)),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 2,
               blurRadius: 3,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
         ),
