@@ -1,5 +1,9 @@
 # Changelog
 
+[0.3.3] - 4 August 2022
+
+* Update to flutter 3 (thanks [@mauriceraguseinit](https://github.com/mauriceraguseinit))
+
 [0.3.2+2] - 21 October 2021
 
 * Replace flutter deprecated elements
