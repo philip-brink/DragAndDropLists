@@ -286,6 +286,10 @@ class DragAndDropLists extends StatefulWidget {
   /// https://github.com/flutter/flutter/issues/14842#issuecomment-371344881
   final bool removeTopPadding;
 
+  /// Whether to animate items in the list into place after they've been dropped
+  /// onto their target or not.
+  final bool animateItemsOnDrop;
+
   DragAndDropLists({
     required this.children,
     required this.onItemReorder,
@@ -336,6 +340,7 @@ class DragAndDropLists extends StatefulWidget {
     this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.removeTopPadding = false,
+    this.animateItemsOnDrop = true,
     Key? key,
   }) : super(key: key) {
     if (listGhost == null &&
@@ -419,6 +424,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       itemDragHandle: widget.itemDragHandle,
       constrainDraggingAxis: widget.constrainDraggingAxis,
       disableScrolling: widget.disableScrolling,
+      animateItemsOnDrop: widget.animateItemsOnDrop,
     );
 
     DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(
