@@ -286,6 +286,16 @@ class DragAndDropLists extends StatefulWidget {
   /// https://github.com/flutter/flutter/issues/14842#issuecomment-371344881
   final bool removeTopPadding;
 
+  /// Respond to the DragAndDropLists' onPointerMove event. This exists to work
+  /// around a conflict in the Flutter engine where multiple Listeners at
+  /// different levels in the widget hierarchy cannot work together.
+  final OnPointerMove? listsOnPointerMove;
+
+  /// Respond to the DragAndDropLists' onPointerCancel event. This exists to
+  /// work around a conflict in the Flutter engine where multiple Listeners at
+  /// different levels in the widget hierarchy cannot work together.
+  final OnPointerCancel? listsOnPointerCancel;
+
   DragAndDropLists({
     required this.children,
     required this.onItemReorder,
@@ -336,6 +346,8 @@ class DragAndDropLists extends StatefulWidget {
     this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.removeTopPadding = false,
+    this.listsOnPointerMove,
+    this.listsOnPointerCancel,
     Key? key,
   }) : super(key: key) {
     if (listGhost == null &&
@@ -394,6 +406,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       onPointerDown: _onPointerDown,
       onPointerUp: _onPointerUp,
       onPointerMove: _onPointerMove,
+      onPointerCancel: widget.listsOnPointerCancel,
       onItemReordered: _internalOnItemReorder,
       onItemDropOnLastTarget: _internalOnItemDropOnLastTarget,
       onListReordered: _internalOnListReorder,
@@ -679,6 +692,10 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       _pointerXPosition = event.position.dx;
 
       _scrollList();
+    }
+
+    if (widget.listsOnPointerMove != null) {
+      widget.listsOnPointerMove!(event);
     }
   }
 
