@@ -175,6 +175,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
       }
     } else {
       draggable = AnimatedSize(
+        vsync: this,
         duration: Duration(
             milliseconds: widget.parameters!.itemSizeAnimationDuration),
         alignment: Alignment.bottomCenter,
@@ -188,6 +189,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           crossAxisAlignment: widget.parameters!.verticalAlignment,
           children: <Widget>[
             AnimatedSize(
+              vsync: this,
               duration: Duration(
                   milliseconds: widget.parameters!.itemSizeAnimationDuration),
               alignment: Alignment.topLeft,

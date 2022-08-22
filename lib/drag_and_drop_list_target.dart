@@ -35,6 +35,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
     Widget visibleContents = Column(
       children: <Widget>[
         AnimatedSize(
+          vsync: this,
           duration: Duration(
               milliseconds: widget.parameters.listSizeAnimationDuration),
           alignment: widget.parameters.axis == Axis.vertical
