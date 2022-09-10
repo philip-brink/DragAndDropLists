@@ -18,4 +18,8 @@ class DragAndDropItem implements DragAndDropInterface {
     this.feedbackWidget,
     this.canDrag = true,
   });
+  @override
+  bool operator ==(other) {
+    return other is DragAndDropItem && other.child == child;
+  }
 }
