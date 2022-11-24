@@ -267,6 +267,10 @@ class DragAndDropLists extends StatefulWidget {
   /// parent CustomScrollView to set physics to NeverScrollableScrollPhysics()
   final bool disableScrolling;
 
+  /// A ScrollPhysics instance that changes the `physics` of the generated
+  /// `ListView`. If set with [disableScrolling] an error will be raised.
+  final ScrollPhysics? scrollPhysics;
+
   /// Set a custom drag handle to use iOS-like handles to drag rather than long
   /// or short presses
   final DragHandle? listDragHandle;
@@ -331,6 +335,7 @@ class DragAndDropLists extends StatefulWidget {
     this.axis = Axis.vertical,
     this.sliverList = false,
     this.scrollController,
+    this.scrollPhysics,
     this.disableScrolling = false,
     this.listDragHandle,
     this.itemDragHandle,
@@ -355,6 +360,10 @@ class DragAndDropLists extends StatefulWidget {
     if (axis == Axis.horizontal && sliverList) {
       throw Exception(
           'Combining a sliver list with a horizontal list is currently unsupported');
+    }
+    if (scrollPhysics != null && disableScrolling) {
+      throw Exception(
+          'Combining `scrollPhysics` and `disableScrolling` is not supported.');
     }
   }
 
@@ -494,6 +503,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   Widget _buildListView(DragAndDropBuilderParameters parameters,
       DragAndDropListTarget dragAndDropListTarget) {
     Widget _listView = ListView(
+      physics: widget.scrollPhysics,
       scrollDirection: widget.axis,
       controller: _scrollController,
       children: _buildOuterList(dragAndDropListTarget, parameters),
