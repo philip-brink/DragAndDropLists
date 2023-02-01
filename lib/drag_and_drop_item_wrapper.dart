@@ -31,7 +31,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
           width: widget.parameters!.itemDraggingWidth ?? _containerSize.width,
           child: Stack(
             children: [
-              widget.child.child,
+              widget.child.feedbackWidget ?? widget.child.child,
               Positioned(
                 right: widget.parameters!.itemDragHandle!.onLeft ? null : 0,
                 left: widget.parameters!.itemDragHandle!.onLeft ? 0 : null,
