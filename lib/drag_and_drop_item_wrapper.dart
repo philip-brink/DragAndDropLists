@@ -1,10 +1,6 @@
-import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:drag_and_drop_lists/measure_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class DragAndDropItemWrapper extends StatefulWidget {
   final DragAndDropItem child;
@@ -18,8 +14,7 @@ class DragAndDropItemWrapper extends StatefulWidget {
   State<StatefulWidget> createState() => _DragAndDropItemWrapper();
 }
 
-class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
-    with TickerProviderStateMixin {
+class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> {
   DragAndDropItem? _hoveredDraggable;
 
   bool _dragging = false;
@@ -181,7 +176,6 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
       draggable = AnimatedSize(
         duration: Duration(
             milliseconds: widget.parameters!.itemSizeAnimationDuration),
-        vsync: this,
         alignment: Alignment.bottomCenter,
         child: _hoveredDraggable != null ? Container() : widget.child.child,
       );
@@ -195,7 +189,6 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
             AnimatedSize(
               duration: Duration(
                   milliseconds: widget.parameters!.itemSizeAnimationDuration),
-              vsync: this,
               alignment: Alignment.topLeft,
               child: _hoveredDraggable != null
                   ? Opacity(

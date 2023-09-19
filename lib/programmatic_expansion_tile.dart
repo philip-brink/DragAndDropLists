@@ -130,13 +130,13 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
         _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
     _isExpanded = PageStorage.of(context)
-            ?.readState(context, identifier: widget.listKey) as bool? ??
+            .readState(context, identifier: widget.listKey) as bool? ??
         widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
 
     // Schedule the notification that widget has changed for after init
     // to ensure that the parent widget maintains the correct state
-    SchedulerBinding.instance!.addPostFrameCallback((Duration duration) {
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
       if (widget.onExpansionChanged != null &&
           _isExpanded != widget.initiallyExpanded) {
         widget.onExpansionChanged!(_isExpanded);
@@ -177,7 +177,7 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
           });
         }
         PageStorage.of(context)
-            ?.writeState(context, _isExpanded, identifier: widget.listKey);
+            .writeState(context, _isExpanded, identifier: widget.listKey);
       });
       if (widget.onExpansionChanged != null) {
         widget.onExpansionChanged!(_isExpanded);
@@ -235,10 +235,10 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
     _borderColorTween.end = theme.dividerColor;
     _headerColorTween
       ..begin = theme.textTheme.subtitle1!.color
-      ..end = theme.accentColor;
+      ..end = theme.iconTheme.color;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
-      ..end = theme.accentColor;
+      ..end = theme.iconTheme.color;
     _backgroundColorTween.end = widget.backgroundColor;
     super.didChangeDependencies();
   }

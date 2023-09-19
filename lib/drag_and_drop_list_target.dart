@@ -26,8 +26,7 @@ class DragAndDropListTarget extends StatefulWidget {
   State<StatefulWidget> createState() => _DragAndDropListTarget();
 }
 
-class _DragAndDropListTarget extends State<DragAndDropListTarget>
-    with TickerProviderStateMixin {
+class _DragAndDropListTarget extends State<DragAndDropListTarget> {
   DragAndDropListInterface? _hoveredDraggable;
 
   @override
@@ -37,7 +36,6 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
         AnimatedSize(
           duration: Duration(
               milliseconds: widget.parameters.listSizeAnimationDuration),
-          vsync: this,
           alignment: widget.parameters.axis == Axis.vertical
               ? Alignment.bottomCenter
               : Alignment.centerLeft,

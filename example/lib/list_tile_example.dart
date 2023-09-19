@@ -1,8 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'package:example/navigation_drawer.dart';
+import 'package:example/navigation_drawer.dart' as drawer;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class ListTileExample extends StatefulWidget {
   ListTileExample({Key? key}) : super(key: key);
@@ -78,7 +76,7 @@ class _ListTileExample extends State<ListTileExample> {
       appBar: AppBar(
         title: Text('List Tiles'),
       ),
-      drawer: NavigationDrawer(),
+      drawer: drawer.NavigationDrawer(),
       body: DragAndDropLists(
         children: _contents,
         onItemReorder: _onItemReorder,

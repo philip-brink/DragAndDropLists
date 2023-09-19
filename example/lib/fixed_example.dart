@@ -1,8 +1,6 @@
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'package:example/navigation_drawer.dart';
+import 'package:example/navigation_drawer.dart' as drawer;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class FixedExample extends StatefulWidget {
   FixedExample({Key? key}) : super(key: key);
@@ -61,7 +59,7 @@ class _FixedExample extends State<FixedExample> {
       appBar: AppBar(
         title: Text('Fixed Items'),
       ),
-      drawer: NavigationDrawer(),
+      drawer: drawer.NavigationDrawer(),
       body: DragAndDropLists(
         children: _contents,
         onItemReorder: _onItemReorder,
