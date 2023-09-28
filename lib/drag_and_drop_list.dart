@@ -47,9 +47,10 @@ class DragAndDropList implements DragAndDropListInterface {
   /// Set to true if it can be reordered.
   /// Set to false if it must remain fixed.
   final bool canDrag;
-
+  final Key? key;
   DragAndDropList({
     required this.children,
+    this.key,
     this.header,
     this.footer,
     this.leftSide,
@@ -95,6 +96,7 @@ class DragAndDropList implements DragAndDropListInterface {
     }
 
     return Container(
+      key: key,
       width: params.axis == Axis.vertical
           ? double.infinity
           : params.listWidth - params.listPadding!.horizontal,
@@ -122,6 +124,7 @@ class DragAndDropList implements DragAndDropListInterface {
       }
       for (int i = 0; i < children.length; i++) {
         allChildren.add(DragAndDropItemWrapper(
+          key: children[i].key,
           child: children[i],
           parameters: parameters,
         ));

@@ -10,7 +10,6 @@ abstract class DragAndDropListInterface implements DragAndDropInterface {
   /// Set to true if it can be reordered.
   /// Set to false if it must remain fixed.
   bool get canDrag;
-
   Widget generateWidget(DragAndDropBuilderParameters params);
 }
 
