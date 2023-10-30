@@ -102,6 +102,7 @@ class DragAndDropList implements DragAndDropListInterface {
       child: AnimatedSize(
         duration: Duration(milliseconds: params.listSizeAnimationDuration),
         curve: Curves.easeInOut,
+        alignment: Alignment.topCenter,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: verticalAlignment,
