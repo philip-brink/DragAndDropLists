@@ -53,29 +53,29 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
               if (candidateData.isNotEmpty) {}
               return Container();
             },
-            onWillAccept: (incoming) {
+            onWillAcceptWithDetails: (details) {
               bool accept = true;
               if (widget.parameters.itemTargetOnWillAccept != null)
                 accept =
-                    widget.parameters.itemTargetOnWillAccept!(incoming, widget);
+                    widget.parameters.itemTargetOnWillAccept!(details.data, widget);
               if (accept && mounted) {
                 setState(() {
-                  _hoveredDraggable = incoming;
+                  _hoveredDraggable = details.data;
                 });
               }
               return accept;
             },
-            onLeave: (incoming) {
+            onLeave: (data) {
               if (mounted) {
                 setState(() {
                   _hoveredDraggable = null;
                 });
               }
             },
-            onAccept: (incoming) {
+            onAcceptWithDetails: (details) {
               if (mounted) {
                 setState(() {
-                  widget.onReorderOrAdd(incoming, widget.parent!, widget);
+                  widget.onReorderOrAdd(details.data, widget.parent!, widget);
                   _hoveredDraggable = null;
                 });
               }

@@ -104,14 +104,14 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
                   if (candidateData.isNotEmpty) {}
                   return Container();
                 },
-                onWillAccept: (incoming) {
+                onWillAcceptWithDetails: (details) {
                   _startExpansionTimer();
                   return false;
                 },
-                onLeave: (incoming) {
+                onLeave: (data) {
                   _stopExpansionTimer();
                 },
-                onAccept: (incoming) {},
+                onAcceptWithDetails: (details) {},
               ),
             )
           ]);

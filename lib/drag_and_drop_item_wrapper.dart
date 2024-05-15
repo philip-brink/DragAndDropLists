@@ -213,30 +213,30 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
               if (candidateData.isNotEmpty) {}
               return Container();
             },
-            onWillAccept: (incoming) {
+            onWillAcceptWithDetails: (details) {
               bool accept = true;
               if (widget.parameters!.itemOnWillAccept != null)
                 accept = widget.parameters!.itemOnWillAccept!(
-                    incoming, widget.child);
+                    details.data, widget.child);
               if (accept && mounted) {
                 setState(() {
-                  _hoveredDraggable = incoming;
+                  _hoveredDraggable = details.data;
                 });
               }
               return accept;
             },
-            onLeave: (incoming) {
+            onLeave: (data) {
               if (mounted) {
                 setState(() {
                   _hoveredDraggable = null;
                 });
               }
             },
-            onAccept: (incoming) {
+            onAcceptWithDetails: (details) {
               if (mounted) {
                 setState(() {
                   if (widget.parameters!.onItemReordered != null)
-                    widget.parameters!.onItemReordered!(incoming, widget.child);
+                    widget.parameters!.onItemReordered!(details.data, widget.child);
                   _hoveredDraggable = null;
                 });
               }

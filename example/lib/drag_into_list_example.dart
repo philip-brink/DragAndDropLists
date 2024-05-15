@@ -1,6 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'package:example/navigation_drawer.dart';
+import 'package:example/custom_navigation_drawer.dart';
 import 'package:flutter/material.dart';
 
 class DragIntoListExample extends StatefulWidget {
@@ -19,7 +19,7 @@ class _DragIntoListExample extends State<DragIntoListExample> {
       appBar: AppBar(
         title: const Text('Drag Into List'),
       ),
-      drawer: const NavigationDrawer(),
+      drawer: const CustomNavigationDrawer(),
       body: Column(
         children: <Widget>[
           Flexible(
