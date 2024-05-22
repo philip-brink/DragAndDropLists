@@ -1,9 +1,8 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 
 class BasicExample extends StatefulWidget {
-  const BasicExample({Key? key}) : super(key: key);
+  const BasicExample({super.key});
 
   @override
   State createState() => _BasicExample();
@@ -55,7 +54,9 @@ class _BasicExample extends State<BasicExample> {
       appBar: AppBar(
         title: const Text('Basic'),
       ),
-      drawer: const NavigationDrawer(),
+      drawer: const NavigationDrawer(
+        children: [],
+      ),
       body: DragAndDropLists(
         children: _contents,
         onItemReorder: _onItemReorder,

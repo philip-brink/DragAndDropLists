@@ -1,9 +1,9 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'package:example/navigation_drawer.dart';
+
 import 'package:flutter/material.dart';
 
 class ExpansionTileExample extends StatefulWidget {
-  const ExpansionTileExample({Key? key}) : super(key: key);
+  const ExpansionTileExample({super.key});
 
   @override
   State createState() => _ListTileExample();
@@ -36,7 +36,9 @@ class _ListTileExample extends State<ExpansionTileExample> {
       appBar: AppBar(
         title: const Text('Expansion Tiles'),
       ),
-      drawer: const NavigationDrawer(),
+      drawer: const NavigationDrawer(
+        children: [],
+      ),
       body: DragAndDropLists(
         children: List.generate(_lists.length, (index) => _buildList(index)),
         onItemReorder: _onItemReorder,
@@ -46,7 +48,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
           padding: const EdgeInsets.symmetric(vertical: 30.0),
           child: Center(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
               decoration: BoxDecoration(
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(7.0),
