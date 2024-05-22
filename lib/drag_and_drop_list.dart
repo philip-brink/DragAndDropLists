@@ -99,10 +99,15 @@ class DragAndDropList implements DragAndDropListInterface {
           ? double.infinity
           : params.listWidth - params.listPadding!.horizontal,
       decoration: decoration ?? params.listDecoration,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: verticalAlignment,
-        children: contents,
+      child: AnimatedSize(
+        duration: Duration(milliseconds: params.listSizeAnimationDuration),
+        curve: Curves.easeInOut,
+        alignment: Alignment.topCenter,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: verticalAlignment,
+          children: contents,
+        ),
       ),
     );
   }
