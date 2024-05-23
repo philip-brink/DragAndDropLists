@@ -1,6 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide NavigationDrawer;
 
 class ListTileExample extends StatefulWidget {
   const ListTileExample({Key? key}) : super(key: key);
@@ -85,7 +85,8 @@ class _ListTileExample extends State<ListTileExample> {
           padding: const EdgeInsets.symmetric(vertical: 30.0),
           child: Center(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 100.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 40.0, horizontal: 100.0),
               decoration: BoxDecoration(
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(7.0),
@@ -95,9 +96,9 @@ class _ListTileExample extends State<ListTileExample> {
           ),
         ),
         listPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        contentsWhenEmpty: Row(
+        contentsWhenEmpty: const Row(
           children: <Widget>[
-            const Expanded(
+            Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 40, right: 10),
                 child: Divider(),
@@ -106,10 +107,11 @@ class _ListTileExample extends State<ListTileExample> {
             Text(
               'Empty List',
               style: TextStyle(
-                  color: Theme.of(context).textTheme.caption!.color,
-                  fontStyle: FontStyle.italic),
+                // color: Theme.of(context).textTheme.caption!.color,
+                fontStyle: FontStyle.italic,
+              ),
             ),
-            const Expanded(
+            Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 20, right: 40),
                 child: Divider(),

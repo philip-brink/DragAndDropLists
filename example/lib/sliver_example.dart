@@ -1,6 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide NavigationDrawer;
 
 class SliverExample extends StatefulWidget {
   const SliverExample({Key? key}) : super(key: key);
@@ -73,7 +73,7 @@ class _SliverExample extends State<SliverExample> {
                 alignment: Alignment.bottomCenter,
                 child: Text(
                   'Slivers',
-                  style: Theme.of(context).primaryTextTheme.headline1,
+                  style: Theme.of(context).primaryTextTheme.displayLarge,
                 ),
               ),
             ),

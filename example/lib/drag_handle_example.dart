@@ -1,6 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide NavigationDrawer;
 
 class DragHandleExample extends StatefulWidget {
   const DragHandleExample({Key? key}) : super(key: key);
@@ -26,7 +26,8 @@ class _DragHandleExample extends State<DragHandleExample> {
                   padding: const EdgeInsets.only(left: 8, bottom: 4),
                   child: Text(
                     'Header $index',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
               ],
@@ -38,7 +39,8 @@ class _DragHandleExample extends State<DragHandleExample> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Text(
                     'Sub $index.1',
                   ),
@@ -50,7 +52,8 @@ class _DragHandleExample extends State<DragHandleExample> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Text(
                     'Sub $index.2',
                   ),
@@ -62,7 +65,8 @@ class _DragHandleExample extends State<DragHandleExample> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Text(
                     'Sub $index.3',
                   ),
