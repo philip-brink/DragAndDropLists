@@ -1,6 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide NavigationDrawer;
 
 class ExpansionTileExample extends StatefulWidget {
   const ExpansionTileExample({Key? key}) : super(key: key);
@@ -46,7 +46,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
           padding: const EdgeInsets.symmetric(vertical: 30.0),
           child: Center(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
               decoration: BoxDecoration(
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(7.0),

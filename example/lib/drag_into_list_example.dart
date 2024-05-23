@@ -1,7 +1,7 @@
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide NavigationDrawer;
 
 class DragIntoListExample extends StatefulWidget {
   const DragIntoListExample({Key? key}) : super(key: key);
@@ -67,7 +67,8 @@ class _DragIntoListExample extends State<DragIntoListExample> {
                     child: Center(
                       child: Draggable<DragAndDropItem>(
                         feedback: const Icon(Icons.photo),
-                        data: DragAndDropItem(child: const Text('New default item')),
+                        data: DragAndDropItem(
+                            child: const Text('New default item')),
                         child: const Icon(Icons.photo),
                       ),
                     ),
