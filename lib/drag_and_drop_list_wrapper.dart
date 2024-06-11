@@ -8,9 +8,8 @@ class DragAndDropListWrapper extends StatefulWidget {
   final DragAndDropListInterface dragAndDropList;
   final DragAndDropBuilderParameters parameters;
 
-  DragAndDropListWrapper(
-      {required this.dragAndDropList, required this.parameters, Key? key})
-      : super(key: key);
+  const DragAndDropListWrapper(
+      {required this.dragAndDropList, required this.parameters, super.key});
 
   @override
   State<StatefulWidget> createState() => _DragAndDropListWrapper();
@@ -65,14 +64,6 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
                 child: Draggable<DragAndDropListInterface>(
                   data: widget.dragAndDropList,
                   axis: draggableAxis(),
-                  child: MeasureSize(
-                    onSizeChange: (size) {
-                      setState(() {
-                        _dragHandleSize = size!;
-                      });
-                    },
-                    child: dragHandle,
-                  ),
                   feedback: Transform.translate(
                     offset: _feedbackContainerOffset(),
                     child: feedback,
@@ -82,6 +73,14 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
                   onDragCompleted: () => _setDragging(false),
                   onDraggableCanceled: (_, __) => _setDragging(false),
                   onDragEnd: (_) => _setDragging(false),
+                  child: MeasureSize(
+                    onSizeChange: (size) {
+                      setState(() {
+                        _dragHandleSize = size!;
+                      });
+                    },
+                    child: dragHandle,
+                  ),
                 ),
               ),
             ],
@@ -91,7 +90,6 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
         draggable = LongPressDraggable<DragAndDropListInterface>(
           data: widget.dragAndDropList,
           axis: draggableAxis(),
-          child: dragAndDropListContents,
           feedback:
               buildFeedbackWithoutHandle(context, dragAndDropListContents),
           childWhenDragging: Container(),
@@ -99,12 +97,12 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
           onDragCompleted: () => _setDragging(false),
           onDraggableCanceled: (_, __) => _setDragging(false),
           onDragEnd: (_) => _setDragging(false),
+          child: dragAndDropListContents,
         );
       } else {
         draggable = Draggable<DragAndDropListInterface>(
           data: widget.dragAndDropList,
           axis: draggableAxis(),
-          child: dragAndDropListContents,
           feedback:
               buildFeedbackWithoutHandle(context, dragAndDropListContents),
           childWhenDragging: Container(),
@@ -112,6 +110,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
           onDragCompleted: () => _setDragging(false),
           onDraggableCanceled: (_, __) => _setDragging(false),
           onDragEnd: (_) => _setDragging(false),
+          child: dragAndDropListContents,
         );
       }
     } else {
@@ -131,7 +130,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
                 child: widget.parameters.listGhost ??
                     Container(
                       padding: widget.parameters.axis == Axis.vertical
-                          ? EdgeInsets.all(0)
+                          ? const EdgeInsets.all(0)
                           : EdgeInsets.symmetric(
                               horizontal:
                                   widget.parameters.listPadding!.horizontal),
@@ -142,10 +141,10 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
             : Container(),
       ),
       Listener(
-        child: draggable,
         onPointerMove: _onPointerMove,
         onPointerDown: widget.parameters.onPointerDown,
         onPointerUp: widget.parameters.onPointerUp,
+        child: draggable,
       ),
     ];
 
@@ -226,7 +225,7 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
       color: Colors.transparent,
       child: Container(
         decoration: widget.parameters.listDecorationWhileDragging,
-        child: Container(
+        child: SizedBox(
           width: widget.parameters.listDraggingWidth ?? _containerSize.width,
           child: Stack(
             children: [

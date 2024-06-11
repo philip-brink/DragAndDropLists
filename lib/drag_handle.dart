@@ -17,11 +17,11 @@ class DragHandle extends StatelessWidget {
   final Widget child;
 
   const DragHandle({
-    Key? key,
+    super.key,
     required this.child,
     this.onLeft = false,
     this.verticalAlignment = DragHandleVerticalAlignment.center,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

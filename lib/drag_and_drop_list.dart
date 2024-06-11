@@ -41,11 +41,13 @@ class DragAndDropList implements DragAndDropListInterface {
 
   /// The child elements that will be contained in this list.
   /// It is possible to not provide any children when an empty list is desired.
+  @override
   final List<DragAndDropItem> children;
 
   /// Whether or not this item can be dragged.
   /// Set to true if it can be reordered.
   /// Set to false if it must remain fixed.
+  @override
   final bool canDrag;
 
   DragAndDropList({
@@ -77,7 +79,7 @@ class DragAndDropList implements DragAndDropListInterface {
       ),
     );
     if (params.axis == Axis.horizontal) {
-      intrinsicHeight = Container(
+      intrinsicHeight = SizedBox(
         width: params.listWidth,
         child: intrinsicHeight,
       );
@@ -141,7 +143,7 @@ class DragAndDropList implements DragAndDropListInterface {
       contents.add(
         Expanded(
           child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: verticalAlignment,
               mainAxisSize: MainAxisSize.max,
@@ -154,12 +156,12 @@ class DragAndDropList implements DragAndDropListInterface {
       contents.add(
         Expanded(
           child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 contentsWhenEmpty ??
-                    Text(
+                    const Text(
                       'Empty list',
                       style: TextStyle(
                         fontStyle: FontStyle.italic,
