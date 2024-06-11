@@ -1,5 +1,5 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'package:example/navigation_drawer.dart';
+import 'package:example/navigation_drawer.dart' as drawer;
 import 'package:flutter/material.dart';
 
 class DragHandleExample extends StatefulWidget {
@@ -26,7 +26,8 @@ class _DragHandleExample extends State<DragHandleExample> {
                   padding: const EdgeInsets.only(left: 8, bottom: 4),
                   child: Text(
                     'Header $index',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
               ],
@@ -38,7 +39,8 @@ class _DragHandleExample extends State<DragHandleExample> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Text(
                     'Sub $index.1',
                   ),
@@ -50,7 +52,8 @@ class _DragHandleExample extends State<DragHandleExample> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Text(
                     'Sub $index.2',
                   ),
@@ -62,7 +65,8 @@ class _DragHandleExample extends State<DragHandleExample> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Text(
                     'Sub $index.3',
                   ),
@@ -84,7 +88,7 @@ class _DragHandleExample extends State<DragHandleExample> {
       appBar: AppBar(
         title: const Text('Drag Handle'),
       ),
-      drawer: const NavigationDrawer(),
+      drawer: const drawer.NavigationDrawer(),
       body: DragAndDropLists(
         children: _contents,
         onItemReorder: _onItemReorder,

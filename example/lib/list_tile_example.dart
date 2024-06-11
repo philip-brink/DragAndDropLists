@@ -1,5 +1,5 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'package:example/navigation_drawer.dart';
+import 'package:example/navigation_drawer.dart' as drawer;
 import 'package:flutter/material.dart';
 
 class ListTileExample extends StatefulWidget {
@@ -76,7 +76,7 @@ class _ListTileExample extends State<ListTileExample> {
       appBar: AppBar(
         title: const Text('List Tiles'),
       ),
-      drawer: const NavigationDrawer(),
+      drawer: const drawer.NavigationDrawer(),
       body: DragAndDropLists(
         children: _contents,
         onItemReorder: _onItemReorder,
@@ -85,7 +85,8 @@ class _ListTileExample extends State<ListTileExample> {
           padding: const EdgeInsets.symmetric(vertical: 30.0),
           child: Center(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 100.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 40.0, horizontal: 100.0),
               decoration: BoxDecoration(
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(7.0),
@@ -106,7 +107,7 @@ class _ListTileExample extends State<ListTileExample> {
             Text(
               'Empty List',
               style: TextStyle(
-                  color: Theme.of(context).textTheme.caption!.color,
+                  color: Theme.of(context).textTheme.bodySmall!.color,
                   fontStyle: FontStyle.italic),
             ),
             const Expanded(
