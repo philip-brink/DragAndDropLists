@@ -1,5 +1,9 @@
 # Changelog
 
+[0.4.0] - 11 June 2024
+
+* Update to be compatible with Flutter 3.22.0 (thanks [@dmitry-comet](https://github.com/dmitry-comet))
+
 [0.3.3] - 4 August 2022
 
 * Update to flutter 3 (thanks [@mauriceraguseinit](https://github.com/mauriceraguseinit))
