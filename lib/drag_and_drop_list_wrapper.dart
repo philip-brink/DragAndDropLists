@@ -253,9 +253,9 @@ class _DragAndDropListWrapper extends State<DragAndDropListWrapper>
     );
   }
 
-  Container buildFeedbackWithoutHandle(
+  SizedBox buildFeedbackWithoutHandle(
       BuildContext context, Widget dragAndDropListContents) {
-    return Container(
+    return SizedBox(
       width: widget.parameters.axis == Axis.vertical
           ? (widget.parameters.listDraggingWidth ??
               MediaQuery.of(context).size.width)
