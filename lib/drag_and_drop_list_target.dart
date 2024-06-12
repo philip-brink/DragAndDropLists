@@ -3,7 +3,7 @@ import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-typedef void OnDropOnLastTarget(
+typedef OnDropOnLastTarget = void Function(
   DragAndDropListInterface newOrReordered,
   DragAndDropListTarget receiver,
 );
@@ -14,13 +14,12 @@ class DragAndDropListTarget extends StatefulWidget {
   final OnDropOnLastTarget onDropOnLastTarget;
   final double lastListTargetSize;
 
-  DragAndDropListTarget(
+  const DragAndDropListTarget(
       {this.child,
       required this.parameters,
       required this.onDropOnLastTarget,
       this.lastListTargetSize = 110,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<StatefulWidget> createState() => _DragAndDropListTarget();
@@ -49,7 +48,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
               : Container(),
         ),
         widget.child ??
-            Container(
+            SizedBox(
               height: widget.parameters.axis == Axis.vertical
                   ? widget.lastListTargetSize
                   : null,

@@ -15,6 +15,7 @@ abstract class DragAndDropListInterface implements DragAndDropInterface {
 
 abstract class DragAndDropListExpansionInterface
     implements DragAndDropListInterface {
+  @override
   final List<DragAndDropItem>? children;
 
   DragAndDropListExpansionInterface({this.children});

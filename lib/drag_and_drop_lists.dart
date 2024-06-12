@@ -35,50 +35,50 @@ export 'package:drag_and_drop_lists/drag_and_drop_list_target.dart';
 export 'package:drag_and_drop_lists/drag_and_drop_list_wrapper.dart';
 export 'package:drag_and_drop_lists/drag_handle.dart';
 
-typedef void OnItemReorder(
+typedef OnItemReorder = void Function(
   int oldItemIndex,
   int oldListIndex,
   int newItemIndex,
   int newListIndex,
 );
-typedef void OnItemAdd(
+typedef OnItemAdd = void Function(
   DragAndDropItem newItem,
   int listIndex,
   int newItemIndex,
 );
-typedef void OnListAdd(DragAndDropListInterface newList, int newListIndex);
-typedef void OnListReorder(int oldListIndex, int newListIndex);
-typedef void OnListDraggingChanged(
+typedef OnListAdd = void Function(DragAndDropListInterface newList, int newListIndex);
+typedef OnListReorder = void Function(int oldListIndex, int newListIndex);
+typedef OnListDraggingChanged = void Function(
   DragAndDropListInterface? list,
   bool dragging,
 );
-typedef bool ListOnWillAccept(
+typedef ListOnWillAccept = bool Function(
   DragAndDropListInterface? incoming,
   DragAndDropListInterface? target,
 );
-typedef void ListOnAccept(
+typedef ListOnAccept = void Function(
   DragAndDropListInterface incoming,
   DragAndDropListInterface target,
 );
-typedef bool ListTargetOnWillAccept(
+typedef ListTargetOnWillAccept = bool Function(
     DragAndDropListInterface? incoming, DragAndDropListTarget target);
-typedef void ListTargetOnAccept(
+typedef ListTargetOnAccept = void Function(
     DragAndDropListInterface incoming, DragAndDropListTarget target);
-typedef void OnItemDraggingChanged(
+typedef OnItemDraggingChanged = void Function(
   DragAndDropItem item,
   bool dragging,
 );
-typedef bool ItemOnWillAccept(
+typedef ItemOnWillAccept = bool Function(
   DragAndDropItem? incoming,
   DragAndDropItem target,
 );
-typedef void ItemOnAccept(
+typedef ItemOnAccept = void Function(
   DragAndDropItem incoming,
   DragAndDropItem target,
 );
-typedef bool ItemTargetOnWillAccept(
+typedef ItemTargetOnWillAccept = bool Function(
     DragAndDropItem? incoming, DragAndDropItemTarget target);
-typedef void ItemTargetOnAccept(
+typedef ItemTargetOnAccept = void Function(
   DragAndDropItem incoming,
   DragAndDropListInterface parentList,
   DragAndDropItemTarget target,
@@ -336,14 +336,15 @@ class DragAndDropLists extends StatefulWidget {
     this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.removeTopPadding = false,
-    Key? key,
-  }) : super(key: key) {
+    super.key,
+  }) {
     if (listGhost == null &&
         children
-            .where((element) => element is DragAndDropListExpansionInterface)
-            .isNotEmpty)
+            .whereType<DragAndDropListExpansionInterface>()
+            .isNotEmpty) {
       throw Exception(
           'If using DragAndDropListExpansion, you must provide a non-null listGhost');
+    }
     if (sliverList && scrollController == null) {
       throw Exception(
           'A scroll controller must be provided when using sliver lists');
@@ -368,14 +369,15 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   double? _pointerYPosition;
   double? _pointerXPosition;
   bool _scrolling = false;
-  PageStorageBucket _pageStorageBucket = PageStorageBucket();
+  final PageStorageBucket _pageStorageBucket = PageStorageBucket();
 
   @override
   void initState() {
-    if (widget.scrollController != null)
+    if (widget.scrollController != null) {
       _scrollController = widget.scrollController;
-    else
+    } else {
       _scrollController = ScrollController();
+    }
 
     super.initState();
   }
@@ -422,10 +424,10 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     );
 
     DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(
-      child: widget.listTarget,
       parameters: parameters,
       onDropOnLastTarget: _internalOnListDropOnLastTarget,
       lastListTargetSize: widget.lastListTargetSize,
+      child: widget.listTarget,
     );
 
     if (widget.children.isNotEmpty) {
@@ -441,11 +443,11 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       }
 
       if (widget.children
-          .where((e) => e is DragAndDropListExpansionInterface)
+          .whereType<DragAndDropListExpansionInterface>()
           .isNotEmpty) {
         outerListHolder = PageStorage(
-          child: outerListHolder,
           bucket: _pageStorageBucket,
+          child: outerListHolder,
         );
       }
       return outerListHolder;
@@ -454,7 +456,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            widget.contentsWhenEmpty ?? Text('Empty'),
+            widget.contentsWhenEmpty ?? const Text('Empty'),
             dragAndDropListTarget,
           ],
         ),
@@ -493,7 +495,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
 
   Widget _buildListView(DragAndDropBuilderParameters parameters,
       DragAndDropListTarget dragAndDropListTarget) {
-    Widget _listView = ListView(
+    Widget listView = ListView(
       scrollDirection: widget.axis,
       controller: _scrollController,
       children: _buildOuterList(dragAndDropListTarget, parameters),
@@ -503,9 +505,9 @@ class DragAndDropListsState extends State<DragAndDropLists> {
         ? MediaQuery.removePadding(
             removeTop: true,
             context: context,
-            child: _listView,
+            child: listView,
           )
-        : _listView;
+        : listView;
   }
 
   List<Widget> _buildOuterList(DragAndDropListTarget dragAndDropListTarget,
@@ -520,12 +522,13 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   }
 
   int _calculateChildrenCount(bool includeSeparators) {
-    if (includeSeparators)
+    if (includeSeparators) {
       return (widget.children.length * 2) -
           (widget.listDividerOnLastChild ? 0 : 1) +
           1;
-    else
+    } else {
       return widget.children.length + 1;
+    }
   }
 
   Widget _buildInnerList(
@@ -575,8 +578,9 @@ class DragAndDropListsState extends State<DragAndDropLists> {
 
     if (reorderedItemIndex == -1) {
       // this is a new item
-      if (widget.onItemAdd != null)
+      if (widget.onItemAdd != null) {
         widget.onItemAdd!(reordered, receiverListIndex, receiverItemIndex);
+      }
     } else {
       if (reorderedListIndex == receiverListIndex &&
           receiverItemIndex > reorderedItemIndex) {
@@ -642,9 +646,10 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     }
 
     if (reorderedItemIndex == -1) {
-      if (widget.onItemAdd != null)
+      if (widget.onItemAdd != null) {
         widget.onItemAdd!(
             newOrReordered, receiverListIndex, reorderedItemIndex);
+      }
     } else {
       if (reorderedListIndex == receiverListIndex &&
           receiverItemIndex > reorderedItemIndex) {
@@ -662,14 +667,16 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     int reorderedListIndex =
         widget.children.indexWhere((e) => newOrReordered == e);
 
-    if (widget.listOnAccept != null)
+    if (widget.listOnAccept != null) {
       widget.listTargetOnAccept!(newOrReordered, receiver);
+    }
 
     if (reorderedListIndex >= 0) {
       widget.onListReorder(reorderedListIndex, widget.children.length - 1);
     } else {
-      if (widget.onListAdd != null)
+      if (widget.onListAdd != null) {
         widget.onListAdd!(newOrReordered, reorderedListIndex);
+      }
     }
   }
 
@@ -708,9 +715,9 @@ class DragAndDropListsState extends State<DragAndDropLists> {
 
       var rb = context.findRenderObject()!;
       late Size size;
-      if (rb is RenderBox)
+      if (rb is RenderBox) {
         size = rb.size;
-      else if (rb is RenderSliver) size = rb.paintBounds.size;
+      } else if (rb is RenderSliver) size = rb.paintBounds.size;
 
       var topLeftOffset = localToGlobal(rb, Offset.zero);
       var bottomRightOffset = localToGlobal(rb, size.bottomRight(Offset.zero));

@@ -9,13 +9,12 @@ class DragAndDropItemTarget extends StatefulWidget {
   final DragAndDropBuilderParameters parameters;
   final OnItemDropOnLastTarget onReorderOrAdd;
 
-  DragAndDropItemTarget(
+  const DragAndDropItemTarget(
       {required this.child,
       required this.onReorderOrAdd,
       required this.parameters,
       this.parent,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<StatefulWidget> createState() => _DragAndDropItemTarget();
@@ -55,9 +54,10 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
             },
             onWillAcceptWithDetails: (details) {
               bool accept = true;
-              if (widget.parameters.itemTargetOnWillAccept != null)
+              if (widget.parameters.itemTargetOnWillAccept != null) {
                 accept =
                     widget.parameters.itemTargetOnWillAccept!(details.data, widget);
+              }
               if (accept && mounted) {
                 setState(() {
                   _hoveredDraggable = details.data;
