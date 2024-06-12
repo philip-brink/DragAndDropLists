@@ -1,5 +1,9 @@
 # Changelog
 
+[0.4.1] - 12 June 2024
+
+* Add key to DragAndDropItem and DragAndDropList (thanks [@saileshbro](https://github.com/saileshbro))
+
 [0.4.0] - 11 June 2024
 
 * Update to be compatible with Flutter 3.22.0 (thanks [@dmitry-comet](https://github.com/dmitry-comet))
