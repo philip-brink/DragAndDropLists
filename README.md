@@ -1,6 +1,8 @@
 # drag\_and\_drop\_lists
 Two-level drag and drop reorderable lists.
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/pbpbpb)
+
 ## Features
 - Reorder elements between multiple lists
 - Reorder lists
@@ -13,25 +15,14 @@ Two-level drag and drop reorderable lists.
 - Easy to extend with custom layouts
 
 <p>
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/basic.gif" width="180" title="Basic">
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/expansion_tiles.gif" width="180" title="Expansion Tiles">
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/drag_handle.gif" width="180" title="Drag Handle">
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/drag_into_list.gif" width="180" title="Drag Into Lists">
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/horizontal.gif" width="180" title="Horizontal">
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/list_tiles.gif" width="180" title="List Tiles">
-<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/slivers.gif" width="180" title="Slivers">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/basic.gif" width="180" title="Basic" alt="Basic list">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/expansion_tiles.gif" width="180" title="Expansion Tiles" alt="Drag and drop expansion tiles">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/drag_handle.gif" width="180" title="Drag Handle" alt="Drag and drop using drag handles">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/drag_into_list.gif" width="180" title="Drag Into Lists" alt="Drag and drop new lists and new items">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/horizontal.gif" width="180" title="Horizontal" alt="Drag and drop horizontal lists">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/list_tiles.gif" width="180" title="List Tiles" alt="Drag and drop list tiles">
+<img src="https://raw.githubusercontent.com/philip-brink/DragAndDropLists/master/readme_images/slivers.gif" width="180" title="Slivers" alt="Drag and drop lists using slivers">
 </p>
-
-## Known Issues
-There is currently (as of flutter v. 1.24.0-1.0.pre) an issue only on web where dragging an item with some descendant that includes an InkWell widget with an onTap method will throw an exception. This includes having a ListTile with an onTap method defined.
-
-This seems to be resolved by using a GestureDetector and its onTap method instead of the InkWell.
-
-See the following issues:
-* [#14](https://github.com/philip-brink/DragAndDropLists/issues/14)
-* [Flutter #69774](https://github.com/flutter/flutter/issues/69774)
-* [Flutter #67044](https://github.com/flutter/flutter/issues/67044)
-* [Flutter #66887](https://github.com/flutter/flutter/issues/66887)
 
 ## Usage
 To use this plugin, add `drag_and_drop_lists` as a [dependency in your pubspec.yaml file.](https://flutter.dev/docs/development/packages-and-plugins/using-packages)
@@ -39,7 +30,7 @@ For example:
 
 ```
 dependencies:
-  drag_and_drop_lists: ^0.2.1
+  drag_and_drop_lists: ^0.4.0
 ``` 
 
 Now in your Dart code, you can use: `import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';`
