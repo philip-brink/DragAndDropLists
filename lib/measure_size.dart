@@ -14,10 +14,10 @@ class MeasureSize extends StatefulWidget {
   });
 
   @override
-  _MeasureSizeState createState() => _MeasureSizeState();
+  MeasureSizeState createState() => MeasureSizeState();
 }
 
-class _MeasureSizeState extends State<MeasureSize> {
+class MeasureSizeState extends State<MeasureSize> {
   @override
   Widget build(BuildContext context) {
     SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
@@ -28,7 +28,7 @@ class _MeasureSizeState extends State<MeasureSize> {
   }
 
   var widgetKey = GlobalKey();
-  var oldSize;
+  Size? oldSize;
   var topLeftPosition = Offset.zero;
 
   void postFrameCallback(_) {

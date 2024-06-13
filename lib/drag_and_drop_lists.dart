@@ -717,7 +717,9 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       late Size size;
       if (rb is RenderBox) {
         size = rb.size;
-      } else if (rb is RenderSliver) size = rb.paintBounds.size;
+      } else if (rb is RenderSliver) {
+        size = rb.paintBounds.size;
+      }
 
       var topLeftOffset = localToGlobal(rb, Offset.zero);
       var bottomRightOffset = localToGlobal(rb, size.bottomRight(Offset.zero));
