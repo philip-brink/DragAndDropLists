@@ -40,6 +40,7 @@ typedef OnItemReorder = void Function(
   int oldListIndex,
   int newItemIndex,
   int newListIndex,
+  DragAndDropItem droppedItem,
 );
 typedef OnItemAdd = void Function(
   DragAndDropItem newItem,
@@ -589,7 +590,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       }
 
       widget.onItemReorder(reorderedItemIndex, reorderedListIndex,
-          receiverItemIndex, receiverListIndex);
+          receiverItemIndex, receiverListIndex, reordered);
     }
   }
 
@@ -657,7 +658,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
         receiverItemIndex--;
       }
       widget.onItemReorder(reorderedItemIndex, reorderedListIndex,
-          receiverItemIndex, receiverListIndex);
+          receiverItemIndex, receiverListIndex,newOrReordered);
     }
   }
 
