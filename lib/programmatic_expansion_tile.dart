@@ -233,7 +233,7 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
     final ThemeData theme = Theme.of(context);
     _borderColorTween.end = theme.dividerColor;
     _headerColorTween
-      ..begin = theme.textTheme.subtitle1!.color
+      ..begin = theme.textTheme.titleSmall!.color
       ..end = theme.colorScheme.secondary;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
