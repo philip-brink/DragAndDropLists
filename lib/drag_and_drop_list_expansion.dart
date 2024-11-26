@@ -36,6 +36,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   @override
   final bool canDrag;
 
+  @override
   final Key? key;
 
   /// Disable to borders displayed at the top and bottom when expanded

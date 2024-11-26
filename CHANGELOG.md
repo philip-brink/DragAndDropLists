@@ -1,5 +1,9 @@
 # Changelog
 
+[0.4.2] - 26 November 2024
+
+* Add key getter to drag and drop list interface (thanks [@juancdominici](https://github.com/juancdominici))
+
 [0.4.1] - 12 June 2024
 
 * Add key to DragAndDropItem and DragAndDropList (thanks [@saileshbro](https://github.com/saileshbro))
