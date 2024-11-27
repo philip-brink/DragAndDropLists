@@ -80,7 +80,7 @@ class _ListTileExample extends State<ExpansionTileExample> {
   }
 
   _onItemReorder(
-      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex,DragAndDropItem droppedItem) {
     setState(() {
       var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
       _lists[newListIndex].children.insert(newItemIndex, movedItem);
